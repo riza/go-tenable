@@ -1,0 +1,31 @@
+# Environment
+.env
+
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary
+*.test
+
+# Build output
+/bin/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Internal documentation cache
+doc/docs.tenable.com/
+doc/hts-cache/
+doc/tenable_api_docs/
