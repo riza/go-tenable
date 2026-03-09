@@ -38,11 +38,11 @@ type Client struct {
 	secretKey  string
 
 	// Services
-	AttackPathService    *AttackPathService
+	AttackPathService   *AttackPathService
 	ExposureViewService *ExposureViewService
 	InventoryService    *InventoryService
 	ExportService       *ExportService
-	TagsService        *TagsService
+	TagsService         *TagsService
 }
 
 // NewClient creates a new One API client.
@@ -137,7 +137,12 @@ func (c *Client) newRequestWithParams(ctx context.Context, method, path string, 
 
 // apiErrorResponse is the response envelope for errors.
 type apiErrorResponse struct {
-	Error string `json:"error"`
+	Error   string `json:"error"`
+	Message string `json:"message"`
+	Detail  *struct {
+		Error   string `json:"error"`
+		Message string `json:"message"`
+	} `json:"detail,omitempty"`
 }
 
 func (c *Client) do(req *http.Request) ([]byte, error) {
@@ -159,7 +164,13 @@ func (c *Client) do(req *http.Request) ([]byte, error) {
 
 		var errResp apiErrorResponse
 		if err := json.Unmarshal(data, &errResp); err == nil {
-			apiErr.ErrorMsg = errResp.Error
+			if errResp.Detail != nil && errResp.Detail.Message != "" {
+				apiErr.ErrorMsg = errResp.Detail.Message
+			} else if errResp.Message != "" {
+				apiErr.ErrorMsg = errResp.Message
+			} else {
+				apiErr.ErrorMsg = errResp.Error
+			}
 		} else {
 			apiErr.ErrorMsg = string(data)
 		}

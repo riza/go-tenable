@@ -15,7 +15,7 @@ type Tag struct {
 	Uuid      string                 `json:"uuid,omitempty"`
 	Key       string                 `json:"key,omitempty"`
 	Value     string                 `json:"value,omitempty"`
-	Sources   []string              `json:"sources,omitempty"`
+	Sources   []string               `json:"sources,omitempty"`
 	CreatedAt string                 `json:"created_at,omitempty"`
 	UpdatedAt string                 `json:"updated_at,omitempty"`
 	Metadata  map[string]interface{} `json:"metadata,omitempty"`
@@ -23,24 +23,23 @@ type Tag struct {
 
 // TagsSearchRequest represents the request body for searching tags.
 type TagsSearchRequest struct {
-	Limit   int               `json:"limit,omitempty"`
-	Offset  int               `json:"offset,omitempty"`
-	Filters TagsSearchFilters `json:"filters,omitempty"`
+	Limit   *int               `json:"limit,omitempty"`
+	Offset  *int               `json:"offset,omitempty"`
+	Filters []TagsSearchFilter `json:"filters,omitempty"`
 }
 
-// TagsSearchFilters represents the filters for tag search.
-type TagsSearchFilters struct {
-	TagIds    []string `json:"tag_ids,omitempty"`
-	Keys      []string `json:"keys,omitempty"`
-	Values    []string `json:"values,omitempty"`
-	Sources   []string `json:"sources,omitempty"`
+// TagsSearchFilter represents a generic filter for tag search.
+type TagsSearchFilter struct {
+	Property string      `json:"property"`
+	Operator string      `json:"operator"`
+	Value    interface{} `json:"value"`
 }
 
 // TagsSearchResponse represents the response from searching tags.
 type TagsSearchResponse struct {
-	Tags      []Tag           `json:"tags,omitempty"`
-	Total     int             `json:"total,omitempty"`
-	Pagination interface{}     `json:"pagination,omitempty"`
+	Tags       []Tag       `json:"tags,omitempty"`
+	Total      int         `json:"total,omitempty"`
+	Pagination interface{} `json:"pagination,omitempty"`
 }
 
 // SearchTags searches for tags.

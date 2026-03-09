@@ -10,7 +10,11 @@ import (
 	"testing"
 )
 
-func TestSearchTags(t *testing.T) {
+func ptrTags[T any](v T) *T {
+	return &v
+}
+
+func TestTagsSearchRequest(t *testing.T) {
 	var gotMethod, gotPath string
 	var gotBody TagsSearchRequest
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -36,9 +40,9 @@ func TestSearchTags(t *testing.T) {
 
 	c := NewClient(ts.URL)
 	req := &TagsSearchRequest{
-		Limit: 20,
-		Filters: TagsSearchFilters{
-			Keys: []string{"env"},
+		Limit: ptrTags(20),
+		Filters: []TagsSearchFilter{
+			{Property: "keys", Operator: "eq", Value: []string{"env"}},
 		},
 	}
 	resp, err := c.TagsService.SearchTags(context.Background(), req)
@@ -52,11 +56,13 @@ func TestSearchTags(t *testing.T) {
 	if gotPath != "/api/v1/t1/tags/search" {
 		t.Errorf("path = %q, want %q", gotPath, "/api/v1/t1/tags/search")
 	}
-	if gotBody.Limit != 20 {
-		t.Errorf("Limit = %d, want 20", gotBody.Limit)
+	if gotBody.Limit == nil || *gotBody.Limit != 20 {
+		t.Errorf("Limit = %v, want 20", gotBody.Limit)
 	}
-	if len(gotBody.Filters.Keys) != 1 || gotBody.Filters.Keys[0] != "env" {
-		t.Errorf("Filters.Keys = %v, want [env]", gotBody.Filters.Keys)
+	if gotBody.Filters == nil || len(gotBody.Filters) == 0 {
+		t.Errorf("Filters is nil, want non-nil")
+	} else if gotBody.Filters[0].Property != "keys" {
+		t.Errorf("Filters.Keys = %v, want [env]", gotBody.Filters[0])
 	}
 	if resp.Total != 2 {
 		t.Errorf("Total = %d, want 2", resp.Total)

@@ -32,10 +32,17 @@ func main() {
 
 	// Search attack paths
 	attackPathsReq := &one.APASearchAttackPathsRequest{
-		Limit:  10,
+		Limit:  100,
 		Offset: 0,
-		Filters: one.APASearchAttackPathsFilters{
-			Sources: []string{"tenable"},
+		Filter: one.APAFilterGroup{
+			Operator: "AND",
+			Value: []one.APAFilterCondition{
+				{
+					Property: "data_source",
+					Operator: "eq",
+					Value:    "tenable",
+				},
+			},
 		},
 	}
 
@@ -59,46 +66,56 @@ func main() {
 	fmt.Println("\n--- Attack Techniques ---")
 
 	techniquesReq := &one.APASearchAttackTechniquesRequest{
-		Limit:  10,
+		Limit:  100,
 		Offset: 0,
-		Filters: one.APASearchAttackTechniquesFilters{
-			Sources: []string{"tenable"},
+		Filter: one.APAFilterGroup{
+			Operator: "and",
+			Value: []one.APAFilterCondition{
+				{
+					Property: "priority",
+					Operator: "==",
+					Value:    "low",
+				},
+			},
 		},
 	}
 
 	techniques, err := client.AttackPathService.SearchAttackTechniques(ctx, techniquesReq)
 	if err != nil {
+		fmt.Printf("API Error: %+v\n", err)
 		log.Fatalf("failed to search attack techniques: %v", err)
 	}
 
 	fmt.Printf("Found %d attack technique(s)\n\n", techniques.Total)
 
 	for _, t := range techniques.Techniques {
-		fmt.Printf("ID: %s | Name: %s | Category: %s | Count: %d | Severity: %s\n",
-			t.Id,
-			t.Name,
-			t.Category,
+		fmt.Printf("ID: %s | Name: %s | Tactics: %v | Count: %d | Priority: %s\n",
+			t.MitreId,
+			t.TechniqueName,
+			t.Tactics,
 			t.Count,
-			t.Severity,
+			t.Priority,
 		)
 	}
 
-	// List exposure view cards
-	fmt.Println("\n--- Exposure View Cards ---")
+	/*
+		// List exposure view cards
+		fmt.Println("\n--- Exposure View Cards ---")
 
-	cards, err := client.ExposureViewService.ListCards(ctx)
-	if err != nil {
-		log.Fatalf("failed to list exposure view cards: %v", err)
-	}
+		cards, err := client.ExposureViewService.ListCards(ctx)
+		if err != nil {
+			log.Fatalf("failed to list exposure view cards: %v", err)
+		}
 
-	fmt.Printf("Found %d card(s)\n\n", cards.Total)
+		fmt.Printf("Found %d card(s)\n\n", cards.Total)
 
-	for _, card := range cards.Cards {
-		fmt.Printf("ID: %s | Name: %s | Type: %s | Category: %s\n",
-			card.Id,
-			card.Name,
-			card.Type,
-			card.Category,
-		)
-	}
+		for _, card := range cards.Cards {
+			fmt.Printf("ID: %s | Name: %s | Type: %s | Category: %s\n",
+				card.Id,
+				card.Name,
+				card.Type,
+				card.Category,
+			)
+		}
+	*/
 }

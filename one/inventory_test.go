@@ -10,7 +10,11 @@ import (
 	"testing"
 )
 
-func TestSearchAssets(t *testing.T) {
+func ptr[T any](v T) *T {
+	return &v
+}
+
+func TestInventoryAssetsSearchRequest(t *testing.T) {
 	var gotMethod, gotPath string
 	var gotBody InventoryAssetsSearchRequest
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -36,9 +40,9 @@ func TestSearchAssets(t *testing.T) {
 
 	c := NewClient(ts.URL)
 	req := &InventoryAssetsSearchRequest{
-		Limit: 50,
-		Filters: InventoryAssetsSearchFilters{
-			Sources: []string{"tvm"},
+		Limit: ptr(50),
+		Filters: []InventorySearchFilter{
+			{Property: "sources", Operator: "eq", Value: []string{"tvm"}},
 		},
 	}
 	resp, err := c.InventoryService.SearchAssets(context.Background(), req)
@@ -52,11 +56,13 @@ func TestSearchAssets(t *testing.T) {
 	if gotPath != "/api/v1/t1/inventory/assets/search" {
 		t.Errorf("path = %q, want %q", gotPath, "/api/v1/t1/inventory/assets/search")
 	}
-	if gotBody.Limit != 50 {
-		t.Errorf("Limit = %d, want 50", gotBody.Limit)
+	if gotBody.Limit == nil || *gotBody.Limit != 50 {
+		t.Errorf("Limit = %v, want 50", gotBody.Limit)
 	}
-	if len(gotBody.Filters.Sources) != 1 || gotBody.Filters.Sources[0] != "tvm" {
-		t.Errorf("Filters.Sources = %v, want [tvm]", gotBody.Filters.Sources)
+	if gotBody.Filters == nil || len(gotBody.Filters) == 0 {
+		t.Errorf("Filters is nil, want non-nil")
+	} else if gotBody.Filters[0].Property != "sources" || gotBody.Filters[0].Operator != "eq" {
+		t.Errorf("Filters.Sources = %v, want [tvm]", gotBody.Filters[0])
 	}
 	if resp.Total != 2 {
 		t.Errorf("Total = %d, want 2", resp.Total)
@@ -91,9 +97,9 @@ func TestSearchFindings(t *testing.T) {
 
 	c := NewClient(ts.URL)
 	req := &InventoryFindingsSearchRequest{
-		Limit: 25,
-		Filters: InventoryFindingsSearchFilters{
-			Severities: []string{"High", "Critical"},
+		Limit: ptr(25),
+		Filters: []InventorySearchFilter{
+			{Property: "finding_severity", Operator: "=", Value: []string{"HIGH", "CRITICAL"}},
 		},
 	}
 	resp, err := c.InventoryService.SearchFindings(context.Background(), req)
@@ -107,11 +113,13 @@ func TestSearchFindings(t *testing.T) {
 	if gotPath != "/api/v1/t1/inventory/findings/search" {
 		t.Errorf("path = %q, want %q", gotPath, "/api/v1/t1/inventory/findings/search")
 	}
-	if gotBody.Limit != 25 {
-		t.Errorf("Limit = %d, want 25", gotBody.Limit)
+	if gotBody.Limit == nil || *gotBody.Limit != 25 {
+		t.Errorf("Limit = %v, want 25", gotBody.Limit)
 	}
-	if len(gotBody.Filters.Severities) != 2 || gotBody.Filters.Severities[0] != "High" {
-		t.Errorf("Filters.Severities = %v, want [High, Critical]", gotBody.Filters.Severities)
+	if gotBody.Filters == nil || len(gotBody.Filters) == 0 {
+		t.Errorf("Filters is nil, want non-nil")
+	} else if gotBody.Filters[0].Property != "finding_severity" {
+		t.Errorf("Filters.Severities = %v, want [HIGH, CRITICAL]", gotBody.Filters[0])
 	}
 	if resp.Total != 1 {
 		t.Errorf("Total = %d, want 1", resp.Total)
@@ -138,7 +146,7 @@ func TestSearchSoftware(t *testing.T) {
 
 	c := NewClient(ts.URL)
 	req := &InventorySoftwareSearchRequest{
-		Limit: 10,
+		Limit: ptr(10),
 	}
 	resp, err := c.InventoryService.SearchSoftware(context.Background(), req)
 
