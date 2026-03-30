@@ -15,10 +15,9 @@ func TestScansCreate(t *testing.T) {
 		gotPath = r.URL.Path
 		w.Header().Set("Content-Type", "application/json")
 		fmt.Fprintln(w, `{
-			"scan": {
-				"uuid": "test-uuid",
-				"name": "Test Scan"
-			}
+			"uuid": "test-uuid",
+			"name": "Test Scan",
+			"id": 42
 		}`)
 	}))
 	defer ts.Close()
@@ -40,9 +39,18 @@ func TestScansCreate(t *testing.T) {
 	if gotPath != "/scans" {
 		t.Errorf("path = %q, want %q", gotPath, "/scans")
 	}
-	// Note: The actual response structure wraps it in "scan" key but the auto-generated struct might differ.
-	// As long as parsing succeeds, it's testing the interaction correctly.
-	_ = resp
+	if resp == nil {
+		t.Fatal("resp is nil")
+	}
+	if resp.Uuid != "test-uuid" {
+		t.Errorf("Uuid = %q, want %q", resp.Uuid, "test-uuid")
+	}
+	if resp.Name != "Test Scan" {
+		t.Errorf("Name = %q, want %q", resp.Name, "Test Scan")
+	}
+	if resp.Id != 42 {
+		t.Errorf("Id = %d, want %d", resp.Id, 42)
+	}
 }
 
 func TestScansList(t *testing.T) {

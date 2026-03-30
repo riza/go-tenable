@@ -50,6 +50,46 @@ func TestNewClientTrailingSlash(t *testing.T) {
 	}
 }
 
+func TestAPIKeyHeader(t *testing.T) {
+	var gotHeader string
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotHeader = r.Header.Get("x-apikeys")
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte(`{}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient(ts.URL, WithAPIKey("ak", "sk"))
+	_, err := c.get(context.Background(), "/test")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	want := "accessKey=ak;secretKey=sk"
+	if gotHeader != want {
+		t.Errorf("x-apikeys header = %q, want %q", gotHeader, want)
+	}
+}
+
+func TestAPIKeyHeaderAbsentWithoutCredentials(t *testing.T) {
+	var gotHeader string
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotHeader = r.Header.Get("x-apikeys")
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte(`{}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient(ts.URL)
+	_, err := c.get(context.Background(), "/test")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if gotHeader != "" {
+		t.Errorf("x-apikeys header = %q, want empty", gotHeader)
+	}
+}
+
 func TestAPIErrorParsing(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
