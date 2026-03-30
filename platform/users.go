@@ -13,18 +13,18 @@ type UsersService struct {
 
 // User represents a user.
 type User struct {
-	Id             int                    `json:"id,omitempty"`
-	Uuid           string                 `json:"uuid,omitempty"`
-	Username       string                 `json:"username,omitempty"`
-	Email          string                 `json:"email,omitempty"`
-	Name           string                 `json:"name,omitempty"`
-	Enabled        bool                   `json:"enabled,omitempty"`
-	CreatedAt      string                 `json:"created_time,omitempty"`
-	LastAuth       string                 `json:"last_auth,omitempty"`
-	Permission     string                 `json:"permission,omitempty"`
-	Role           string                 `json:"role,omitempty"`
-	AuthType       string                 `json:"auth_type,omitempty"`
-	Timezone       string                 `json:"timezone,omitempty"`
+	Id         int    `json:"id,omitempty"`
+	Uuid       string `json:"uuid,omitempty"`
+	Username   string `json:"username,omitempty"`
+	Email      string `json:"email,omitempty"`
+	Name       string `json:"name,omitempty"`
+	Enabled    bool   `json:"enabled,omitempty"`
+	CreatedAt  string `json:"created_time,omitempty"`
+	LastAuth   string `json:"last_auth,omitempty"`
+	Permission string `json:"permission,omitempty"`
+	Role       string `json:"role,omitempty"`
+	AuthType   string `json:"auth_type,omitempty"`
+	Timezone   string `json:"timezone,omitempty"`
 }
 
 // UsersListResponse represents the response from listing users.

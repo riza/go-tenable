@@ -13,21 +13,21 @@ type AccessGroupsService struct {
 
 // AccessGroup represents an access group.
 type AccessGroup struct {
-	Id          string                 `json:"id,omitempty"`
-	Name        string                 `json:"name,omitempty"`
-	Description string                 `json:"description,omitempty"`
-	CreatedAt   string                 `json:"created_time,omitempty"`
-	UpdatedAt   string                 `json:"modified_time,omitempty"`
-	Rules       []AccessGroupRule      `json:"rules,omitempty"`
+	Id          string            `json:"id,omitempty"`
+	Name        string            `json:"name,omitempty"`
+	Description string            `json:"description,omitempty"`
+	CreatedAt   string            `json:"created_time,omitempty"`
+	UpdatedAt   string            `json:"modified_time,omitempty"`
+	Rules       []AccessGroupRule `json:"rules,omitempty"`
 }
 
 // AccessGroupRule represents an access group rule.
 type AccessGroupRule struct {
-	Id        string `json:"id,omitempty"`
-	Name      string `json:"name,omitempty"`
-	Type      string `json:"type,omitempty"`
-	Operator  string `json:"operator,omitempty"`
-	Value     string `json:"value,omitempty"`
+	Id       string `json:"id,omitempty"`
+	Name     string `json:"name,omitempty"`
+	Type     string `json:"type,omitempty"`
+	Operator string `json:"operator,omitempty"`
+	Value    string `json:"value,omitempty"`
 }
 
 // AccessGroupsListResponse represents the response from listing access groups.
