@@ -44,7 +44,7 @@ func TestSearchAttackPaths(t *testing.T) {
 					"first_aes": 8.5,
 					"last_acr": 9.0,
 					"techniques": [
-						{"technique": "Initial Access", "external_id": "T1190"}
+						{"technique": "Initial Access", "external_id": "T1190", "nodes": [101, 202]}
 					]
 				},
 				{
@@ -107,6 +107,9 @@ func TestSearchAttackPaths(t *testing.T) {
 	}
 	if resp.AttackPaths[0].Techniques[0].Technique != "Initial Access" {
 		t.Errorf("Techniques[0].Technique = %q, want %q", resp.AttackPaths[0].Techniques[0].Technique, "Initial Access")
+	}
+	if len(resp.AttackPaths[0].Techniques[0].Nodes) != 2 || resp.AttackPaths[0].Techniques[0].Nodes[0] != 101 {
+		t.Errorf("Techniques[0].Nodes = %v, want [101 202]", resp.AttackPaths[0].Techniques[0].Nodes)
 	}
 	if !resp.AttackPaths[1].IsNew {
 		t.Errorf("AttackPaths[1].IsNew = false, want true")

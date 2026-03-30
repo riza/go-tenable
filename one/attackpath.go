@@ -91,7 +91,7 @@ type APATechniqueMethod struct {
 
 // APATechnique represents an attack technique associated with a vector.
 type APATechnique struct {
-	Nodes             []string            `json:"nodes,omitempty"`
+	Nodes             []int64             `json:"nodes,omitempty"`
 	Method            *APATechniqueMethod `json:"method,omitempty"`
 	Technique         string              `json:"technique,omitempty"`
 	SourceInformation string              `json:"source_information,omitempty"`
