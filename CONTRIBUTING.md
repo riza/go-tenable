@@ -32,7 +32,7 @@ make test
 make check
 ```
 
-This runs `go vet`, `go test`, and formatting checks.
+This runs `go vet` and `go test`.
 
 ## Code Style
 
@@ -43,11 +43,11 @@ This runs `go vet`, `go test`, and formatting checks.
 
 ## Adding a New Service
 
-Each API resource maps to a single Go file in the corresponding package (`sc/` or `vm/`):
+Each API resource maps to a single Go file in the corresponding package (`sc/`, `vm/`, `platform/`, or `one/`):
 
-1. Create `sc/<resource>.go` or `vm/<resource>.go`
+1. Create `<package>/<resource>.go`
 2. Define the service struct with a `client *Client` field
-3. Add exported methods for each API endpoint
+3. Add exported methods for each API endpoint (all methods should accept `context.Context` as the first parameter)
 4. Register the service in `initServices()` (in `services.go` or `client.go`)
 5. Add tests in `<resource>_test.go`
 

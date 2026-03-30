@@ -1,6 +1,6 @@
 # Tenable One API — Go SDK
 
-The `one` package provides a Go client for the [Tenable One API](https://developer.tenable.com/reference/tenable-one-overview), covering platform-level services such as attack paths, exposure views, global inventory, and tags.
+The `one` package provides a Go client for the [Tenable One API](https://developer.tenable.com), covering platform-level services such as attack paths, exposure views, global inventory, and tags.
 
 > All methods accept a `context.Context` as the first parameter for cancellation and timeout support.
 
@@ -22,7 +22,7 @@ func main() {
 		one.WithAPIKey("your-access-key", "your-secret-key"),
 	)
 
-	searchReq := &one.SearchAttackPathsRequest{
+	searchReq := &one.APASearchAttackPathsRequest{
 		Limit: 10,
 	}
 
@@ -31,7 +31,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("Found %d attack paths\n", len(paths))
+	fmt.Printf("Found %d attack paths\n", paths.Total)
 }
 ```
 

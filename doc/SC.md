@@ -2,12 +2,15 @@
 
 The `sc` package provides a Go client for the [Tenable Security Center](https://www.tenable.com/products/security-center) REST API, covering **~85 endpoints** with full CRUD operations.
 
+> All methods accept a `context.Context` as the first parameter for cancellation and timeout support.
+
 ## Quick Start
 
 ```go
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -19,7 +22,7 @@ func main() {
 		sc.WithAPIKey("your-access-key", "your-secret-key"),
 	)
 
-	scans, err := client.Scan.List(nil)
+	scans, err := client.Scan.List(context.Background(), nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -42,7 +45,7 @@ client := sc.NewClient(baseURL, sc.WithAPIKey(accessKey, secretKey))
 
 ```go
 client := sc.NewClient(baseURL)
-token, err := client.Token.Create(&sc.TokenCreateInput{
+token, err := client.Token.Create(context.Background(), &sc.TokenCreateInput{
 	Username: "admin",
 	Password: "password",
 })
@@ -61,7 +64,7 @@ token, err := client.Token.Create(&sc.TokenCreateInput{
 API errors are returned as `*sc.APIError` with HTTP status code, SC error code, and message:
 
 ```go
-scan, err := client.Scan.Get("999999")
+scan, err := client.Scan.Get(context.Background(), "999999")
 if err != nil {
 	var apiErr *sc.APIError
 	if errors.As(err, &apiErr) {

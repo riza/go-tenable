@@ -1,6 +1,6 @@
 # Tenable Platform API — Go SDK
 
-The `platform` package provides a Go client for the [Tenable Platform API](https://developer.tenable.com/reference/platform-api-overview), covering core services including access control, agents, credentials, scanners, and user management.
+The `platform` package provides a Go client for the [Tenable Platform API](https://developer.tenable.com), covering core services including access control, agents, credentials, scanners, and user management.
 
 > All methods accept a `context.Context` as the first parameter for cancellation and timeout support.
 
@@ -61,7 +61,7 @@ if err != nil {
 
 ## Available Services
 
-`AccessControl` · `AccessGroups` · `Agents` · `Credentials` · `Misc` · `Scanners` · `Users`
+`AccessControl` · `AccessGroups` · `ActivityLog` · `Agents` · `CloudConnectors` · `Credentials` · `Exclusions` · `Groups` · `Networks` · `Permissions` · `Profiles` · `RecastRules` · `Scanners` · `Server` · `Tags` · `TargetGroups` · `Users`
 
 ## Examples
 

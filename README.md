@@ -32,7 +32,7 @@ client := sc.NewClient("https://sc.example.com",
 	sc.WithAPIKey("access-key", "secret-key"),
 )
 
-scans, err := client.Scan.List(nil)
+scans, err := client.Scan.List(context.Background(), nil)
 ```
 
 ### Vulnerability Management
@@ -62,7 +62,9 @@ client := one.NewClient("https://cloud.tenable.com",
 	one.WithAPIKey("access-key", "secret-key"),
 )
 
-paths, err := client.AttackPathService.SearchAttackPaths(context.Background(), req)
+paths, err := client.AttackPathService.SearchAttackPaths(context.Background(), &one.APASearchAttackPathsRequest{
+	Limit: 10,
+})
 ```
 
 For full examples, authentication options, error handling, and service listings see:
@@ -71,9 +73,57 @@ For full examples, authentication options, error handling, and service listings 
 - **[Platform Documentation](doc/PLATFORM.md)** — Authentication, services list, error handling, examples
 - **[One Documentation](doc/ONE.md)** — Authentication, services list, error handling, examples
 
+## Testing
+
+### Unit Tests
+
+```bash
+go test ./...
+```
+
+### Integration Tests
+
+Integration tests run against live Tenable API instances. They are gated behind the `integration` build tag and will skip automatically if credentials are not configured.
+
+```bash
+# Set credentials for the packages you want to test
+export TENABLE_SC_URL=https://sc.example.com
+export TENABLE_SC_ACCESS_KEY=xxx
+export TENABLE_SC_SECRET_KEY=yyy
+
+export TENABLE_VM_URL=https://cloud.tenable.com
+export TENABLE_VM_ACCESS_KEY=xxx
+export TENABLE_VM_SECRET_KEY=yyy
+
+export TENABLE_PLATFORM_URL=https://cloud.tenable.com
+export TENABLE_PLATFORM_ACCESS_KEY=xxx
+export TENABLE_PLATFORM_SECRET_KEY=yyy
+
+export TENABLE_ONE_URL=https://cloud.tenable.com
+export TENABLE_ONE_ACCESS_KEY=xxx
+export TENABLE_ONE_SECRET_KEY=yyy
+
+# Run integration tests
+go test -tags=integration ./...
+```
+
+Or use the Makefile target:
+
+```bash
+TENABLE_SC_URL=https://sc.example.com TENABLE_SC_ACCESS_KEY=xxx TENABLE_SC_SECRET_KEY=yyy \
+  make test-integration
+```
+
 ## Examples
 
 Runnable examples are in the [`examples/`](examples/) directory:
+
+| Area | Examples |
+|------|----------|
+| SC | `scheduled-scans` |
+| VM | `list-assets`, `list-scans`, `stop-scan` |
+| Platform | `list-groups` |
+| One | `search-attack-paths`, `inventory-search`, `tags-search`, `export-assets`, `exposure-cards` |
 
 ```bash
 # SC — List scheduled scans
@@ -84,6 +134,14 @@ SC_URL=https://sc.example.com SC_ACCESS_KEY=xxx SC_SECRET_KEY=yyy \
 VM_URL=https://cloud.tenable.com VM_ACCESS_KEY=xxx VM_SECRET_KEY=yyy \
   go run ./examples/vm/list-assets/
 
+# VM — List scans
+VM_URL=https://cloud.tenable.com VM_ACCESS_KEY=xxx VM_SECRET_KEY=yyy \
+  go run ./examples/vm/list-scans/
+
+# VM — Stop scan
+VM_URL=https://cloud.tenable.com VM_ACCESS_KEY=xxx VM_SECRET_KEY=yyy \
+  go run ./examples/vm/stop-scan/
+
 # Platform — List groups
 PLATFORM_URL=https://cloud.tenable.com PLATFORM_ACCESS_KEY=xxx PLATFORM_SECRET_KEY=yyy \
   go run ./examples/platform/list-groups/
@@ -91,6 +149,22 @@ PLATFORM_URL=https://cloud.tenable.com PLATFORM_ACCESS_KEY=xxx PLATFORM_SECRET_K
 # One — Search attack paths
 ONE_URL=https://cloud.tenable.com ONE_ACCESS_KEY=xxx ONE_SECRET_KEY=yyy \
   go run ./examples/one/search-attack-paths/
+
+# One — Inventory search
+ONE_URL=https://cloud.tenable.com ONE_ACCESS_KEY=xxx ONE_SECRET_KEY=yyy \
+  go run ./examples/one/inventory-search/
+
+# One — Tags search
+ONE_URL=https://cloud.tenable.com ONE_ACCESS_KEY=xxx ONE_SECRET_KEY=yyy \
+  go run ./examples/one/tags-search/
+
+# One — Export assets
+ONE_URL=https://cloud.tenable.com ONE_ACCESS_KEY=xxx ONE_SECRET_KEY=yyy \
+  go run ./examples/one/export-assets/
+
+# One — Exposure cards
+ONE_URL=https://cloud.tenable.com ONE_ACCESS_KEY=xxx ONE_SECRET_KEY=yyy \
+  go run ./examples/one/exposure-cards/
 ```
 
 ## Project Structure
@@ -106,8 +180,7 @@ go-tenable/
 │   ├── SC.md               # SC package guide
 │   ├── VM.md               # VM package guide
 │   ├── PLATFORM.md         # Platform API package guide
-│   ├── ONE.md              # One API package guide
-│   └── sc/                 # SC API endpoint reference (markdown)
+│   └── ONE.md              # One API package guide
 ├── go.mod
 ├── LICENSE
 ├── CONTRIBUTING.md
@@ -116,13 +189,11 @@ go-tenable/
 
 ## Roadmap
 
-- **Context support for SC** — Add `context.Context` to all SC service methods (VM, Platform, One already have it)
 - **Typed fields** — Replace `interface{}` fields with proper Go structs
 - **Pagination helpers** — Iterator utilities for list endpoints
 - **Rate limiting** — Configurable rate limiter
 - **Retry with backoff** — Automatic retry for transient errors
 - **Unified client** — Top-level `tenable.Client` targeting both SC and VM
-- **Integration tests** — Tests against live instances (behind build tag)
 - **CI pipeline** — GitHub Actions for lint, vet, test
 
 ## Contributing
