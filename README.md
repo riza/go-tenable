@@ -194,7 +194,6 @@ go-tenable/
 - **Rate limiting** — Configurable rate limiter
 - **Retry with backoff** — Automatic retry for transient errors
 - **Unified client** — Top-level `tenable.Client` targeting both SC and VM
-- **CI pipeline** — GitHub Actions for lint, vet, test
 
 ## Contributing
 
