@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -31,8 +31,8 @@ type DirectorScanCreateInput struct {
 }
 
 // List returns all directorScans.
-func (s *DirectorScanService) List() (*DirectorScanListResponse, error) {
-	resp, err := s.client.get("/mgmt/scan")
+func (s *DirectorScanService) List(ctx context.Context) (*DirectorScanListResponse, error) {
+	resp, err := s.client.get(ctx, "/mgmt/scan")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list directorScans: %w", err)
 	}
@@ -46,8 +46,8 @@ func (s *DirectorScanService) List() (*DirectorScanListResponse, error) {
 }
 
 // Create creates a new directorScan.
-func (s *DirectorScanService) Create(input *DirectorScanCreateInput) (*DirectorScan, error) {
-	resp, err := s.client.post("/mgmt/scan", input)
+func (s *DirectorScanService) Create(ctx context.Context, input *DirectorScanCreateInput) (*DirectorScan, error) {
+	resp, err := s.client.post(ctx, "/mgmt/scan", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create directorScan: %w", err)
 	}
@@ -61,8 +61,8 @@ func (s *DirectorScanService) Create(input *DirectorScanCreateInput) (*DirectorS
 }
 
 // Get returns the directorScan with the given ID.
-func (s *DirectorScanService) Get(id string) (*DirectorScan, error) {
-	resp, err := s.client.get("/mgmt/scan" + "/" + id)
+func (s *DirectorScanService) Get(ctx context.Context, id string) (*DirectorScan, error) {
+	resp, err := s.client.get(ctx, "/mgmt/scan"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get directorScan %s: %w", id, err)
 	}
@@ -76,12 +76,11 @@ func (s *DirectorScanService) Get(id string) (*DirectorScan, error) {
 }
 
 // Delete deletes the directorScan with the given ID.
-func (s *DirectorScanService) Delete(id string) error {
-	_, err := s.client.delete("/mgmt/scan" + "/" + id)
+func (s *DirectorScanService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/mgmt/scan"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete directorScan %s: %w", id, err)
 	}
 
 	return nil
 }
-

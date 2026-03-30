@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type PluginFamilyListResponse struct {
 }
 
 // List returns all pluginFamilys.
-func (s *PluginFamilyService) List() (*PluginFamilyListResponse, error) {
-	resp, err := s.client.get("/pluginFamily")
+func (s *PluginFamilyService) List(ctx context.Context) (*PluginFamilyListResponse, error) {
+	resp, err := s.client.get(ctx, "/pluginFamily")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list pluginFamilys: %w", err)
 	}
@@ -38,4 +38,3 @@ func (s *PluginFamilyService) List() (*PluginFamilyListResponse, error) {
 
 	return &result, nil
 }
-

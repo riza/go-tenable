@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type PublishingSiteCreateInput struct {
 type PublishingSiteUpdateInput = PublishingSiteCreateInput
 
 // List returns all publishingSites.
-func (s *PublishingSiteService) List() (*PublishingSiteListResponse, error) {
-	resp, err := s.client.get("/pubSite")
+func (s *PublishingSiteService) List(ctx context.Context) (*PublishingSiteListResponse, error) {
+	resp, err := s.client.get(ctx, "/pubSite")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list publishingSites: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *PublishingSiteService) List() (*PublishingSiteListResponse, error) {
 }
 
 // Create creates a new publishingSite.
-func (s *PublishingSiteService) Create(input *PublishingSiteCreateInput) (*PublishingSite, error) {
-	resp, err := s.client.post("/pubSite", input)
+func (s *PublishingSiteService) Create(ctx context.Context, input *PublishingSiteCreateInput) (*PublishingSite, error) {
+	resp, err := s.client.post(ctx, "/pubSite", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create publishingSite: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *PublishingSiteService) Create(input *PublishingSiteCreateInput) (*Publi
 }
 
 // Get returns the publishingSite with the given ID.
-func (s *PublishingSiteService) Get(id string) (*PublishingSite, error) {
-	resp, err := s.client.get("/pubSite" + "/" + id)
+func (s *PublishingSiteService) Get(ctx context.Context, id string) (*PublishingSite, error) {
+	resp, err := s.client.get(ctx, "/pubSite"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get publishingSite %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *PublishingSiteService) Get(id string) (*PublishingSite, error) {
 }
 
 // Update updates the publishingSite with the given ID.
-func (s *PublishingSiteService) Update(id string, input *PublishingSiteUpdateInput) (*PublishingSite, error) {
-	resp, err := s.client.patch("/pubSite" + "/" + id, input)
+func (s *PublishingSiteService) Update(ctx context.Context, id string, input *PublishingSiteUpdateInput) (*PublishingSite, error) {
+	resp, err := s.client.patch(ctx, "/pubSite"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update publishingSite %s: %w", id, err)
 	}
@@ -94,12 +94,11 @@ func (s *PublishingSiteService) Update(id string, input *PublishingSiteUpdateInp
 }
 
 // Delete deletes the publishingSite with the given ID.
-func (s *PublishingSiteService) Delete(id string) error {
-	_, err := s.client.delete("/pubSite" + "/" + id)
+func (s *PublishingSiteService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/pubSite"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete publishingSite %s: %w", id, err)
 	}
 
 	return nil
 }
-

@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type DirectorScanResultListResponse struct {
 }
 
 // List returns all directorScanResults.
-func (s *DirectorScanResultService) List() (*DirectorScanResultListResponse, error) {
-	resp, err := s.client.get("/mgmt/scanResult")
+func (s *DirectorScanResultService) List(ctx context.Context) (*DirectorScanResultListResponse, error) {
+	resp, err := s.client.get(ctx, "/mgmt/scanResult")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list directorScanResults: %w", err)
 	}
@@ -40,8 +40,8 @@ func (s *DirectorScanResultService) List() (*DirectorScanResultListResponse, err
 }
 
 // Get returns the directorScanResult with the given ID.
-func (s *DirectorScanResultService) Get(id string) (*DirectorScanResult, error) {
-	resp, err := s.client.get("/mgmt/scanResult" + "/" + id)
+func (s *DirectorScanResultService) Get(ctx context.Context, id string) (*DirectorScanResult, error) {
+	resp, err := s.client.get(ctx, "/mgmt/scanResult"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get directorScanResult %s: %w", id, err)
 	}
@@ -55,8 +55,8 @@ func (s *DirectorScanResultService) Get(id string) (*DirectorScanResult, error) 
 }
 
 // Email performs the email action on the directorScanResult with the given ID.
-func (s *DirectorScanResultService) Email(id string) (*DirectorScanResult, error) {
-	resp, err := s.client.post("/mgmt/scanResult" + "/" + id + "/email", nil)
+func (s *DirectorScanResultService) Email(ctx context.Context, id string) (*DirectorScanResult, error) {
+	resp, err := s.client.post(ctx, "/mgmt/scanResult"+"/"+id+"/email", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: email directorScanResult %s: %w", id, err)
 	}
@@ -70,8 +70,8 @@ func (s *DirectorScanResultService) Email(id string) (*DirectorScanResult, error
 }
 
 // Pause performs the pause action on the directorScanResult with the given ID.
-func (s *DirectorScanResultService) Pause(id string) (*DirectorScanResult, error) {
-	resp, err := s.client.post("/mgmt/scanResult" + "/" + id + "/pause", nil)
+func (s *DirectorScanResultService) Pause(ctx context.Context, id string) (*DirectorScanResult, error) {
+	resp, err := s.client.post(ctx, "/mgmt/scanResult"+"/"+id+"/pause", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: pause directorScanResult %s: %w", id, err)
 	}
@@ -85,8 +85,8 @@ func (s *DirectorScanResultService) Pause(id string) (*DirectorScanResult, error
 }
 
 // Resume performs the resume action on the directorScanResult with the given ID.
-func (s *DirectorScanResultService) Resume(id string) (*DirectorScanResult, error) {
-	resp, err := s.client.post("/mgmt/scanResult" + "/" + id + "/resume", nil)
+func (s *DirectorScanResultService) Resume(ctx context.Context, id string) (*DirectorScanResult, error) {
+	resp, err := s.client.post(ctx, "/mgmt/scanResult"+"/"+id+"/resume", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: resume directorScanResult %s: %w", id, err)
 	}
@@ -100,8 +100,8 @@ func (s *DirectorScanResultService) Resume(id string) (*DirectorScanResult, erro
 }
 
 // Download performs the download action on the directorScanResult with the given ID.
-func (s *DirectorScanResultService) Download(id string) (*DirectorScanResult, error) {
-	resp, err := s.client.post("/mgmt/scanResult" + "/" + id + "/download", nil)
+func (s *DirectorScanResultService) Download(ctx context.Context, id string) (*DirectorScanResult, error) {
+	resp, err := s.client.post(ctx, "/mgmt/scanResult"+"/"+id+"/download", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: download directorScanResult %s: %w", id, err)
 	}
@@ -113,4 +113,3 @@ func (s *DirectorScanResultService) Download(id string) (*DirectorScanResult, er
 
 	return &result, nil
 }
-

@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type StyleListResponse struct {
 }
 
 // List returns all styles.
-func (s *StyleService) List() (*StyleListResponse, error) {
-	resp, err := s.client.get("/style")
+func (s *StyleService) List(ctx context.Context) (*StyleListResponse, error) {
+	resp, err := s.client.get(ctx, "/style")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list styles: %w", err)
 	}
@@ -40,8 +40,8 @@ func (s *StyleService) List() (*StyleListResponse, error) {
 }
 
 // Get returns the style with the given ID.
-func (s *StyleService) Get(id string) (*Style, error) {
-	resp, err := s.client.get("/style" + "/" + id)
+func (s *StyleService) Get(ctx context.Context, id string) (*Style, error) {
+	resp, err := s.client.get(ctx, "/style"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get style %s: %w", id, err)
 	}
@@ -53,4 +53,3 @@ func (s *StyleService) Get(id string) (*Style, error) {
 
 	return &result, nil
 }
-

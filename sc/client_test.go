@@ -1,6 +1,7 @@
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"io"
@@ -60,7 +61,7 @@ func TestAPIKeyHeader(t *testing.T) {
 	defer ts.Close()
 
 	c := NewClient(ts.URL, WithAPIKey("ak", "sk"))
-	_, err := c.get("/test")
+	_, err := c.get(context.Background(), "/test")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -86,7 +87,7 @@ func TestAPIKeyHeaderAbsentWithoutCredentials(t *testing.T) {
 	defer ts.Close()
 
 	c := NewClient(ts.URL)
-	_, err := c.get("/test")
+	_, err := c.get(context.Background(), "/test")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -109,7 +110,7 @@ func TestAPIErrorParsing(t *testing.T) {
 	defer ts.Close()
 
 	c := NewClient(ts.URL)
-	_, err := c.get("/test")
+	_, err := c.get(context.Background(), "/test")
 	if err == nil {
 		t.Fatal("expected error, got nil")
 	}
@@ -149,7 +150,7 @@ func TestAPIErrorParsingWithErrorCodeOnSuccess(t *testing.T) {
 	defer ts.Close()
 
 	c := NewClient(ts.URL)
-	_, err := c.get("/test")
+	_, err := c.get(context.Background(), "/test")
 	if err == nil {
 		t.Fatal("expected error, got nil")
 	}
@@ -179,7 +180,7 @@ func TestDoRequestSetsContentType(t *testing.T) {
 	defer ts.Close()
 
 	c := NewClient(ts.URL)
-	_, err := c.get("/test")
+	_, err := c.get(context.Background(), "/test")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -202,7 +203,7 @@ func TestDoRequestSetsUserAgent(t *testing.T) {
 	defer ts.Close()
 
 	c := NewClient(ts.URL)
-	_, err := c.get("/test")
+	_, err := c.get(context.Background(), "/test")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -221,25 +222,25 @@ func TestHTTPMethods(t *testing.T) {
 	}{
 		{
 			name:       "GET",
-			callMethod: func(c *Client) (*apiResponse, error) { return c.get("/scan") },
+			callMethod: func(c *Client) (*apiResponse, error) { return c.get(context.Background(), "/scan") },
 			wantMethod: http.MethodGet,
 			wantPath:   "/rest/scan",
 		},
 		{
 			name:       "POST",
-			callMethod: func(c *Client) (*apiResponse, error) { return c.post("/scan", nil) },
+			callMethod: func(c *Client) (*apiResponse, error) { return c.post(context.Background(), "/scan", nil) },
 			wantMethod: http.MethodPost,
 			wantPath:   "/rest/scan",
 		},
 		{
 			name:       "PATCH",
-			callMethod: func(c *Client) (*apiResponse, error) { return c.patch("/scan/1", nil) },
+			callMethod: func(c *Client) (*apiResponse, error) { return c.patch(context.Background(), "/scan/1", nil) },
 			wantMethod: http.MethodPatch,
 			wantPath:   "/rest/scan/1",
 		},
 		{
 			name:       "DELETE",
-			callMethod: func(c *Client) (*apiResponse, error) { return c.delete("/scan/1") },
+			callMethod: func(c *Client) (*apiResponse, error) { return c.delete(context.Background(), "/scan/1") },
 			wantMethod: http.MethodDelete,
 			wantPath:   "/rest/scan/1",
 		},
@@ -306,7 +307,7 @@ func TestPostBodyMarshaling(t *testing.T) {
 		Description: "A test scan",
 		Count:       42,
 	}
-	_, err := c.post("/scan", input)
+	_, err := c.post(context.Background(), "/scan", input)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -334,7 +335,7 @@ func TestSuccessfulResponse(t *testing.T) {
 	defer ts.Close()
 
 	c := NewClient(ts.URL)
-	resp, err := c.get("/scan/123")
+	resp, err := c.get(context.Background(), "/scan/123")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -379,7 +380,7 @@ func TestUnmarshalError(t *testing.T) {
 	defer ts.Close()
 
 	c := NewClient(ts.URL)
-	_, err := c.get("/test")
+	_, err := c.get(context.Background(), "/test")
 	if err == nil {
 		t.Fatal("expected error for invalid JSON response, got nil")
 	}
@@ -404,7 +405,7 @@ func TestHTTPStatusErrorWithZeroErrorCode(t *testing.T) {
 	defer ts.Close()
 
 	c := NewClient(ts.URL)
-	_, err := c.get("/test")
+	_, err := c.get(context.Background(), "/test")
 	if err == nil {
 		t.Fatal("expected error for HTTP 500, got nil")
 	}
@@ -431,7 +432,7 @@ func TestNilBodyProducesNoRequestBody(t *testing.T) {
 	defer ts.Close()
 
 	c := NewClient(ts.URL)
-	_, err := c.get("/test")
+	_, err := c.get(context.Background(), "/test")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}

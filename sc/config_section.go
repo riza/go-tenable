@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -31,8 +31,8 @@ type ConfigSectionUpdateInput struct {
 }
 
 // List returns all configSections.
-func (s *ConfigSectionService) List() (*ConfigSectionListResponse, error) {
-	resp, err := s.client.get("/configSection")
+func (s *ConfigSectionService) List(ctx context.Context) (*ConfigSectionListResponse, error) {
+	resp, err := s.client.get(ctx, "/configSection")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list configSections: %w", err)
 	}
@@ -46,8 +46,8 @@ func (s *ConfigSectionService) List() (*ConfigSectionListResponse, error) {
 }
 
 // Get returns the configSection with the given ID.
-func (s *ConfigSectionService) Get(id string) (*ConfigSection, error) {
-	resp, err := s.client.get("/configSection" + "/" + id)
+func (s *ConfigSectionService) Get(ctx context.Context, id string) (*ConfigSection, error) {
+	resp, err := s.client.get(ctx, "/configSection"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get configSection %s: %w", id, err)
 	}
@@ -61,8 +61,8 @@ func (s *ConfigSectionService) Get(id string) (*ConfigSection, error) {
 }
 
 // Update updates the configSection with the given ID.
-func (s *ConfigSectionService) Update(id string, input *ConfigSectionUpdateInput) (*ConfigSection, error) {
-	resp, err := s.client.patch("/configSection" + "/" + id, input)
+func (s *ConfigSectionService) Update(ctx context.Context, id string, input *ConfigSectionUpdateInput) (*ConfigSection, error) {
+	resp, err := s.client.patch(ctx, "/configSection"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update configSection %s: %w", id, err)
 	}
@@ -74,4 +74,3 @@ func (s *ConfigSectionService) Update(id string, input *ConfigSectionUpdateInput
 
 	return &result, nil
 }
-

@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -31,8 +31,8 @@ type SoftwareUpdateUpdateInput struct {
 }
 
 // List returns all softwareUpdates.
-func (s *SoftwareUpdateService) List() (*SoftwareUpdateListResponse, error) {
-	resp, err := s.client.get("/softwareUpdate")
+func (s *SoftwareUpdateService) List(ctx context.Context) (*SoftwareUpdateListResponse, error) {
+	resp, err := s.client.get(ctx, "/softwareUpdate")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list softwareUpdates: %w", err)
 	}
@@ -46,8 +46,8 @@ func (s *SoftwareUpdateService) List() (*SoftwareUpdateListResponse, error) {
 }
 
 // Update updates the softwareUpdate.
-func (s *SoftwareUpdateService) Update(input *SoftwareUpdateUpdateInput) (*SoftwareUpdate, error) {
-	resp, err := s.client.patch("/softwareUpdate", input)
+func (s *SoftwareUpdateService) Update(ctx context.Context, input *SoftwareUpdateUpdateInput) (*SoftwareUpdate, error) {
+	resp, err := s.client.patch(ctx, "/softwareUpdate", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update softwareUpdate: %w", err)
 	}
@@ -59,4 +59,3 @@ func (s *SoftwareUpdateService) Update(input *SoftwareUpdateUpdateInput) (*Softw
 
 	return &result, nil
 }
-

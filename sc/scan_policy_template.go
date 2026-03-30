@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type ScanPolicyTemplateListResponse struct {
 }
 
 // List returns all scanPolicyTemplates.
-func (s *ScanPolicyTemplateService) List() (*ScanPolicyTemplateListResponse, error) {
-	resp, err := s.client.get("/policyTemplate")
+func (s *ScanPolicyTemplateService) List(ctx context.Context) (*ScanPolicyTemplateListResponse, error) {
+	resp, err := s.client.get(ctx, "/policyTemplate")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list scanPolicyTemplates: %w", err)
 	}
@@ -40,8 +40,8 @@ func (s *ScanPolicyTemplateService) List() (*ScanPolicyTemplateListResponse, err
 }
 
 // Get returns the scanPolicyTemplate with the given ID.
-func (s *ScanPolicyTemplateService) Get(id string) (*ScanPolicyTemplate, error) {
-	resp, err := s.client.get("/policyTemplate" + "/" + id)
+func (s *ScanPolicyTemplateService) Get(ctx context.Context, id string) (*ScanPolicyTemplate, error) {
+	resp, err := s.client.get(ctx, "/policyTemplate"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get scanPolicyTemplate %s: %w", id, err)
 	}
@@ -53,4 +53,3 @@ func (s *ScanPolicyTemplateService) Get(id string) (*ScanPolicyTemplate, error) 
 
 	return &result, nil
 }
-

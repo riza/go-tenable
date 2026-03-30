@@ -2,6 +2,7 @@ package sc
 
 import (
 	"bytes"
+	"context"
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
@@ -156,28 +157,28 @@ func WithHTTPClient(hc *http.Client) Option {
 // WithInsecureSkipVerify disables TLS certificate verification.
 func WithInsecureSkipVerify() Option {
 	return func(c *Client) {
-		c.HTTPClient = &http.Client{
-			Transport: &http.Transport{
-				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-			},
-		}
+		transport := http.DefaultTransport.(*http.Transport).Clone()
+		transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+		c.HTTPClient = &http.Client{Transport: transport}
 	}
 }
 
 // QueryParams holds optional query string parameters for API requests.
-type QueryParams map[string]string
+type QueryParams map[string][]string
 
-func (c *Client) newRequest(method, path string, body interface{}) (*http.Request, error) {
-	return c.newRequestWithParams(method, path, body, nil)
+func (c *Client) newRequest(ctx context.Context, method, path string, body interface{}) (*http.Request, error) {
+	return c.newRequestWithParams(ctx, method, path, body, nil)
 }
 
-func (c *Client) newRequestWithParams(method, path string, body interface{}, params QueryParams) (*http.Request, error) {
+func (c *Client) newRequestWithParams(ctx context.Context, method, path string, body interface{}, params QueryParams) (*http.Request, error) {
 	u := c.BaseURL + "/rest" + path
 
 	if len(params) > 0 {
 		q := url.Values{}
 		for k, v := range params {
-			q.Set(k, v)
+			for _, val := range v {
+				q.Add(k, val)
+			}
 		}
 		u += "?" + q.Encode()
 	}
@@ -191,7 +192,7 @@ func (c *Client) newRequestWithParams(method, path string, body interface{}, par
 		buf = bytes.NewReader(b)
 	}
 
-	req, err := http.NewRequest(method, u, buf)
+	req, err := http.NewRequestWithContext(ctx, method, u, buf)
 	if err != nil {
 		return nil, err
 	}
@@ -205,12 +206,12 @@ func (c *Client) newRequestWithParams(method, path string, body interface{}, par
 	return req, nil
 }
 
-func (c *Client) doRequest(method, path string, body interface{}) (*apiResponse, error) {
-	return c.doRequestWithParams(method, path, body, nil)
+func (c *Client) doRequest(ctx context.Context, method, path string, body interface{}) (*apiResponse, error) {
+	return c.doRequestWithParams(ctx, method, path, body, nil)
 }
 
-func (c *Client) doRequestWithParams(method, path string, body interface{}, params QueryParams) (*apiResponse, error) {
-	req, err := c.newRequestWithParams(method, path, body, params)
+func (c *Client) doRequestWithParams(ctx context.Context, method, path string, body interface{}, params QueryParams) (*apiResponse, error) {
+	req, err := c.newRequestWithParams(ctx, method, path, body, params)
 	if err != nil {
 		return nil, err
 	}
@@ -250,23 +251,26 @@ func (c *Client) doRequestWithParams(method, path string, body interface{}, para
 	return &apiResp, nil
 }
 
-func (c *Client) get(path string) (*apiResponse, error) {
-	return c.doRequest(http.MethodGet, path, nil)
+func (c *Client) get(ctx context.Context, path string) (*apiResponse, error) {
+	return c.doRequest(ctx, http.MethodGet, path, nil)
 }
 
-func (c *Client) getWithParams(path string, params QueryParams) (*apiResponse, error) {
-	return c.doRequestWithParams(http.MethodGet, path, nil, params)
+func (c *Client) getWithParams(ctx context.Context, path string, params QueryParams) (*apiResponse, error) {
+	return c.doRequestWithParams(ctx, http.MethodGet, path, nil, params)
 }
 
-func (c *Client) post(path string, body interface{}) (*apiResponse, error) {
-	return c.doRequest(http.MethodPost, path, body)
+func (c *Client) post(ctx context.Context, path string, body interface{}) (*apiResponse, error) {
+	return c.doRequest(ctx, http.MethodPost, path, body)
 }
 
-func (c *Client) patch(path string, body interface{}) (*apiResponse, error) {
-	return c.doRequest(http.MethodPatch, path, body)
+func (c *Client) put(ctx context.Context, path string, body interface{}) (*apiResponse, error) {
+	return c.doRequest(ctx, http.MethodPut, path, body)
 }
 
-func (c *Client) delete(path string) (*apiResponse, error) {
-	return c.doRequest(http.MethodDelete, path, nil)
+func (c *Client) patch(ctx context.Context, path string, body interface{}) (*apiResponse, error) {
+	return c.doRequest(ctx, http.MethodPatch, path, body)
 }
 
+func (c *Client) delete(ctx context.Context, path string) (*apiResponse, error) {
+	return c.doRequest(ctx, http.MethodDelete, path, nil)
+}

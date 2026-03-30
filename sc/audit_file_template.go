@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type AuditFileTemplateListResponse struct {
 }
 
 // List returns all auditFileTemplates.
-func (s *AuditFileTemplateService) List() (*AuditFileTemplateListResponse, error) {
-	resp, err := s.client.get("/auditFileTemplate")
+func (s *AuditFileTemplateService) List(ctx context.Context) (*AuditFileTemplateListResponse, error) {
+	resp, err := s.client.get(ctx, "/auditFileTemplate")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list auditFileTemplates: %w", err)
 	}
@@ -38,4 +38,3 @@ func (s *AuditFileTemplateService) List() (*AuditFileTemplateListResponse, error
 
 	return &result, nil
 }
-

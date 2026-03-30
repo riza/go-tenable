@@ -1,6 +1,7 @@
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -12,27 +13,27 @@ type AssetService struct {
 
 // Asset represents an asset resource from the API.
 type Asset struct {
-	ID              string          `json:"id"`
-	Name            string          `json:"name"`
-	Type            string          `json:"type"`
-	Description     string          `json:"description"`
-	Tags            string          `json:"tags"`
-	Context         string          `json:"context"`
-	Status          string          `json:"status"`
-	TemplateID      string          `json:"templateID"`
-	CreatedTime     string          `json:"createdTime"`
-	ModifiedTime    string          `json:"modifiedTime"`
-	TypeFields      json.RawMessage `json:"typeFields,omitempty"`
+	ID              string            `json:"id"`
+	Name            string            `json:"name"`
+	Type            string            `json:"type"`
+	Description     string            `json:"description"`
+	Tags            string            `json:"tags"`
+	Context         string            `json:"context"`
+	Status          string            `json:"status"`
+	TemplateID      string            `json:"templateID"`
+	CreatedTime     string            `json:"createdTime"`
+	ModifiedTime    string            `json:"modifiedTime"`
+	TypeFields      json.RawMessage   `json:"typeFields,omitempty"`
 	Repositories    []AssetRepository `json:"repositories,omitempty"`
-	IPCount         string          `json:"ipCount"`
-	Groups          []IDRef         `json:"groups,omitempty"`
-	AssetDataFields []IDRef         `json:"assetDataFields,omitempty"`
-	CanUse          string          `json:"canUse"`
-	CanManage       string          `json:"canManage"`
-	Creator         *AssetUserRef   `json:"creator,omitempty"`
-	Owner           *AssetUserRef   `json:"owner,omitempty"`
-	OwnerGroup      *AssetGroupRef  `json:"ownerGroup,omitempty"`
-	TargetGroup     *AssetGroupRef  `json:"targetGroup,omitempty"`
+	IPCount         string            `json:"ipCount"`
+	Groups          []IDRef           `json:"groups,omitempty"`
+	AssetDataFields []IDRef           `json:"assetDataFields,omitempty"`
+	CanUse          string            `json:"canUse"`
+	CanManage       string            `json:"canManage"`
+	Creator         *AssetUserRef     `json:"creator,omitempty"`
+	Owner           *AssetUserRef     `json:"owner,omitempty"`
+	OwnerGroup      *AssetGroupRef    `json:"ownerGroup,omitempty"`
+	TargetGroup     *AssetGroupRef    `json:"targetGroup,omitempty"`
 }
 
 // AssetUserRef is a user reference with extended fields returned by asset endpoints.
@@ -106,8 +107,8 @@ type AssetShareInput struct {
 }
 
 // List returns the list of assets (usable and manageable).
-func (s *AssetService) List() (*AssetListResponse, error) {
-	resp, err := s.client.get("/asset")
+func (s *AssetService) List(ctx context.Context) (*AssetListResponse, error) {
+	resp, err := s.client.get(ctx, "/asset")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list assets: %w", err)
 	}
@@ -121,8 +122,8 @@ func (s *AssetService) List() (*AssetListResponse, error) {
 }
 
 // Get returns the asset with the given ID.
-func (s *AssetService) Get(id string) (*Asset, error) {
-	resp, err := s.client.get("/asset/" + id)
+func (s *AssetService) Get(ctx context.Context, id string) (*Asset, error) {
+	resp, err := s.client.get(ctx, "/asset/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get asset %s: %w", id, err)
 	}
@@ -136,8 +137,8 @@ func (s *AssetService) Get(id string) (*Asset, error) {
 }
 
 // Create creates a new asset with the given input.
-func (s *AssetService) Create(input *AssetCreateInput) (*Asset, error) {
-	resp, err := s.client.post("/asset", input)
+func (s *AssetService) Create(ctx context.Context, input *AssetCreateInput) (*Asset, error) {
+	resp, err := s.client.post(ctx, "/asset", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create asset: %w", err)
 	}
@@ -151,8 +152,8 @@ func (s *AssetService) Create(input *AssetCreateInput) (*Asset, error) {
 }
 
 // Update updates an existing asset with the given input.
-func (s *AssetService) Update(id string, input *AssetUpdateInput) (*Asset, error) {
-	resp, err := s.client.patch("/asset/"+id, input)
+func (s *AssetService) Update(ctx context.Context, id string, input *AssetUpdateInput) (*Asset, error) {
+	resp, err := s.client.patch(ctx, "/asset/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update asset %s: %w", id, err)
 	}
@@ -166,8 +167,8 @@ func (s *AssetService) Update(id string, input *AssetUpdateInput) (*Asset, error
 }
 
 // Delete deletes the asset with the given ID.
-func (s *AssetService) Delete(id string) error {
-	_, err := s.client.delete("/asset/" + id)
+func (s *AssetService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/asset/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete asset %s: %w", id, err)
 	}
@@ -176,8 +177,8 @@ func (s *AssetService) Delete(id string) error {
 }
 
 // Import imports an asset definition from a file.
-func (s *AssetService) Import(input *AssetImportInput) (*Asset, error) {
-	resp, err := s.client.post("/asset/import", input)
+func (s *AssetService) Import(ctx context.Context, input *AssetImportInput) (*Asset, error) {
+	resp, err := s.client.post(ctx, "/asset/import", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: import asset: %w", err)
 	}
@@ -191,8 +192,8 @@ func (s *AssetService) Import(input *AssetImportInput) (*Asset, error) {
 }
 
 // Export exports the asset with the given ID. The response is raw XML data.
-func (s *AssetService) Export(id string) (json.RawMessage, error) {
-	resp, err := s.client.get("/asset/" + id + "/export")
+func (s *AssetService) Export(ctx context.Context, id string) (json.RawMessage, error) {
+	resp, err := s.client.get(ctx, "/asset/"+id+"/export")
 	if err != nil {
 		return nil, fmt.Errorf("sc: export asset %s: %w", id, err)
 	}
@@ -201,8 +202,8 @@ func (s *AssetService) Export(id string) (json.RawMessage, error) {
 }
 
 // Refresh triggers a refresh of the asset with the given ID.
-func (s *AssetService) Refresh(id string, input *AssetRefreshInput) (*Asset, error) {
-	resp, err := s.client.post("/asset/"+id+"/refresh", input)
+func (s *AssetService) Refresh(ctx context.Context, id string, input *AssetRefreshInput) (*Asset, error) {
+	resp, err := s.client.post(ctx, "/asset/"+id+"/refresh", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: refresh asset %s: %w", id, err)
 	}
@@ -216,8 +217,8 @@ func (s *AssetService) Refresh(id string, input *AssetRefreshInput) (*Asset, err
 }
 
 // TestLDAPQuery tests an LDAP query and returns matching hostnames.
-func (s *AssetService) TestLDAPQuery(input *AssetLDAPTestInput) (*AssetLDAPTestResponse, error) {
-	resp, err := s.client.post("/asset/testLDAPQuery", input)
+func (s *AssetService) TestLDAPQuery(ctx context.Context, input *AssetLDAPTestInput) (*AssetLDAPTestResponse, error) {
+	resp, err := s.client.post(ctx, "/asset/testLDAPQuery", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: test LDAP query: %w", err)
 	}
@@ -231,8 +232,8 @@ func (s *AssetService) TestLDAPQuery(input *AssetLDAPTestInput) (*AssetLDAPTestR
 }
 
 // Share shares the asset with the given ID to the specified groups.
-func (s *AssetService) Share(id string, input *AssetShareInput) (*Asset, error) {
-	resp, err := s.client.post("/asset/"+id+"/share", input)
+func (s *AssetService) Share(ctx context.Context, id string, input *AssetShareInput) (*Asset, error) {
+	resp, err := s.client.post(ctx, "/asset/"+id+"/share", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: share asset %s: %w", id, err)
 	}
@@ -246,8 +247,8 @@ func (s *AssetService) Share(id string, input *AssetShareInput) (*Asset, error) 
 }
 
 // Tags returns the list of asset tags.
-func (s *AssetService) Tags() ([]string, error) {
-	resp, err := s.client.get("/asset/tag")
+func (s *AssetService) Tags(ctx context.Context) ([]string, error) {
+	resp, err := s.client.get(ctx, "/asset/tag")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list asset tags: %w", err)
 	}

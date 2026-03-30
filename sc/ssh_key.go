@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -31,8 +31,8 @@ type SSHKeyCreateInput struct {
 }
 
 // List returns all sSHKeys.
-func (s *SSHKeyService) List() (*SSHKeyListResponse, error) {
-	resp, err := s.client.get("/sshKey")
+func (s *SSHKeyService) List(ctx context.Context) (*SSHKeyListResponse, error) {
+	resp, err := s.client.get(ctx, "/sshKey")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list sSHKeys: %w", err)
 	}
@@ -46,8 +46,8 @@ func (s *SSHKeyService) List() (*SSHKeyListResponse, error) {
 }
 
 // Create creates a new sSHKey.
-func (s *SSHKeyService) Create(input *SSHKeyCreateInput) (*SSHKey, error) {
-	resp, err := s.client.post("/sshKey", input)
+func (s *SSHKeyService) Create(ctx context.Context, input *SSHKeyCreateInput) (*SSHKey, error) {
+	resp, err := s.client.post(ctx, "/sshKey", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create sSHKey: %w", err)
 	}
@@ -61,8 +61,8 @@ func (s *SSHKeyService) Create(input *SSHKeyCreateInput) (*SSHKey, error) {
 }
 
 // Delete deletes the sSHKey.
-func (s *SSHKeyService) Delete() error {
-	_, err := s.client.delete("/sshKey")
+func (s *SSHKeyService) Delete(ctx context.Context) error {
+	_, err := s.client.delete(ctx, "/sshKey")
 	if err != nil {
 		return fmt.Errorf("sc: delete sSHKey: %w", err)
 	}
@@ -71,8 +71,8 @@ func (s *SSHKeyService) Delete() error {
 }
 
 // Download performs the download action on the sSHKey.
-func (s *SSHKeyService) Download() (*SSHKey, error) {
-	resp, err := s.client.get("/sshKey/download")
+func (s *SSHKeyService) Download(ctx context.Context) (*SSHKey, error) {
+	resp, err := s.client.get(ctx, "/sshKey/download")
 	if err != nil {
 		return nil, fmt.Errorf("sc: download sSHKey: %w", err)
 	}
@@ -86,8 +86,8 @@ func (s *SSHKeyService) Download() (*SSHKey, error) {
 }
 
 // InstallRemoteKey performs the installRemoteKey action on the sSHKey.
-func (s *SSHKeyService) InstallRemoteKey() (*SSHKey, error) {
-	resp, err := s.client.post("/sshKey/installRemoteKey", nil)
+func (s *SSHKeyService) InstallRemoteKey(ctx context.Context) (*SSHKey, error) {
+	resp, err := s.client.post(ctx, "/sshKey/installRemoteKey", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: installRemoteKey sSHKey: %w", err)
 	}
@@ -99,4 +99,3 @@ func (s *SSHKeyService) InstallRemoteKey() (*SSHKey, error) {
 
 	return &result, nil
 }
-

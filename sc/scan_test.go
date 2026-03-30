@@ -1,6 +1,7 @@
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -30,7 +31,7 @@ func TestScanList(t *testing.T) {
 	defer ts.Close()
 
 	c := NewClient(ts.URL)
-	result, err := c.Scan.List(nil)
+	result, err := c.Scan.List(context.Background(), nil)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -112,7 +113,7 @@ func TestScanGet(t *testing.T) {
 	defer ts.Close()
 
 	c := NewClient(ts.URL)
-	scan, err := c.Scan.Get("4")
+	scan, err := c.Scan.Get(context.Background(), "4")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -228,7 +229,7 @@ func TestScanCreate(t *testing.T) {
 			Type: "dependent",
 		},
 	}
-	scan, err := c.Scan.Create(input)
+	scan, err := c.Scan.Create(context.Background(), input)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -311,7 +312,7 @@ func TestScanUpdate(t *testing.T) {
 		Repository:  &IDRef{ID: "2"},
 		IPList:      "10.0.0.1",
 	}
-	scan, err := c.Scan.Update("4", input)
+	scan, err := c.Scan.Update(context.Background(), "4", input)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -360,7 +361,7 @@ func TestScanDelete(t *testing.T) {
 	defer ts.Close()
 
 	c := NewClient(ts.URL)
-	err := c.Scan.Delete("4")
+	err := c.Scan.Delete(context.Background(), "4")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -407,7 +408,7 @@ func TestScanLaunch(t *testing.T) {
 		DiagnosticTarget:   "10.0.0.1",
 		DiagnosticPassword: "secret123",
 	}
-	result, err := c.Scan.Launch("2", input)
+	result, err := c.Scan.Launch(context.Background(), "2", input)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -467,7 +468,7 @@ func TestScanLaunchNilInput(t *testing.T) {
 	defer ts.Close()
 
 	c := NewClient(ts.URL)
-	result, err := c.Scan.Launch("2", nil)
+	result, err := c.Scan.Launch(context.Background(), "2", nil)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -535,7 +536,7 @@ func TestScanCopy(t *testing.T) {
 		Name:       "CopiedScan",
 		TargetUser: &IDRef{ID: "1"},
 	}
-	scan, err := c.Scan.Copy("4", input)
+	scan, err := c.Scan.Copy(context.Background(), "4", input)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}

@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -19,8 +19,8 @@ type AgentGroup struct {
 }
 
 // Get returns the agentGroup with the given ID.
-func (s *AgentGroupService) Get(id string) (*AgentGroup, error) {
-	resp, err := s.client.get("/agentGroup" + "/" + id)
+func (s *AgentGroupService) Get(ctx context.Context, id string) (*AgentGroup, error) {
+	resp, err := s.client.get(ctx, "/agentGroup"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get agentGroup %s: %w", id, err)
 	}
@@ -34,8 +34,8 @@ func (s *AgentGroupService) Get(id string) (*AgentGroup, error) {
 }
 
 // Remote performs the remote action on the agentGroup with the given ID.
-func (s *AgentGroupService) Remote(id string) (*AgentGroup, error) {
-	resp, err := s.client.get("/agentGroup" + "/" + id + "/remote")
+func (s *AgentGroupService) Remote(ctx context.Context, id string) (*AgentGroup, error) {
+	resp, err := s.client.get(ctx, "/agentGroup"+"/"+id+"/remote")
 	if err != nil {
 		return nil, fmt.Errorf("sc: remote agentGroup %s: %w", id, err)
 	}
@@ -47,4 +47,3 @@ func (s *AgentGroupService) Remote(id string) (*AgentGroup, error) {
 
 	return &result, nil
 }
-

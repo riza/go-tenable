@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type SolutionsCreateInput struct {
 }
 
 // Create creates a new solutions.
-func (s *SolutionsService) Create(input *SolutionsCreateInput) (*Solutions, error) {
-	resp, err := s.client.post("/solutions", input)
+func (s *SolutionsService) Create(ctx context.Context, input *SolutionsCreateInput) (*Solutions, error) {
+	resp, err := s.client.post(ctx, "/solutions", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create solutions: %w", err)
 	}
@@ -40,8 +40,8 @@ func (s *SolutionsService) Create(input *SolutionsCreateInput) (*Solutions, erro
 }
 
 // CreateByID performs the  action on the solutions with the given ID.
-func (s *SolutionsService) CreateByID(id string) (*Solutions, error) {
-	resp, err := s.client.post("/solutions" + "/" + id, nil)
+func (s *SolutionsService) CreateByID(ctx context.Context, id string) (*Solutions, error) {
+	resp, err := s.client.post(ctx, "/solutions"+"/"+id, nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: createByID solutions %s: %w", id, err)
 	}
@@ -55,8 +55,8 @@ func (s *SolutionsService) CreateByID(id string) (*Solutions, error) {
 }
 
 // Vuln performs the vuln action on the solutions with the given ID.
-func (s *SolutionsService) Vuln(id string) (*Solutions, error) {
-	resp, err := s.client.post("/solutions" + "/" + id + "/vuln", nil)
+func (s *SolutionsService) Vuln(ctx context.Context, id string) (*Solutions, error) {
+	resp, err := s.client.post(ctx, "/solutions"+"/"+id+"/vuln", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: vuln solutions %s: %w", id, err)
 	}
@@ -70,8 +70,8 @@ func (s *SolutionsService) Vuln(id string) (*Solutions, error) {
 }
 
 // Asset performs the asset action on the solutions with the given ID.
-func (s *SolutionsService) Asset(id string) (*Solutions, error) {
-	resp, err := s.client.post("/solutions" + "/" + id + "/asset", nil)
+func (s *SolutionsService) Asset(ctx context.Context, id string) (*Solutions, error) {
+	resp, err := s.client.post(ctx, "/solutions"+"/"+id+"/asset", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: asset solutions %s: %w", id, err)
 	}
@@ -83,4 +83,3 @@ func (s *SolutionsService) Asset(id string) (*Solutions, error) {
 
 	return &result, nil
 }
-

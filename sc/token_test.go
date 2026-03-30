@@ -1,6 +1,7 @@
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -33,7 +34,7 @@ func TestTokenCreate(t *testing.T) {
 	defer ts.Close()
 
 	c := NewClient(ts.URL)
-	resp, err := c.Token.Create(&TokenCreateInput{
+	resp, err := c.Token.Create(context.Background(), &TokenCreateInput{
 		Username: "admin",
 		Password: "secret",
 	})
@@ -86,7 +87,7 @@ func TestTokenCreateWithReleaseSession(t *testing.T) {
 	defer ts.Close()
 
 	c := NewClient(ts.URL)
-	resp, err := c.Token.Create(&TokenCreateInput{
+	resp, err := c.Token.Create(context.Background(), &TokenCreateInput{
 		Username:       "admin",
 		Password:       "secret",
 		ReleaseSession: "true",
@@ -119,7 +120,7 @@ func TestTokenDelete(t *testing.T) {
 	defer ts.Close()
 
 	c := NewClient(ts.URL)
-	err := c.Token.Delete()
+	err := c.Token.Delete(context.Background())
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -148,7 +149,7 @@ func TestTokenCreateAPIError(t *testing.T) {
 	defer ts.Close()
 
 	c := NewClient(ts.URL)
-	_, err := c.Token.Create(&TokenCreateInput{
+	_, err := c.Token.Create(context.Background(), &TokenCreateInput{
 		Username: "admin",
 		Password: "wrong",
 	})
@@ -170,7 +171,7 @@ func TestTokenDeleteAPIError(t *testing.T) {
 	defer ts.Close()
 
 	c := NewClient(ts.URL)
-	err := c.Token.Delete()
+	err := c.Token.Delete(context.Background())
 	if err == nil {
 		t.Fatal("expected error, got nil")
 	}

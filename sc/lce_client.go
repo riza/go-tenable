@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type LCEClientListResponse struct {
 }
 
 // List returns all lCEClients.
-func (s *LCEClientService) List() (*LCEClientListResponse, error) {
-	resp, err := s.client.get("/lce/{id}/client")
+func (s *LCEClientService) List(ctx context.Context) (*LCEClientListResponse, error) {
+	resp, err := s.client.get(ctx, "/lce/{id}/client")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list lCEClients: %w", err)
 	}
@@ -40,8 +40,8 @@ func (s *LCEClientService) List() (*LCEClientListResponse, error) {
 }
 
 // Types performs the types action on the lCEClient.
-func (s *LCEClientService) Types() (*LCEClient, error) {
-	resp, err := s.client.get("/lce/{id}/client/types")
+func (s *LCEClientService) Types(ctx context.Context) (*LCEClient, error) {
+	resp, err := s.client.get(ctx, "/lce/{id}/client/types")
 	if err != nil {
 		return nil, fmt.Errorf("sc: types lCEClient: %w", err)
 	}
@@ -55,8 +55,8 @@ func (s *LCEClientService) Types() (*LCEClient, error) {
 }
 
 // OsTypes performs the osTypes action on the lCEClient.
-func (s *LCEClientService) OsTypes() (*LCEClient, error) {
-	resp, err := s.client.get("/lce/{id}/client/osTypes")
+func (s *LCEClientService) OsTypes(ctx context.Context) (*LCEClient, error) {
+	resp, err := s.client.get(ctx, "/lce/{id}/client/osTypes")
 	if err != nil {
 		return nil, fmt.Errorf("sc: osTypes lCEClient: %w", err)
 	}
@@ -68,4 +68,3 @@ func (s *LCEClientService) OsTypes() (*LCEClient, error) {
 
 	return &result, nil
 }
-

@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -31,8 +31,8 @@ type DirectorScannerCreateInput struct {
 }
 
 // List returns all directorScanners.
-func (s *DirectorScannerService) List() (*DirectorScannerListResponse, error) {
-	resp, err := s.client.get("/mgmt/scanner")
+func (s *DirectorScannerService) List(ctx context.Context) (*DirectorScannerListResponse, error) {
+	resp, err := s.client.get(ctx, "/mgmt/scanner")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list directorScanners: %w", err)
 	}
@@ -46,8 +46,8 @@ func (s *DirectorScannerService) List() (*DirectorScannerListResponse, error) {
 }
 
 // Create creates a new directorScanner.
-func (s *DirectorScannerService) Create(input *DirectorScannerCreateInput) (*DirectorScanner, error) {
-	resp, err := s.client.post("/mgmt/scanner", input)
+func (s *DirectorScannerService) Create(ctx context.Context, input *DirectorScannerCreateInput) (*DirectorScanner, error) {
+	resp, err := s.client.post(ctx, "/mgmt/scanner", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create directorScanner: %w", err)
 	}
@@ -59,4 +59,3 @@ func (s *DirectorScannerService) Create(input *DirectorScannerCreateInput) (*Dir
 
 	return &result, nil
 }
-

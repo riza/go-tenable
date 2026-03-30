@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -31,8 +31,8 @@ type ReportImageCreateInput struct {
 }
 
 // List returns all reportImages.
-func (s *ReportImageService) List() (*ReportImageListResponse, error) {
-	resp, err := s.client.get("/report/image")
+func (s *ReportImageService) List(ctx context.Context) (*ReportImageListResponse, error) {
+	resp, err := s.client.get(ctx, "/report/image")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list reportImages: %w", err)
 	}
@@ -46,8 +46,8 @@ func (s *ReportImageService) List() (*ReportImageListResponse, error) {
 }
 
 // Create creates a new reportImage.
-func (s *ReportImageService) Create(input *ReportImageCreateInput) (*ReportImage, error) {
-	resp, err := s.client.post("/report/image", input)
+func (s *ReportImageService) Create(ctx context.Context, input *ReportImageCreateInput) (*ReportImage, error) {
+	resp, err := s.client.post(ctx, "/report/image", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create reportImage: %w", err)
 	}
@@ -59,4 +59,3 @@ func (s *ReportImageService) Create(input *ReportImageCreateInput) (*ReportImage
 
 	return &result, nil
 }
-

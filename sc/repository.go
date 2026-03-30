@@ -1,6 +1,7 @@
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -69,8 +70,8 @@ type RepositoryAuthorizeInput struct {
 
 // List returns the list of repositories. Unlike most resources, the repository
 // list endpoint returns a direct array rather than usable/manageable groups.
-func (s *RepositoryService) List() ([]Repository, error) {
-	resp, err := s.client.get("/repository")
+func (s *RepositoryService) List(ctx context.Context) ([]Repository, error) {
+	resp, err := s.client.get(ctx, "/repository")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list repositories: %w", err)
 	}
@@ -84,8 +85,8 @@ func (s *RepositoryService) List() ([]Repository, error) {
 }
 
 // Get returns the repository with the given ID.
-func (s *RepositoryService) Get(id string) (*Repository, error) {
-	resp, err := s.client.get("/repository/" + id)
+func (s *RepositoryService) Get(ctx context.Context, id string) (*Repository, error) {
+	resp, err := s.client.get(ctx, "/repository/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get repository %s: %w", id, err)
 	}
@@ -99,8 +100,8 @@ func (s *RepositoryService) Get(id string) (*Repository, error) {
 }
 
 // Create creates a new repository with the given input.
-func (s *RepositoryService) Create(input *RepositoryCreateInput) (*Repository, error) {
-	resp, err := s.client.post("/repository", input)
+func (s *RepositoryService) Create(ctx context.Context, input *RepositoryCreateInput) (*Repository, error) {
+	resp, err := s.client.post(ctx, "/repository", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create repository: %w", err)
 	}
@@ -114,8 +115,8 @@ func (s *RepositoryService) Create(input *RepositoryCreateInput) (*Repository, e
 }
 
 // Update updates an existing repository with the given input.
-func (s *RepositoryService) Update(id string, input *RepositoryUpdateInput) (*Repository, error) {
-	resp, err := s.client.patch("/repository/"+id, input)
+func (s *RepositoryService) Update(ctx context.Context, id string, input *RepositoryUpdateInput) (*Repository, error) {
+	resp, err := s.client.patch(ctx, "/repository/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update repository %s: %w", id, err)
 	}
@@ -129,8 +130,8 @@ func (s *RepositoryService) Update(id string, input *RepositoryUpdateInput) (*Re
 }
 
 // Delete deletes the repository with the given ID.
-func (s *RepositoryService) Delete(id string) error {
-	_, err := s.client.delete("/repository/" + id)
+func (s *RepositoryService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/repository/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete repository %s: %w", id, err)
 	}
@@ -139,8 +140,8 @@ func (s *RepositoryService) Delete(id string) error {
 }
 
 // AcceptRiskRules returns the accept risk rules for the repository with the given ID.
-func (s *RepositoryService) AcceptRiskRules(id string) (json.RawMessage, error) {
-	resp, err := s.client.get("/repository/" + id + "/acceptRiskRule")
+func (s *RepositoryService) AcceptRiskRules(ctx context.Context, id string) (json.RawMessage, error) {
+	resp, err := s.client.get(ctx, "/repository/"+id+"/acceptRiskRule")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list accept risk rules for repository %s: %w", id, err)
 	}
@@ -149,8 +150,8 @@ func (s *RepositoryService) AcceptRiskRules(id string) (json.RawMessage, error) 
 }
 
 // RecastRiskRules returns the recast risk rules for the repository with the given ID.
-func (s *RepositoryService) RecastRiskRules(id string) (json.RawMessage, error) {
-	resp, err := s.client.get("/repository/" + id + "/recastRiskRule")
+func (s *RepositoryService) RecastRiskRules(ctx context.Context, id string) (json.RawMessage, error) {
+	resp, err := s.client.get(ctx, "/repository/"+id+"/recastRiskRule")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list recast risk rules for repository %s: %w", id, err)
 	}
@@ -159,8 +160,8 @@ func (s *RepositoryService) RecastRiskRules(id string) (json.RawMessage, error) 
 }
 
 // Import imports data into the repository with the given ID.
-func (s *RepositoryService) Import(id string, input *RepositoryImportInput) (json.RawMessage, error) {
-	resp, err := s.client.post("/repository/"+id+"/import", input)
+func (s *RepositoryService) Import(ctx context.Context, id string, input *RepositoryImportInput) (json.RawMessage, error) {
+	resp, err := s.client.post(ctx, "/repository/"+id+"/import", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: import repository %s: %w", id, err)
 	}
@@ -169,8 +170,8 @@ func (s *RepositoryService) Import(id string, input *RepositoryImportInput) (jso
 }
 
 // Export exports data from the repository with the given ID. The response is binary data.
-func (s *RepositoryService) Export(id string) (json.RawMessage, error) {
-	resp, err := s.client.get("/repository/" + id + "/export")
+func (s *RepositoryService) Export(ctx context.Context, id string) (json.RawMessage, error) {
+	resp, err := s.client.get(ctx, "/repository/"+id+"/export")
 	if err != nil {
 		return nil, fmt.Errorf("sc: export repository %s: %w", id, err)
 	}
@@ -179,8 +180,8 @@ func (s *RepositoryService) Export(id string) (json.RawMessage, error) {
 }
 
 // Sync triggers a sync of the repository with the given ID.
-func (s *RepositoryService) Sync(id string) (json.RawMessage, error) {
-	resp, err := s.client.post("/repository/"+id+"/sync", nil)
+func (s *RepositoryService) Sync(ctx context.Context, id string) (json.RawMessage, error) {
+	resp, err := s.client.post(ctx, "/repository/"+id+"/sync", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: sync repository %s: %w", id, err)
 	}
@@ -189,8 +190,8 @@ func (s *RepositoryService) Sync(id string) (json.RawMessage, error) {
 }
 
 // UpdateMobileData triggers a mobile data update for the repository with the given ID.
-func (s *RepositoryService) UpdateMobileData(id string) (json.RawMessage, error) {
-	resp, err := s.client.post("/repository/"+id+"/updateMobileData", nil)
+func (s *RepositoryService) UpdateMobileData(ctx context.Context, id string) (json.RawMessage, error) {
+	resp, err := s.client.post(ctx, "/repository/"+id+"/updateMobileData", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update mobile data for repository %s: %w", id, err)
 	}
@@ -199,8 +200,8 @@ func (s *RepositoryService) UpdateMobileData(id string) (json.RawMessage, error)
 }
 
 // DeviceInfo returns device information for the given host UUID within the repository.
-func (s *RepositoryService) DeviceInfo(id string, hostUUID string) (json.RawMessage, error) {
-	resp, err := s.client.get("/repository/" + id + "/deviceInfo?uuid=" + hostUUID)
+func (s *RepositoryService) DeviceInfo(ctx context.Context, id string, hostUUID string) (json.RawMessage, error) {
+	resp, err := s.client.get(ctx, "/repository/"+id+"/deviceInfo?uuid="+hostUUID)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get device info for repository %s: %w", id, err)
 	}
@@ -209,8 +210,8 @@ func (s *RepositoryService) DeviceInfo(id string, hostUUID string) (json.RawMess
 }
 
 // Authorize authorizes access to a remote repository.
-func (s *RepositoryService) Authorize(input *RepositoryAuthorizeInput) (json.RawMessage, error) {
-	resp, err := s.client.post("/repository/authorize", input)
+func (s *RepositoryService) Authorize(ctx context.Context, input *RepositoryAuthorizeInput) (json.RawMessage, error) {
+	resp, err := s.client.post(ctx, "/repository/authorize", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: authorize repository: %w", err)
 	}
@@ -219,8 +220,8 @@ func (s *RepositoryService) Authorize(input *RepositoryAuthorizeInput) (json.Raw
 }
 
 // FetchRemote fetches available remote repositories from the given host.
-func (s *RepositoryService) FetchRemote(host string) (json.RawMessage, error) {
-	resp, err := s.client.get("/repository/fetchRemote?host=" + host)
+func (s *RepositoryService) FetchRemote(ctx context.Context, host string) (json.RawMessage, error) {
+	resp, err := s.client.get(ctx, "/repository/fetchRemote?host="+host)
 	if err != nil {
 		return nil, fmt.Errorf("sc: fetch remote repositories: %w", err)
 	}

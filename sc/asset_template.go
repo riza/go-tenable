@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type AssetTemplateListResponse struct {
 }
 
 // List returns all assetTemplates.
-func (s *AssetTemplateService) List() (*AssetTemplateListResponse, error) {
-	resp, err := s.client.get("/assetTemplate")
+func (s *AssetTemplateService) List(ctx context.Context) (*AssetTemplateListResponse, error) {
+	resp, err := s.client.get(ctx, "/assetTemplate")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list assetTemplates: %w", err)
 	}
@@ -40,8 +40,8 @@ func (s *AssetTemplateService) List() (*AssetTemplateListResponse, error) {
 }
 
 // Get returns the assetTemplate with the given ID.
-func (s *AssetTemplateService) Get(id string) (*AssetTemplate, error) {
-	resp, err := s.client.get("/assetTemplate" + "/" + id)
+func (s *AssetTemplateService) Get(ctx context.Context, id string) (*AssetTemplate, error) {
+	resp, err := s.client.get(ctx, "/assetTemplate"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get assetTemplate %s: %w", id, err)
 	}
@@ -55,8 +55,8 @@ func (s *AssetTemplateService) Get(id string) (*AssetTemplate, error) {
 }
 
 // Categories performs the categories action on the assetTemplate.
-func (s *AssetTemplateService) Categories() (*AssetTemplate, error) {
-	resp, err := s.client.get("/assetTemplate/categories")
+func (s *AssetTemplateService) Categories(ctx context.Context) (*AssetTemplate, error) {
+	resp, err := s.client.get(ctx, "/assetTemplate/categories")
 	if err != nil {
 		return nil, fmt.Errorf("sc: categories assetTemplate: %w", err)
 	}
@@ -68,4 +68,3 @@ func (s *AssetTemplateService) Categories() (*AssetTemplate, error) {
 
 	return &result, nil
 }
-

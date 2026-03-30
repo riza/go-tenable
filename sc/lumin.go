@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -19,8 +19,8 @@ type Lumin struct {
 }
 
 // Repositories performs the repositories action on the lumin.
-func (s *LuminService) Repositories() (*Lumin, error) {
-	resp, err := s.client.post("/lumin/repositories", nil)
+func (s *LuminService) Repositories(ctx context.Context) (*Lumin, error) {
+	resp, err := s.client.post(ctx, "/lumin/repositories", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: repositories lumin: %w", err)
 	}
@@ -34,8 +34,8 @@ func (s *LuminService) Repositories() (*Lumin, error) {
 }
 
 // Assets performs the assets action on the lumin.
-func (s *LuminService) Assets() (*Lumin, error) {
-	resp, err := s.client.post("/lumin/assets", nil)
+func (s *LuminService) Assets(ctx context.Context) (*Lumin, error) {
+	resp, err := s.client.post(ctx, "/lumin/assets", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: assets lumin: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *LuminService) Assets() (*Lumin, error) {
 }
 
 // Schedule performs the schedule action on the lumin.
-func (s *LuminService) Schedule() (*Lumin, error) {
-	resp, err := s.client.get("/lumin/schedule")
+func (s *LuminService) Schedule(ctx context.Context) (*Lumin, error) {
+	resp, err := s.client.get(ctx, "/lumin/schedule")
 	if err != nil {
 		return nil, fmt.Errorf("sc: schedule lumin: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *LuminService) Schedule() (*Lumin, error) {
 }
 
 // Metrics performs the metrics action on the lumin.
-func (s *LuminService) Metrics() (*Lumin, error) {
-	resp, err := s.client.get("/lumin/metrics")
+func (s *LuminService) Metrics(ctx context.Context) (*Lumin, error) {
+	resp, err := s.client.get(ctx, "/lumin/metrics")
 	if err != nil {
 		return nil, fmt.Errorf("sc: metrics lumin: %w", err)
 	}
@@ -79,8 +79,8 @@ func (s *LuminService) Metrics() (*Lumin, error) {
 }
 
 // Test performs the test action on the lumin.
-func (s *LuminService) Test() (*Lumin, error) {
-	resp, err := s.client.get("/lumin/test")
+func (s *LuminService) Test(ctx context.Context) (*Lumin, error) {
+	resp, err := s.client.get(ctx, "/lumin/test")
 	if err != nil {
 		return nil, fmt.Errorf("sc: test lumin: %w", err)
 	}
@@ -92,4 +92,3 @@ func (s *LuminService) Test() (*Lumin, error) {
 
 	return &result, nil
 }
-

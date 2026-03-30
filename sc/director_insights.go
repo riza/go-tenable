@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type DirectorInsightsListResponse struct {
 }
 
 // List returns all directorInsightss.
-func (s *DirectorInsightsService) List() (*DirectorInsightsListResponse, error) {
-	resp, err := s.client.get("/mgmt/insights")
+func (s *DirectorInsightsService) List(ctx context.Context) (*DirectorInsightsListResponse, error) {
+	resp, err := s.client.get(ctx, "/mgmt/insights")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list directorInsightss: %w", err)
 	}
@@ -38,4 +38,3 @@ func (s *DirectorInsightsService) List() (*DirectorInsightsListResponse, error) 
 
 	return &result, nil
 }
-

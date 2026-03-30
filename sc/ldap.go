@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type LDAPCreateInput struct {
 type LDAPUpdateInput = LDAPCreateInput
 
 // List returns all lDAPs.
-func (s *LDAPService) List() (*LDAPListResponse, error) {
-	resp, err := s.client.get("/ldap")
+func (s *LDAPService) List(ctx context.Context) (*LDAPListResponse, error) {
+	resp, err := s.client.get(ctx, "/ldap")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list lDAPs: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *LDAPService) List() (*LDAPListResponse, error) {
 }
 
 // Create creates a new lDAP.
-func (s *LDAPService) Create(input *LDAPCreateInput) (*LDAP, error) {
-	resp, err := s.client.post("/ldap", input)
+func (s *LDAPService) Create(ctx context.Context, input *LDAPCreateInput) (*LDAP, error) {
+	resp, err := s.client.post(ctx, "/ldap", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create lDAP: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *LDAPService) Create(input *LDAPCreateInput) (*LDAP, error) {
 }
 
 // Get returns the lDAP with the given ID.
-func (s *LDAPService) Get(id string) (*LDAP, error) {
-	resp, err := s.client.get("/ldap" + "/" + id)
+func (s *LDAPService) Get(ctx context.Context, id string) (*LDAP, error) {
+	resp, err := s.client.get(ctx, "/ldap"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get lDAP %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *LDAPService) Get(id string) (*LDAP, error) {
 }
 
 // Update updates the lDAP with the given ID.
-func (s *LDAPService) Update(id string, input *LDAPUpdateInput) (*LDAP, error) {
-	resp, err := s.client.patch("/ldap" + "/" + id, input)
+func (s *LDAPService) Update(ctx context.Context, id string, input *LDAPUpdateInput) (*LDAP, error) {
+	resp, err := s.client.patch(ctx, "/ldap"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update lDAP %s: %w", id, err)
 	}
@@ -94,8 +94,8 @@ func (s *LDAPService) Update(id string, input *LDAPUpdateInput) (*LDAP, error) {
 }
 
 // Delete deletes the lDAP with the given ID.
-func (s *LDAPService) Delete(id string) error {
-	_, err := s.client.delete("/ldap" + "/" + id)
+func (s *LDAPService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/ldap"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete lDAP %s: %w", id, err)
 	}
@@ -104,8 +104,8 @@ func (s *LDAPService) Delete(id string) error {
 }
 
 // Query performs the query action on the lDAP with the given ID.
-func (s *LDAPService) Query(id string) (*LDAP, error) {
-	resp, err := s.client.post("/ldap" + "/" + id + "/query", nil)
+func (s *LDAPService) Query(ctx context.Context, id string) (*LDAP, error) {
+	resp, err := s.client.post(ctx, "/ldap"+"/"+id+"/query", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: query lDAP %s: %w", id, err)
 	}
@@ -119,8 +119,8 @@ func (s *LDAPService) Query(id string) (*LDAP, error) {
 }
 
 // Test performs the test action on the lDAP.
-func (s *LDAPService) Test() (*LDAP, error) {
-	resp, err := s.client.post("/ldap/test", nil)
+func (s *LDAPService) Test(ctx context.Context) (*LDAP, error) {
+	resp, err := s.client.post(ctx, "/ldap/test", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: test lDAP: %w", err)
 	}
@@ -132,4 +132,3 @@ func (s *LDAPService) Test() (*LDAP, error) {
 
 	return &result, nil
 }
-

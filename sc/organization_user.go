@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type OrganizationUserListResponse struct {
 }
 
 // List returns all organizationUsers.
-func (s *OrganizationUserService) List() (*OrganizationUserListResponse, error) {
-	resp, err := s.client.get("/organization/{orgID}/user")
+func (s *OrganizationUserService) List(ctx context.Context) (*OrganizationUserListResponse, error) {
+	resp, err := s.client.get(ctx, "/organization/{orgID}/user")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list organizationUsers: %w", err)
 	}
@@ -40,8 +40,8 @@ func (s *OrganizationUserService) List() (*OrganizationUserListResponse, error) 
 }
 
 // Get returns the organizationUser with the given ID.
-func (s *OrganizationUserService) Get(id string) (*OrganizationUser, error) {
-	resp, err := s.client.get("/organization/{orgID}/user" + "/" + id)
+func (s *OrganizationUserService) Get(ctx context.Context, id string) (*OrganizationUser, error) {
+	resp, err := s.client.get(ctx, "/organization/{orgID}/user"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get organizationUser %s: %w", id, err)
 	}
@@ -53,4 +53,3 @@ func (s *OrganizationUserService) Get(id string) (*OrganizationUser, error) {
 
 	return &result, nil
 }
-

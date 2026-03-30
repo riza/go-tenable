@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type DashboardTabCreateInput struct {
 type DashboardTabUpdateInput = DashboardTabCreateInput
 
 // List returns all dashboardTabs.
-func (s *DashboardTabService) List() (*DashboardTabListResponse, error) {
-	resp, err := s.client.get("/dashboard")
+func (s *DashboardTabService) List(ctx context.Context) (*DashboardTabListResponse, error) {
+	resp, err := s.client.get(ctx, "/dashboard")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list dashboardTabs: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *DashboardTabService) List() (*DashboardTabListResponse, error) {
 }
 
 // Create creates a new dashboardTab.
-func (s *DashboardTabService) Create(input *DashboardTabCreateInput) (*DashboardTab, error) {
-	resp, err := s.client.post("/dashboard", input)
+func (s *DashboardTabService) Create(ctx context.Context, input *DashboardTabCreateInput) (*DashboardTab, error) {
+	resp, err := s.client.post(ctx, "/dashboard", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create dashboardTab: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *DashboardTabService) Create(input *DashboardTabCreateInput) (*Dashboard
 }
 
 // Get returns the dashboardTab with the given ID.
-func (s *DashboardTabService) Get(id string) (*DashboardTab, error) {
-	resp, err := s.client.get("/dashboard" + "/" + id)
+func (s *DashboardTabService) Get(ctx context.Context, id string) (*DashboardTab, error) {
+	resp, err := s.client.get(ctx, "/dashboard"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get dashboardTab %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *DashboardTabService) Get(id string) (*DashboardTab, error) {
 }
 
 // Update updates the dashboardTab with the given ID.
-func (s *DashboardTabService) Update(id string, input *DashboardTabUpdateInput) (*DashboardTab, error) {
-	resp, err := s.client.patch("/dashboard" + "/" + id, input)
+func (s *DashboardTabService) Update(ctx context.Context, id string, input *DashboardTabUpdateInput) (*DashboardTab, error) {
+	resp, err := s.client.patch(ctx, "/dashboard"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update dashboardTab %s: %w", id, err)
 	}
@@ -94,8 +94,8 @@ func (s *DashboardTabService) Update(id string, input *DashboardTabUpdateInput) 
 }
 
 // Delete deletes the dashboardTab with the given ID.
-func (s *DashboardTabService) Delete(id string) error {
-	_, err := s.client.delete("/dashboard" + "/" + id)
+func (s *DashboardTabService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/dashboard"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete dashboardTab %s: %w", id, err)
 	}
@@ -104,8 +104,8 @@ func (s *DashboardTabService) Delete(id string) error {
 }
 
 // Copy performs the copy action on the dashboardTab with the given ID.
-func (s *DashboardTabService) Copy(id string) (*DashboardTab, error) {
-	resp, err := s.client.post("/dashboard" + "/" + id + "/copy", nil)
+func (s *DashboardTabService) Copy(ctx context.Context, id string) (*DashboardTab, error) {
+	resp, err := s.client.post(ctx, "/dashboard"+"/"+id+"/copy", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: copy dashboardTab %s: %w", id, err)
 	}
@@ -119,8 +119,8 @@ func (s *DashboardTabService) Copy(id string) (*DashboardTab, error) {
 }
 
 // Import performs the import action on the dashboardTab.
-func (s *DashboardTabService) Import() (*DashboardTab, error) {
-	resp, err := s.client.post("/dashboard/import", nil)
+func (s *DashboardTabService) Import(ctx context.Context) (*DashboardTab, error) {
+	resp, err := s.client.post(ctx, "/dashboard/import", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: import dashboardTab: %w", err)
 	}
@@ -134,8 +134,8 @@ func (s *DashboardTabService) Import() (*DashboardTab, error) {
 }
 
 // Export performs the export action on the dashboardTab with the given ID.
-func (s *DashboardTabService) Export(id string) (*DashboardTab, error) {
-	resp, err := s.client.post("/dashboard" + "/" + id + "/export", nil)
+func (s *DashboardTabService) Export(ctx context.Context, id string) (*DashboardTab, error) {
+	resp, err := s.client.post(ctx, "/dashboard"+"/"+id+"/export", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: export dashboardTab %s: %w", id, err)
 	}
@@ -149,8 +149,8 @@ func (s *DashboardTabService) Export(id string) (*DashboardTab, error) {
 }
 
 // Share performs the share action on the dashboardTab with the given ID.
-func (s *DashboardTabService) Share(id string) (*DashboardTab, error) {
-	resp, err := s.client.post("/dashboard" + "/" + id + "/share", nil)
+func (s *DashboardTabService) Share(ctx context.Context, id string) (*DashboardTab, error) {
+	resp, err := s.client.post(ctx, "/dashboard"+"/"+id+"/share", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: share dashboardTab %s: %w", id, err)
 	}
@@ -162,4 +162,3 @@ func (s *DashboardTabService) Share(id string) (*DashboardTab, error) {
 
 	return &result, nil
 }
-

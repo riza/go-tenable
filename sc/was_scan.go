@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type WASScanCreateInput struct {
 type WASScanUpdateInput = WASScanCreateInput
 
 // List returns all wASScans.
-func (s *WASScanService) List() (*WASScanListResponse, error) {
-	resp, err := s.client.get("/wasScan")
+func (s *WASScanService) List(ctx context.Context) (*WASScanListResponse, error) {
+	resp, err := s.client.get(ctx, "/wasScan")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list wASScans: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *WASScanService) List() (*WASScanListResponse, error) {
 }
 
 // Create creates a new wASScan.
-func (s *WASScanService) Create(input *WASScanCreateInput) (*WASScan, error) {
-	resp, err := s.client.post("/wasScan", input)
+func (s *WASScanService) Create(ctx context.Context, input *WASScanCreateInput) (*WASScan, error) {
+	resp, err := s.client.post(ctx, "/wasScan", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create wASScan: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *WASScanService) Create(input *WASScanCreateInput) (*WASScan, error) {
 }
 
 // Get returns the wASScan with the given ID.
-func (s *WASScanService) Get(id string) (*WASScan, error) {
-	resp, err := s.client.get("/wasScan" + "/" + id)
+func (s *WASScanService) Get(ctx context.Context, id string) (*WASScan, error) {
+	resp, err := s.client.get(ctx, "/wasScan"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get wASScan %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *WASScanService) Get(id string) (*WASScan, error) {
 }
 
 // Update updates the wASScan with the given ID.
-func (s *WASScanService) Update(id string, input *WASScanUpdateInput) (*WASScan, error) {
-	resp, err := s.client.patch("/wasScan" + "/" + id, input)
+func (s *WASScanService) Update(ctx context.Context, id string, input *WASScanUpdateInput) (*WASScan, error) {
+	resp, err := s.client.patch(ctx, "/wasScan"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update wASScan %s: %w", id, err)
 	}
@@ -94,8 +94,8 @@ func (s *WASScanService) Update(id string, input *WASScanUpdateInput) (*WASScan,
 }
 
 // Delete deletes the wASScan with the given ID.
-func (s *WASScanService) Delete(id string) error {
-	_, err := s.client.delete("/wasScan" + "/" + id)
+func (s *WASScanService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/wasScan"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete wASScan %s: %w", id, err)
 	}
@@ -104,8 +104,8 @@ func (s *WASScanService) Delete(id string) error {
 }
 
 // Copy performs the copy action on the wASScan with the given ID.
-func (s *WASScanService) Copy(id string) (*WASScan, error) {
-	resp, err := s.client.post("/wasScan" + "/" + id + "/copy", nil)
+func (s *WASScanService) Copy(ctx context.Context, id string) (*WASScan, error) {
+	resp, err := s.client.post(ctx, "/wasScan"+"/"+id+"/copy", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: copy wASScan %s: %w", id, err)
 	}
@@ -119,8 +119,8 @@ func (s *WASScanService) Copy(id string) (*WASScan, error) {
 }
 
 // Launch performs the launch action on the wASScan with the given ID.
-func (s *WASScanService) Launch(id string) (*WASScan, error) {
-	resp, err := s.client.post("/wasScan" + "/" + id + "/launch", nil)
+func (s *WASScanService) Launch(ctx context.Context, id string) (*WASScan, error) {
+	resp, err := s.client.post(ctx, "/wasScan"+"/"+id+"/launch", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: launch wASScan %s: %w", id, err)
 	}
@@ -132,4 +132,3 @@ func (s *WASScanService) Launch(id string) (*WASScan, error) {
 
 	return &result, nil
 }
-

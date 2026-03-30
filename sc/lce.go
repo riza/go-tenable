@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type LCECreateInput struct {
 type LCEUpdateInput = LCECreateInput
 
 // List returns all lCEs.
-func (s *LCEService) List() (*LCEListResponse, error) {
-	resp, err := s.client.get("/lce")
+func (s *LCEService) List(ctx context.Context) (*LCEListResponse, error) {
+	resp, err := s.client.get(ctx, "/lce")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list lCEs: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *LCEService) List() (*LCEListResponse, error) {
 }
 
 // Create creates a new lCE.
-func (s *LCEService) Create(input *LCECreateInput) (*LCE, error) {
-	resp, err := s.client.post("/lce", input)
+func (s *LCEService) Create(ctx context.Context, input *LCECreateInput) (*LCE, error) {
+	resp, err := s.client.post(ctx, "/lce", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create lCE: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *LCEService) Create(input *LCECreateInput) (*LCE, error) {
 }
 
 // Authorize performs the authorize action on the lCE.
-func (s *LCEService) Authorize() (*LCE, error) {
-	resp, err := s.client.post("/lce/authorize", nil)
+func (s *LCEService) Authorize(ctx context.Context) (*LCE, error) {
+	resp, err := s.client.post(ctx, "/lce/authorize", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: authorize lCE: %w", err)
 	}
@@ -79,8 +79,8 @@ func (s *LCEService) Authorize() (*LCE, error) {
 }
 
 // Get returns the lCE with the given ID.
-func (s *LCEService) Get(id string) (*LCE, error) {
-	resp, err := s.client.get("/lce" + "/" + id)
+func (s *LCEService) Get(ctx context.Context, id string) (*LCE, error) {
+	resp, err := s.client.get(ctx, "/lce"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get lCE %s: %w", id, err)
 	}
@@ -94,8 +94,8 @@ func (s *LCEService) Get(id string) (*LCE, error) {
 }
 
 // Update updates the lCE with the given ID.
-func (s *LCEService) Update(id string, input *LCEUpdateInput) (*LCE, error) {
-	resp, err := s.client.patch("/lce" + "/" + id, input)
+func (s *LCEService) Update(ctx context.Context, id string, input *LCEUpdateInput) (*LCE, error) {
+	resp, err := s.client.patch(ctx, "/lce"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update lCE %s: %w", id, err)
 	}
@@ -109,8 +109,8 @@ func (s *LCEService) Update(id string, input *LCEUpdateInput) (*LCE, error) {
 }
 
 // Delete deletes the lCE with the given ID.
-func (s *LCEService) Delete(id string) error {
-	_, err := s.client.delete("/lce" + "/" + id)
+func (s *LCEService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/lce"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete lCE %s: %w", id, err)
 	}
@@ -119,8 +119,8 @@ func (s *LCEService) Delete(id string) error {
 }
 
 // EventTypes performs the eventTypes action on the lCE.
-func (s *LCEService) EventTypes() (*LCE, error) {
-	resp, err := s.client.get("/lce/eventTypes")
+func (s *LCEService) EventTypes(ctx context.Context) (*LCE, error) {
+	resp, err := s.client.get(ctx, "/lce/eventTypes")
 	if err != nil {
 		return nil, fmt.Errorf("sc: eventTypes lCE: %w", err)
 	}
@@ -132,4 +132,3 @@ func (s *LCEService) EventTypes() (*LCE, error) {
 
 	return &result, nil
 }
-

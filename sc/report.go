@@ -1,6 +1,7 @@
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -73,8 +74,8 @@ type ReportSendResponse struct {
 }
 
 // List returns the list of reports (usable and manageable).
-func (s *ReportService) List() (*ReportListResponse, error) {
-	resp, err := s.client.get("/report")
+func (s *ReportService) List(ctx context.Context) (*ReportListResponse, error) {
+	resp, err := s.client.get(ctx, "/report")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list reports: %w", err)
 	}
@@ -88,8 +89,8 @@ func (s *ReportService) List() (*ReportListResponse, error) {
 }
 
 // Get returns the report with the given ID.
-func (s *ReportService) Get(id string) (*Report, error) {
-	resp, err := s.client.get("/report/" + id)
+func (s *ReportService) Get(ctx context.Context, id string) (*Report, error) {
+	resp, err := s.client.get(ctx, "/report/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get report %s: %w", id, err)
 	}
@@ -103,8 +104,8 @@ func (s *ReportService) Get(id string) (*Report, error) {
 }
 
 // Delete deletes the report with the given ID.
-func (s *ReportService) Delete(id string) error {
-	_, err := s.client.delete("/report/" + id)
+func (s *ReportService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/report/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete report %s: %w", id, err)
 	}
@@ -113,8 +114,8 @@ func (s *ReportService) Delete(id string) error {
 }
 
 // Copy copies the report with the given ID to the specified users.
-func (s *ReportService) Copy(id string, input *ReportCopyInput) (*ReportCopyResponse, error) {
-	resp, err := s.client.post("/report/"+id+"/copy", input)
+func (s *ReportService) Copy(ctx context.Context, id string, input *ReportCopyInput) (*ReportCopyResponse, error) {
+	resp, err := s.client.post(ctx, "/report/"+id+"/copy", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: copy report %s: %w", id, err)
 	}
@@ -128,8 +129,8 @@ func (s *ReportService) Copy(id string, input *ReportCopyInput) (*ReportCopyResp
 }
 
 // Email emails the report with the given ID to the specified address.
-func (s *ReportService) Email(id string, input *ReportEmailInput) (*ReportEmailResponse, error) {
-	resp, err := s.client.post("/report/"+id+"/email", input)
+func (s *ReportService) Email(ctx context.Context, id string, input *ReportEmailInput) (*ReportEmailResponse, error) {
+	resp, err := s.client.post(ctx, "/report/"+id+"/email", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: email report %s: %w", id, err)
 	}
@@ -143,8 +144,8 @@ func (s *ReportService) Email(id string, input *ReportEmailInput) (*ReportEmailR
 }
 
 // Download downloads the report with the given ID. The response is the raw binary content.
-func (s *ReportService) Download(id string) (json.RawMessage, error) {
-	resp, err := s.client.post("/report/"+id+"/download", nil)
+func (s *ReportService) Download(ctx context.Context, id string) (json.RawMessage, error) {
+	resp, err := s.client.post(ctx, "/report/"+id+"/download", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: download report %s: %w", id, err)
 	}
@@ -153,8 +154,8 @@ func (s *ReportService) Download(id string) (json.RawMessage, error) {
 }
 
 // Stop stops the running report with the given ID.
-func (s *ReportService) Stop(id string) error {
-	_, err := s.client.post("/report/"+id+"/stop", nil)
+func (s *ReportService) Stop(ctx context.Context, id string) error {
+	_, err := s.client.post(ctx, "/report/"+id+"/stop", nil)
 	if err != nil {
 		return fmt.Errorf("sc: stop report %s: %w", id, err)
 	}
@@ -163,8 +164,8 @@ func (s *ReportService) Stop(id string) error {
 }
 
 // Send sends the report with the given ID to the specified publishing sites.
-func (s *ReportService) Send(id string, input *ReportSendInput) (*ReportSendResponse, error) {
-	resp, err := s.client.post("/report/"+id+"/send", input)
+func (s *ReportService) Send(ctx context.Context, id string, input *ReportSendInput) (*ReportSendResponse, error) {
+	resp, err := s.client.post(ctx, "/report/"+id+"/send", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: send report %s: %w", id, err)
 	}

@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type DirectorScanZoneCreateInput struct {
 type DirectorScanZoneUpdateInput = DirectorScanZoneCreateInput
 
 // List returns all directorScanZones.
-func (s *DirectorScanZoneService) List() (*DirectorScanZoneListResponse, error) {
-	resp, err := s.client.get("/mgmt/zone")
+func (s *DirectorScanZoneService) List(ctx context.Context) (*DirectorScanZoneListResponse, error) {
+	resp, err := s.client.get(ctx, "/mgmt/zone")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list directorScanZones: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *DirectorScanZoneService) List() (*DirectorScanZoneListResponse, error) 
 }
 
 // Create creates a new directorScanZone.
-func (s *DirectorScanZoneService) Create(input *DirectorScanZoneCreateInput) (*DirectorScanZone, error) {
-	resp, err := s.client.post("/mgmt/zone", input)
+func (s *DirectorScanZoneService) Create(ctx context.Context, input *DirectorScanZoneCreateInput) (*DirectorScanZone, error) {
+	resp, err := s.client.post(ctx, "/mgmt/zone", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create directorScanZone: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *DirectorScanZoneService) Create(input *DirectorScanZoneCreateInput) (*D
 }
 
 // Update updates the directorScanZone with the given ID.
-func (s *DirectorScanZoneService) Update(id string, input *DirectorScanZoneUpdateInput) (*DirectorScanZone, error) {
-	resp, err := s.client.patch("/mgmt/zone" + "/" + id, input)
+func (s *DirectorScanZoneService) Update(ctx context.Context, id string, input *DirectorScanZoneUpdateInput) (*DirectorScanZone, error) {
+	resp, err := s.client.patch(ctx, "/mgmt/zone"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update directorScanZone %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *DirectorScanZoneService) Update(id string, input *DirectorScanZoneUpdat
 }
 
 // Delete deletes the directorScanZone with the given ID.
-func (s *DirectorScanZoneService) Delete(id string) error {
-	_, err := s.client.delete("/mgmt/zone" + "/" + id)
+func (s *DirectorScanZoneService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/mgmt/zone"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete directorScanZone %s: %w", id, err)
 	}
@@ -89,8 +89,8 @@ func (s *DirectorScanZoneService) Delete(id string) error {
 }
 
 // Get returns the directorScanZone with the given ID.
-func (s *DirectorScanZoneService) Get(id string) (*DirectorScanZone, error) {
-	resp, err := s.client.get("/mgmt/zone" + "/" + id)
+func (s *DirectorScanZoneService) Get(ctx context.Context, id string) (*DirectorScanZone, error) {
+	resp, err := s.client.get(ctx, "/mgmt/zone"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get directorScanZone %s: %w", id, err)
 	}
@@ -102,4 +102,3 @@ func (s *DirectorScanZoneService) Get(id string) (*DirectorScanZone, error) {
 
 	return &result, nil
 }
-

@@ -1,6 +1,7 @@
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -31,8 +32,8 @@ type FeedProcessInput struct {
 }
 
 // Get returns the status of all feeds.
-func (s *FeedService) Get() (*FeedResponse, error) {
-	resp, err := s.client.get("/feed")
+func (s *FeedService) Get(ctx context.Context) (*FeedResponse, error) {
+	resp, err := s.client.get(ctx, "/feed")
 	if err != nil {
 		return nil, fmt.Errorf("sc: get feed: %w", err)
 	}
@@ -46,8 +47,8 @@ func (s *FeedService) Get() (*FeedResponse, error) {
 }
 
 // GetType returns the status of a specific feed type.
-func (s *FeedService) GetType(feedType string) (*FeedStatus, error) {
-	resp, err := s.client.get("/feed/" + feedType)
+func (s *FeedService) GetType(ctx context.Context, feedType string) (*FeedStatus, error) {
+	resp, err := s.client.get(ctx, "/feed/"+feedType)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get feed %s: %w", feedType, err)
 	}
@@ -61,8 +62,8 @@ func (s *FeedService) GetType(feedType string) (*FeedStatus, error) {
 }
 
 // Update triggers an update for the specified feed type.
-func (s *FeedService) Update(feedType string) error {
-	_, err := s.client.post("/feed/"+feedType+"/update", nil)
+func (s *FeedService) Update(ctx context.Context, feedType string) error {
+	_, err := s.client.post(ctx, "/feed/"+feedType+"/update", nil)
 	if err != nil {
 		return fmt.Errorf("sc: update feed %s: %w", feedType, err)
 	}
@@ -71,8 +72,8 @@ func (s *FeedService) Update(feedType string) error {
 }
 
 // Process triggers processing of an uploaded feed file for the specified feed type.
-func (s *FeedService) Process(feedType string, input *FeedProcessInput) error {
-	_, err := s.client.post("/feed/"+feedType+"/process", input)
+func (s *FeedService) Process(ctx context.Context, feedType string, input *FeedProcessInput) error {
+	_, err := s.client.post(ctx, "/feed/"+feedType+"/process", input)
 	if err != nil {
 		return fmt.Errorf("sc: process feed %s: %w", feedType, err)
 	}

@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type ScanZoneCreateInput struct {
 type ScanZoneUpdateInput = ScanZoneCreateInput
 
 // List returns all scanZones.
-func (s *ScanZoneService) List() (*ScanZoneListResponse, error) {
-	resp, err := s.client.get("/zone")
+func (s *ScanZoneService) List(ctx context.Context) (*ScanZoneListResponse, error) {
+	resp, err := s.client.get(ctx, "/zone")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list scanZones: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *ScanZoneService) List() (*ScanZoneListResponse, error) {
 }
 
 // Create creates a new scanZone.
-func (s *ScanZoneService) Create(input *ScanZoneCreateInput) (*ScanZone, error) {
-	resp, err := s.client.post("/zone", input)
+func (s *ScanZoneService) Create(ctx context.Context, input *ScanZoneCreateInput) (*ScanZone, error) {
+	resp, err := s.client.post(ctx, "/zone", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create scanZone: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *ScanZoneService) Create(input *ScanZoneCreateInput) (*ScanZone, error) 
 }
 
 // Get returns the scanZone with the given ID.
-func (s *ScanZoneService) Get(id string) (*ScanZone, error) {
-	resp, err := s.client.get("/zone" + "/" + id)
+func (s *ScanZoneService) Get(ctx context.Context, id string) (*ScanZone, error) {
+	resp, err := s.client.get(ctx, "/zone"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get scanZone %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *ScanZoneService) Get(id string) (*ScanZone, error) {
 }
 
 // Update updates the scanZone with the given ID.
-func (s *ScanZoneService) Update(id string, input *ScanZoneUpdateInput) (*ScanZone, error) {
-	resp, err := s.client.patch("/zone" + "/" + id, input)
+func (s *ScanZoneService) Update(ctx context.Context, id string, input *ScanZoneUpdateInput) (*ScanZone, error) {
+	resp, err := s.client.patch(ctx, "/zone"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update scanZone %s: %w", id, err)
 	}
@@ -94,12 +94,11 @@ func (s *ScanZoneService) Update(id string, input *ScanZoneUpdateInput) (*ScanZo
 }
 
 // Delete deletes the scanZone with the given ID.
-func (s *ScanZoneService) Delete(id string) error {
-	_, err := s.client.delete("/zone" + "/" + id)
+func (s *ScanZoneService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/zone"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete scanZone %s: %w", id, err)
 	}
 
 	return nil
 }
-

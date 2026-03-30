@@ -1,6 +1,7 @@
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -71,8 +72,8 @@ type PluginResetInput struct {
 }
 
 // List returns all configuration types.
-func (s *ConfigurationService) List() ([]ConfigType, error) {
-	resp, err := s.client.get("/config")
+func (s *ConfigurationService) List(ctx context.Context) ([]ConfigType, error) {
+	resp, err := s.client.get(ctx, "/config")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list configurations: %w", err)
 	}
@@ -87,8 +88,8 @@ func (s *ConfigurationService) List() ([]ConfigType, error) {
 
 // Get returns the configuration detail for the given ID. The response is a
 // dynamic key-value map that varies per configuration type.
-func (s *ConfigurationService) Get(id string) (json.RawMessage, error) {
-	resp, err := s.client.get("/config/" + id)
+func (s *ConfigurationService) Get(ctx context.Context, id string) (json.RawMessage, error) {
+	resp, err := s.client.get(ctx, "/config/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get configuration %s: %w", id, err)
 	}
@@ -98,8 +99,8 @@ func (s *ConfigurationService) Get(id string) (json.RawMessage, error) {
 
 // Update updates the configuration with the given ID using a map of key-value
 // pairs. The response is a dynamic key-value map.
-func (s *ConfigurationService) Update(id string, input map[string]string) (json.RawMessage, error) {
-	resp, err := s.client.patch("/config/"+id, input)
+func (s *ConfigurationService) Update(ctx context.Context, id string, input map[string]string) (json.RawMessage, error) {
+	resp, err := s.client.patch(ctx, "/config/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update configuration %s: %w", id, err)
 	}
@@ -109,9 +110,9 @@ func (s *ConfigurationService) Update(id string, input map[string]string) (json.
 
 // Query queries the configuration for the given comma-separated items
 // (e.g. "smtp,ldap").
-func (s *ConfigurationService) Query(items string) ([]ConfigQueryItem, error) {
+func (s *ConfigurationService) Query(ctx context.Context, items string) ([]ConfigQueryItem, error) {
 	path := fmt.Sprintf("/config/query?item=%s", items)
-	resp, err := s.client.get(path)
+	resp, err := s.client.get(ctx, path)
 	if err != nil {
 		return nil, fmt.Errorf("sc: query configuration: %w", err)
 	}
@@ -125,8 +126,8 @@ func (s *ConfigurationService) Query(items string) ([]ConfigQueryItem, error) {
 }
 
 // TestSMTP tests the SMTP configuration.
-func (s *ConfigurationService) TestSMTP(input *TestSMTPInput) (*TestSMTPResponse, error) {
-	resp, err := s.client.post("/config/testSMTP", input)
+func (s *ConfigurationService) TestSMTP(ctx context.Context, input *TestSMTPInput) (*TestSMTPResponse, error) {
+	resp, err := s.client.post(ctx, "/config/testSMTP", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: test SMTP configuration: %w", err)
 	}
@@ -140,8 +141,8 @@ func (s *ConfigurationService) TestSMTP(input *TestSMTPInput) (*TestSMTPResponse
 }
 
 // RegisterLicense registers a license file.
-func (s *ConfigurationService) RegisterLicense(input *LicenseRegisterInput) (json.RawMessage, error) {
-	resp, err := s.client.post("/config/license/register", input)
+func (s *ConfigurationService) RegisterLicense(ctx context.Context, input *LicenseRegisterInput) (json.RawMessage, error) {
+	resp, err := s.client.post(ctx, "/config/license/register", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: register license: %w", err)
 	}
@@ -150,8 +151,8 @@ func (s *ConfigurationService) RegisterLicense(input *LicenseRegisterInput) (jso
 }
 
 // RegisterPlugins registers plugins with an activation code.
-func (s *ConfigurationService) RegisterPlugins(input *PluginRegisterInput) (*PluginRegisterResponse, error) {
-	resp, err := s.client.post("/config/plugins/register", input)
+func (s *ConfigurationService) RegisterPlugins(ctx context.Context, input *PluginRegisterInput) (*PluginRegisterResponse, error) {
+	resp, err := s.client.post(ctx, "/config/plugins/register", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: register plugins: %w", err)
 	}
@@ -165,8 +166,8 @@ func (s *ConfigurationService) RegisterPlugins(input *PluginRegisterInput) (*Plu
 }
 
 // ResetPlugins resets plugins of the given type.
-func (s *ConfigurationService) ResetPlugins(input *PluginResetInput) error {
-	_, err := s.client.post("/config/plugins/reset", input)
+func (s *ConfigurationService) ResetPlugins(ctx context.Context, input *PluginResetInput) error {
+	_, err := s.client.post(ctx, "/config/plugins/reset", input)
 	if err != nil {
 		return fmt.Errorf("sc: reset plugins: %w", err)
 	}

@@ -1,6 +1,7 @@
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -55,8 +56,8 @@ type CredentialShareInput struct {
 }
 
 // List returns the list of credentials (usable and manageable).
-func (s *CredentialService) List() (*CredentialListResponse, error) {
-	resp, err := s.client.get("/credential")
+func (s *CredentialService) List(ctx context.Context) (*CredentialListResponse, error) {
+	resp, err := s.client.get(ctx, "/credential")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list credentials: %w", err)
 	}
@@ -70,8 +71,8 @@ func (s *CredentialService) List() (*CredentialListResponse, error) {
 }
 
 // Get returns the credential with the given ID.
-func (s *CredentialService) Get(id string) (*Credential, error) {
-	resp, err := s.client.get("/credential/" + id)
+func (s *CredentialService) Get(ctx context.Context, id string) (*Credential, error) {
+	resp, err := s.client.get(ctx, "/credential/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get credential %s: %w", id, err)
 	}
@@ -85,8 +86,8 @@ func (s *CredentialService) Get(id string) (*Credential, error) {
 }
 
 // Create creates a new credential with the given input.
-func (s *CredentialService) Create(input *CredentialCreateInput) (*Credential, error) {
-	resp, err := s.client.post("/credential", input)
+func (s *CredentialService) Create(ctx context.Context, input *CredentialCreateInput) (*Credential, error) {
+	resp, err := s.client.post(ctx, "/credential", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create credential: %w", err)
 	}
@@ -100,8 +101,8 @@ func (s *CredentialService) Create(input *CredentialCreateInput) (*Credential, e
 }
 
 // Update updates an existing credential with the given input.
-func (s *CredentialService) Update(id string, input *CredentialUpdateInput) (*Credential, error) {
-	resp, err := s.client.patch("/credential/"+id, input)
+func (s *CredentialService) Update(ctx context.Context, id string, input *CredentialUpdateInput) (*Credential, error) {
+	resp, err := s.client.patch(ctx, "/credential/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update credential %s: %w", id, err)
 	}
@@ -115,8 +116,8 @@ func (s *CredentialService) Update(id string, input *CredentialUpdateInput) (*Cr
 }
 
 // Delete deletes the credential with the given ID.
-func (s *CredentialService) Delete(id string) error {
-	_, err := s.client.delete("/credential/" + id)
+func (s *CredentialService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/credential/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete credential %s: %w", id, err)
 	}
@@ -125,8 +126,8 @@ func (s *CredentialService) Delete(id string) error {
 }
 
 // Share shares the credential with the given ID to the specified groups.
-func (s *CredentialService) Share(id string, input *CredentialShareInput) (*Credential, error) {
-	resp, err := s.client.post("/credential/"+id+"/share", input)
+func (s *CredentialService) Share(ctx context.Context, id string, input *CredentialShareInput) (*Credential, error) {
+	resp, err := s.client.post(ctx, "/credential/"+id+"/share", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: share credential %s: %w", id, err)
 	}
@@ -140,8 +141,8 @@ func (s *CredentialService) Share(id string, input *CredentialShareInput) (*Cred
 }
 
 // Tags returns the list of credential tags.
-func (s *CredentialService) Tags() ([]string, error) {
-	resp, err := s.client.get("/credential/tag")
+func (s *CredentialService) Tags(ctx context.Context) ([]string, error) {
+	resp, err := s.client.get(ctx, "/credential/tag")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list credential tags: %w", err)
 	}

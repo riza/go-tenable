@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -18,17 +18,17 @@ type Status struct {
 	Description string `json:"description"`
 }
 
-// StatusListResponse represents the response from listing statuss.
+// StatusListResponse represents the response from listing statuses.
 type StatusListResponse struct {
 	Usable     []Status `json:"usable"`
 	Manageable []Status `json:"manageable"`
 }
 
-// List returns all statuss.
-func (s *StatusService) List() (*StatusListResponse, error) {
-	resp, err := s.client.get("/status")
+// List returns all statuses.
+func (s *StatusService) List(ctx context.Context) (*StatusListResponse, error) {
+	resp, err := s.client.get(ctx, "/status")
 	if err != nil {
-		return nil, fmt.Errorf("sc: list statuss: %w", err)
+		return nil, fmt.Errorf("sc: list statuses: %w", err)
 	}
 
 	var result StatusListResponse
@@ -38,4 +38,3 @@ func (s *StatusService) List() (*StatusListResponse, error) {
 
 	return &result, nil
 }
-

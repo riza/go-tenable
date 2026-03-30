@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type NotificationListResponse struct {
 }
 
 // List returns all notifications.
-func (s *NotificationService) List() (*NotificationListResponse, error) {
-	resp, err := s.client.get("/notification")
+func (s *NotificationService) List(ctx context.Context) (*NotificationListResponse, error) {
+	resp, err := s.client.get(ctx, "/notification")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list notifications: %w", err)
 	}
@@ -40,8 +40,8 @@ func (s *NotificationService) List() (*NotificationListResponse, error) {
 }
 
 // Get returns the notification with the given ID.
-func (s *NotificationService) Get(id string) (*Notification, error) {
-	resp, err := s.client.get("/notification" + "/" + id)
+func (s *NotificationService) Get(ctx context.Context, id string) (*Notification, error) {
+	resp, err := s.client.get(ctx, "/notification"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get notification %s: %w", id, err)
 	}
@@ -53,4 +53,3 @@ func (s *NotificationService) Get(id string) (*Notification, error) {
 
 	return &result, nil
 }
-

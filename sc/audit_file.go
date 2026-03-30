@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type AuditFileCreateInput struct {
 type AuditFileUpdateInput = AuditFileCreateInput
 
 // List returns all auditFiles.
-func (s *AuditFileService) List() (*AuditFileListResponse, error) {
-	resp, err := s.client.get("/auditFile")
+func (s *AuditFileService) List(ctx context.Context) (*AuditFileListResponse, error) {
+	resp, err := s.client.get(ctx, "/auditFile")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list auditFiles: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *AuditFileService) List() (*AuditFileListResponse, error) {
 }
 
 // Create creates a new auditFile.
-func (s *AuditFileService) Create(input *AuditFileCreateInput) (*AuditFile, error) {
-	resp, err := s.client.post("/auditFile", input)
+func (s *AuditFileService) Create(ctx context.Context, input *AuditFileCreateInput) (*AuditFile, error) {
+	resp, err := s.client.post(ctx, "/auditFile", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create auditFile: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *AuditFileService) Create(input *AuditFileCreateInput) (*AuditFile, erro
 }
 
 // Get returns the auditFile with the given ID.
-func (s *AuditFileService) Get(id string) (*AuditFile, error) {
-	resp, err := s.client.get("/auditFile" + "/" + id)
+func (s *AuditFileService) Get(ctx context.Context, id string) (*AuditFile, error) {
+	resp, err := s.client.get(ctx, "/auditFile"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get auditFile %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *AuditFileService) Get(id string) (*AuditFile, error) {
 }
 
 // Update updates the auditFile with the given ID.
-func (s *AuditFileService) Update(id string, input *AuditFileUpdateInput) (*AuditFile, error) {
-	resp, err := s.client.patch("/auditFile" + "/" + id, input)
+func (s *AuditFileService) Update(ctx context.Context, id string, input *AuditFileUpdateInput) (*AuditFile, error) {
+	resp, err := s.client.patch(ctx, "/auditFile"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update auditFile %s: %w", id, err)
 	}
@@ -94,8 +94,8 @@ func (s *AuditFileService) Update(id string, input *AuditFileUpdateInput) (*Audi
 }
 
 // Delete deletes the auditFile with the given ID.
-func (s *AuditFileService) Delete(id string) error {
-	_, err := s.client.delete("/auditFile" + "/" + id)
+func (s *AuditFileService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/auditFile"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete auditFile %s: %w", id, err)
 	}
@@ -104,8 +104,8 @@ func (s *AuditFileService) Delete(id string) error {
 }
 
 // Refresh performs the refresh action on the auditFile with the given ID.
-func (s *AuditFileService) Refresh(id string) (*AuditFile, error) {
-	resp, err := s.client.post("/auditFile" + "/" + id + "/refresh", nil)
+func (s *AuditFileService) Refresh(ctx context.Context, id string) (*AuditFile, error) {
+	resp, err := s.client.post(ctx, "/auditFile"+"/"+id+"/refresh", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: refresh auditFile %s: %w", id, err)
 	}
@@ -119,8 +119,8 @@ func (s *AuditFileService) Refresh(id string) (*AuditFile, error) {
 }
 
 // Share performs the share action on the auditFile with the given ID.
-func (s *AuditFileService) Share(id string) (*AuditFile, error) {
-	resp, err := s.client.post("/auditFile" + "/" + id + "/share", nil)
+func (s *AuditFileService) Share(ctx context.Context, id string) (*AuditFile, error) {
+	resp, err := s.client.post(ctx, "/auditFile"+"/"+id+"/share", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: share auditFile %s: %w", id, err)
 	}
@@ -134,8 +134,8 @@ func (s *AuditFileService) Share(id string) (*AuditFile, error) {
 }
 
 // Export performs the export action on the auditFile with the given ID.
-func (s *AuditFileService) Export(id string) (*AuditFile, error) {
-	resp, err := s.client.get("/auditFile" + "/" + id + "/export")
+func (s *AuditFileService) Export(ctx context.Context, id string) (*AuditFile, error) {
+	resp, err := s.client.get(ctx, "/auditFile"+"/"+id+"/export")
 	if err != nil {
 		return nil, fmt.Errorf("sc: export auditFile %s: %w", id, err)
 	}
@@ -147,4 +147,3 @@ func (s *AuditFileService) Export(id string) (*AuditFile, error) {
 
 	return &result, nil
 }
-

@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type TicketCreateInput struct {
 type TicketUpdateInput = TicketCreateInput
 
 // List returns all tickets.
-func (s *TicketService) List() (*TicketListResponse, error) {
-	resp, err := s.client.get("/ticket")
+func (s *TicketService) List(ctx context.Context) (*TicketListResponse, error) {
+	resp, err := s.client.get(ctx, "/ticket")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list tickets: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *TicketService) List() (*TicketListResponse, error) {
 }
 
 // Create creates a new ticket.
-func (s *TicketService) Create(input *TicketCreateInput) (*Ticket, error) {
-	resp, err := s.client.post("/ticket", input)
+func (s *TicketService) Create(ctx context.Context, input *TicketCreateInput) (*Ticket, error) {
+	resp, err := s.client.post(ctx, "/ticket", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create ticket: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *TicketService) Create(input *TicketCreateInput) (*Ticket, error) {
 }
 
 // Get returns the ticket with the given ID.
-func (s *TicketService) Get(id string) (*Ticket, error) {
-	resp, err := s.client.get("/ticket" + "/" + id)
+func (s *TicketService) Get(ctx context.Context, id string) (*Ticket, error) {
+	resp, err := s.client.get(ctx, "/ticket"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get ticket %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *TicketService) Get(id string) (*Ticket, error) {
 }
 
 // Update updates the ticket with the given ID.
-func (s *TicketService) Update(id string, input *TicketUpdateInput) (*Ticket, error) {
-	resp, err := s.client.patch("/ticket" + "/" + id, input)
+func (s *TicketService) Update(ctx context.Context, id string, input *TicketUpdateInput) (*Ticket, error) {
+	resp, err := s.client.patch(ctx, "/ticket"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update ticket %s: %w", id, err)
 	}
@@ -92,4 +92,3 @@ func (s *TicketService) Update(id string, input *TicketUpdateInput) (*Ticket, er
 
 	return &result, nil
 }
-

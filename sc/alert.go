@@ -1,6 +1,7 @@
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -71,8 +72,8 @@ type AlertCreateInput struct {
 type AlertUpdateInput = AlertCreateInput
 
 // List returns the list of alerts (usable and manageable).
-func (s *AlertService) List() (*AlertListResponse, error) {
-	resp, err := s.client.get("/alert")
+func (s *AlertService) List(ctx context.Context) (*AlertListResponse, error) {
+	resp, err := s.client.get(ctx, "/alert")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list alerts: %w", err)
 	}
@@ -86,8 +87,8 @@ func (s *AlertService) List() (*AlertListResponse, error) {
 }
 
 // Create creates a new alert with the given input.
-func (s *AlertService) Create(input *AlertCreateInput) (*Alert, error) {
-	resp, err := s.client.post("/alert", input)
+func (s *AlertService) Create(ctx context.Context, input *AlertCreateInput) (*Alert, error) {
+	resp, err := s.client.post(ctx, "/alert", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create alert: %w", err)
 	}
@@ -101,8 +102,8 @@ func (s *AlertService) Create(input *AlertCreateInput) (*Alert, error) {
 }
 
 // Get returns the alert with the given ID.
-func (s *AlertService) Get(id string) (*Alert, error) {
-	resp, err := s.client.get("/alert/" + id)
+func (s *AlertService) Get(ctx context.Context, id string) (*Alert, error) {
+	resp, err := s.client.get(ctx, "/alert/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get alert %s: %w", id, err)
 	}
@@ -116,8 +117,8 @@ func (s *AlertService) Get(id string) (*Alert, error) {
 }
 
 // Update updates an existing alert with the given input.
-func (s *AlertService) Update(id string, input *AlertUpdateInput) (*Alert, error) {
-	resp, err := s.client.patch("/alert/"+id, input)
+func (s *AlertService) Update(ctx context.Context, id string, input *AlertUpdateInput) (*Alert, error) {
+	resp, err := s.client.patch(ctx, "/alert/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update alert %s: %w", id, err)
 	}
@@ -131,8 +132,8 @@ func (s *AlertService) Update(id string, input *AlertUpdateInput) (*Alert, error
 }
 
 // Delete deletes the alert with the given ID.
-func (s *AlertService) Delete(id string) error {
-	_, err := s.client.delete("/alert/" + id)
+func (s *AlertService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/alert/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete alert %s: %w", id, err)
 	}
@@ -141,8 +142,8 @@ func (s *AlertService) Delete(id string) error {
 }
 
 // Execute triggers execution of the alert with the given ID.
-func (s *AlertService) Execute(id string) (*Alert, error) {
-	resp, err := s.client.post("/alert/"+id+"/execute", nil)
+func (s *AlertService) Execute(ctx context.Context, id string) (*Alert, error) {
+	resp, err := s.client.post(ctx, "/alert/"+id+"/execute", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: execute alert %s: %w", id, err)
 	}

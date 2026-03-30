@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type PluginListResponse struct {
 }
 
 // List returns all plugins.
-func (s *PluginService) List() (*PluginListResponse, error) {
-	resp, err := s.client.get("/plugin")
+func (s *PluginService) List(ctx context.Context) (*PluginListResponse, error) {
+	resp, err := s.client.get(ctx, "/plugin")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list plugins: %w", err)
 	}
@@ -40,8 +40,8 @@ func (s *PluginService) List() (*PluginListResponse, error) {
 }
 
 // Get returns the plugin with the given ID.
-func (s *PluginService) Get(id string) (*Plugin, error) {
-	resp, err := s.client.get("/plugin" + "/" + id)
+func (s *PluginService) Get(ctx context.Context, id string) (*Plugin, error) {
+	resp, err := s.client.get(ctx, "/plugin"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get plugin %s: %w", id, err)
 	}
@@ -53,4 +53,3 @@ func (s *PluginService) Get(id string) (*Plugin, error) {
 
 	return &result, nil
 }
-

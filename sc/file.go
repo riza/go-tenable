@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -19,8 +19,8 @@ type File struct {
 }
 
 // Upload performs the upload action on the file.
-func (s *FileService) Upload() (*File, error) {
-	resp, err := s.client.post("/file/upload", nil)
+func (s *FileService) Upload(ctx context.Context) (*File, error) {
+	resp, err := s.client.post(ctx, "/file/upload", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: upload file: %w", err)
 	}
@@ -34,8 +34,8 @@ func (s *FileService) Upload() (*File, error) {
 }
 
 // Clear performs the clear action on the file.
-func (s *FileService) Clear() (*File, error) {
-	resp, err := s.client.post("/file/clear", nil)
+func (s *FileService) Clear(ctx context.Context) (*File, error) {
+	resp, err := s.client.post(ctx, "/file/clear", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: clear file: %w", err)
 	}
@@ -47,4 +47,3 @@ func (s *FileService) Clear() (*File, error) {
 
 	return &result, nil
 }
-

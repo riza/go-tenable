@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type DeviceInfoListResponse struct {
 }
 
 // List returns all deviceInfos.
-func (s *DeviceInfoService) List() (*DeviceInfoListResponse, error) {
-	resp, err := s.client.get("/deviceInfo")
+func (s *DeviceInfoService) List(ctx context.Context) (*DeviceInfoListResponse, error) {
+	resp, err := s.client.get(ctx, "/deviceInfo")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list deviceInfos: %w", err)
 	}
@@ -38,4 +38,3 @@ func (s *DeviceInfoService) List() (*DeviceInfoListResponse, error) {
 
 	return &result, nil
 }
-

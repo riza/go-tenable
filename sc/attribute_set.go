@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type AttributeSetCreateInput struct {
 type AttributeSetUpdateInput = AttributeSetCreateInput
 
 // List returns all attributeSets.
-func (s *AttributeSetService) List() (*AttributeSetListResponse, error) {
-	resp, err := s.client.get("/attributeSet")
+func (s *AttributeSetService) List(ctx context.Context) (*AttributeSetListResponse, error) {
+	resp, err := s.client.get(ctx, "/attributeSet")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list attributeSets: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *AttributeSetService) List() (*AttributeSetListResponse, error) {
 }
 
 // Create creates a new attributeSet.
-func (s *AttributeSetService) Create(input *AttributeSetCreateInput) (*AttributeSet, error) {
-	resp, err := s.client.post("/attributeSet", input)
+func (s *AttributeSetService) Create(ctx context.Context, input *AttributeSetCreateInput) (*AttributeSet, error) {
+	resp, err := s.client.post(ctx, "/attributeSet", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create attributeSet: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *AttributeSetService) Create(input *AttributeSetCreateInput) (*Attribute
 }
 
 // Get returns the attributeSet with the given ID.
-func (s *AttributeSetService) Get(id string) (*AttributeSet, error) {
-	resp, err := s.client.get("/attributeSet" + "/" + id)
+func (s *AttributeSetService) Get(ctx context.Context, id string) (*AttributeSet, error) {
+	resp, err := s.client.get(ctx, "/attributeSet"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get attributeSet %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *AttributeSetService) Get(id string) (*AttributeSet, error) {
 }
 
 // Update updates the attributeSet with the given ID.
-func (s *AttributeSetService) Update(id string, input *AttributeSetUpdateInput) (*AttributeSet, error) {
-	resp, err := s.client.patch("/attributeSet" + "/" + id, input)
+func (s *AttributeSetService) Update(ctx context.Context, id string, input *AttributeSetUpdateInput) (*AttributeSet, error) {
+	resp, err := s.client.patch(ctx, "/attributeSet"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update attributeSet %s: %w", id, err)
 	}
@@ -94,8 +94,8 @@ func (s *AttributeSetService) Update(id string, input *AttributeSetUpdateInput) 
 }
 
 // Delete deletes the attributeSet with the given ID.
-func (s *AttributeSetService) Delete(id string) error {
-	_, err := s.client.delete("/attributeSet" + "/" + id)
+func (s *AttributeSetService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/attributeSet"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete attributeSet %s: %w", id, err)
 	}
@@ -104,8 +104,8 @@ func (s *AttributeSetService) Delete(id string) error {
 }
 
 // Types performs the types action on the attributeSet.
-func (s *AttributeSetService) Types() (*AttributeSet, error) {
-	resp, err := s.client.get("/attributeSet/types")
+func (s *AttributeSetService) Types(ctx context.Context) (*AttributeSet, error) {
+	resp, err := s.client.get(ctx, "/attributeSet/types")
 	if err != nil {
 		return nil, fmt.Errorf("sc: types attributeSet: %w", err)
 	}
@@ -117,4 +117,3 @@ func (s *AttributeSetService) Types() (*AttributeSet, error) {
 
 	return &result, nil
 }
-

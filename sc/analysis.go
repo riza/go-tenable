@@ -1,6 +1,7 @@
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -32,8 +33,8 @@ type AnalysisResponse struct {
 }
 
 // Run executes an analysis query and returns the results.
-func (s *AnalysisService) Run(input *AnalysisInput) (*AnalysisResponse, error) {
-	resp, err := s.client.post("/analysis", input)
+func (s *AnalysisService) Run(ctx context.Context, input *AnalysisInput) (*AnalysisResponse, error) {
+	resp, err := s.client.post(ctx, "/analysis", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: run analysis: %w", err)
 	}
@@ -48,8 +49,8 @@ func (s *AnalysisService) Run(input *AnalysisInput) (*AnalysisResponse, error) {
 
 // Download executes an analysis query and returns the binary response body.
 // The caller is responsible for closing the returned io.ReadCloser.
-func (s *AnalysisService) Download(input *AnalysisInput) (io.ReadCloser, error) {
-	req, err := s.client.newRequest(http.MethodPost, "/analysis/download", input)
+func (s *AnalysisService) Download(ctx context.Context, input *AnalysisInput) (io.ReadCloser, error) {
+	req, err := s.client.newRequest(ctx, http.MethodPost, "/analysis/download", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create analysis download request: %w", err)
 	}

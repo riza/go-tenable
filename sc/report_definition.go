@@ -1,6 +1,7 @@
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -12,33 +13,33 @@ type ReportDefinitionService struct {
 
 // ReportDefinition represents a report definition resource from the API.
 type ReportDefinition struct {
-	ID                 string                     `json:"id"`
-	Name               string                     `json:"name"`
-	Description        string                     `json:"description"`
-	Type               string                     `json:"type"`
-	StyleFamily        string                     `json:"styleFamily"`
-	Definition         json.RawMessage            `json:"definition,omitempty"`
-	XMLDefinition      string                     `json:"xmldefinition"`
-	EncryptionPassword string                     `json:"encryptionPassword"`
-	Status             string                     `json:"status"`
-	ShareUsers         []IDRef                    `json:"shareUsers,omitempty"`
-	EmailUsers         []IDRef                    `json:"emailUsers,omitempty"`
-	EmailTargets       string                     `json:"emailTargets"`
-	EmailBCCTargets    string                     `json:"emailBCCTargets"`
-	EmailTargetType    string                     `json:"emailTargetType"`
-	CreatedTime        string                     `json:"createdTime"`
-	ModifiedTime       string                     `json:"modifiedTime"`
-	PubSites           []IDRef                    `json:"pubSites,omitempty"`
-	Sources            json.RawMessage            `json:"sources,omitempty"`
-	Components         json.RawMessage            `json:"components,omitempty"`
-	Iterators          json.RawMessage            `json:"iterators,omitempty"`
-	ScanResult         json.RawMessage            `json:"scanResult,omitempty"`
-	Schedule           *ReportDefinitionSchedule  `json:"schedule,omitempty"`
-	Creator            *IDRef                     `json:"creator,omitempty"`
-	Owner              *IDRef                     `json:"owner,omitempty"`
-	OwnerGroup         *IDRef                     `json:"ownerGroup,omitempty"`
-	AttributeSet       *IDRef                     `json:"attributeSet,omitempty"`
-	QueryStatus        json.RawMessage            `json:"queryStatus,omitempty"`
+	ID                 string                    `json:"id"`
+	Name               string                    `json:"name"`
+	Description        string                    `json:"description"`
+	Type               string                    `json:"type"`
+	StyleFamily        string                    `json:"styleFamily"`
+	Definition         json.RawMessage           `json:"definition,omitempty"`
+	XMLDefinition      string                    `json:"xmldefinition"`
+	EncryptionPassword string                    `json:"encryptionPassword"`
+	Status             string                    `json:"status"`
+	ShareUsers         []IDRef                   `json:"shareUsers,omitempty"`
+	EmailUsers         []IDRef                   `json:"emailUsers,omitempty"`
+	EmailTargets       string                    `json:"emailTargets"`
+	EmailBCCTargets    string                    `json:"emailBCCTargets"`
+	EmailTargetType    string                    `json:"emailTargetType"`
+	CreatedTime        string                    `json:"createdTime"`
+	ModifiedTime       string                    `json:"modifiedTime"`
+	PubSites           []IDRef                   `json:"pubSites,omitempty"`
+	Sources            json.RawMessage           `json:"sources,omitempty"`
+	Components         json.RawMessage           `json:"components,omitempty"`
+	Iterators          json.RawMessage           `json:"iterators,omitempty"`
+	ScanResult         json.RawMessage           `json:"scanResult,omitempty"`
+	Schedule           *ReportDefinitionSchedule `json:"schedule,omitempty"`
+	Creator            *IDRef                    `json:"creator,omitempty"`
+	Owner              *IDRef                    `json:"owner,omitempty"`
+	OwnerGroup         *IDRef                    `json:"ownerGroup,omitempty"`
+	AttributeSet       *IDRef                    `json:"attributeSet,omitempty"`
+	QueryStatus        json.RawMessage           `json:"queryStatus,omitempty"`
 }
 
 // ReportDefinitionSchedule represents the schedule configuration for a report definition.
@@ -112,8 +113,8 @@ type ReportDefinitionImportResponse struct {
 }
 
 // List returns the list of report definitions (usable and manageable).
-func (s *ReportDefinitionService) List() (*ReportDefinitionListResponse, error) {
-	resp, err := s.client.get("/reportDefinition")
+func (s *ReportDefinitionService) List(ctx context.Context) (*ReportDefinitionListResponse, error) {
+	resp, err := s.client.get(ctx, "/reportDefinition")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list report definitions: %w", err)
 	}
@@ -127,8 +128,8 @@ func (s *ReportDefinitionService) List() (*ReportDefinitionListResponse, error) 
 }
 
 // Create creates a new report definition with the given input.
-func (s *ReportDefinitionService) Create(input *ReportDefinitionCreateInput) (*ReportDefinition, error) {
-	resp, err := s.client.post("/reportDefinition", input)
+func (s *ReportDefinitionService) Create(ctx context.Context, input *ReportDefinitionCreateInput) (*ReportDefinition, error) {
+	resp, err := s.client.post(ctx, "/reportDefinition", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create report definition: %w", err)
 	}
@@ -142,8 +143,8 @@ func (s *ReportDefinitionService) Create(input *ReportDefinitionCreateInput) (*R
 }
 
 // Get returns the report definition with the given ID.
-func (s *ReportDefinitionService) Get(id string) (*ReportDefinition, error) {
-	resp, err := s.client.get("/reportDefinition/" + id)
+func (s *ReportDefinitionService) Get(ctx context.Context, id string) (*ReportDefinition, error) {
+	resp, err := s.client.get(ctx, "/reportDefinition/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get report definition %s: %w", id, err)
 	}
@@ -157,8 +158,8 @@ func (s *ReportDefinitionService) Get(id string) (*ReportDefinition, error) {
 }
 
 // Update updates an existing report definition with the given input.
-func (s *ReportDefinitionService) Update(id string, input *ReportDefinitionUpdateInput) (*ReportDefinition, error) {
-	resp, err := s.client.patch("/reportDefinition/"+id, input)
+func (s *ReportDefinitionService) Update(ctx context.Context, id string, input *ReportDefinitionUpdateInput) (*ReportDefinition, error) {
+	resp, err := s.client.patch(ctx, "/reportDefinition/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update report definition %s: %w", id, err)
 	}
@@ -172,8 +173,8 @@ func (s *ReportDefinitionService) Update(id string, input *ReportDefinitionUpdat
 }
 
 // Delete deletes the report definition with the given ID.
-func (s *ReportDefinitionService) Delete(id string) error {
-	_, err := s.client.delete("/reportDefinition/" + id)
+func (s *ReportDefinitionService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/reportDefinition/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete report definition %s: %w", id, err)
 	}
@@ -182,8 +183,8 @@ func (s *ReportDefinitionService) Delete(id string) error {
 }
 
 // Launch launches the report definition with the given ID.
-func (s *ReportDefinitionService) Launch(id string) (*ReportDefinitionLaunchResponse, error) {
-	resp, err := s.client.post("/reportDefinition/"+id+"/launch", nil)
+func (s *ReportDefinitionService) Launch(ctx context.Context, id string) (*ReportDefinitionLaunchResponse, error) {
+	resp, err := s.client.post(ctx, "/reportDefinition/"+id+"/launch", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: launch report definition %s: %w", id, err)
 	}
@@ -197,8 +198,8 @@ func (s *ReportDefinitionService) Launch(id string) (*ReportDefinitionLaunchResp
 }
 
 // Copy copies the report definition with the given ID.
-func (s *ReportDefinitionService) Copy(id string, input *ReportDefinitionCopyInput) (*ReportDefinition, error) {
-	resp, err := s.client.post("/reportDefinition/"+id+"/copy", input)
+func (s *ReportDefinitionService) Copy(ctx context.Context, id string, input *ReportDefinitionCopyInput) (*ReportDefinition, error) {
+	resp, err := s.client.post(ctx, "/reportDefinition/"+id+"/copy", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: copy report definition %s: %w", id, err)
 	}
@@ -212,8 +213,8 @@ func (s *ReportDefinitionService) Copy(id string, input *ReportDefinitionCopyInp
 }
 
 // Export exports the report definition with the given ID. The response is the raw binary content.
-func (s *ReportDefinitionService) Export(id string, input *ReportDefinitionExportInput) (json.RawMessage, error) {
-	resp, err := s.client.post("/reportDefinition/"+id+"/export", input)
+func (s *ReportDefinitionService) Export(ctx context.Context, id string, input *ReportDefinitionExportInput) (json.RawMessage, error) {
+	resp, err := s.client.post(ctx, "/reportDefinition/"+id+"/export", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: export report definition %s: %w", id, err)
 	}
@@ -222,8 +223,8 @@ func (s *ReportDefinitionService) Export(id string, input *ReportDefinitionExpor
 }
 
 // Import imports a report definition from the given input.
-func (s *ReportDefinitionService) Import(input *ReportDefinitionImportInput) (*ReportDefinitionImportResponse, error) {
-	resp, err := s.client.post("/reportDefinition/import", input)
+func (s *ReportDefinitionService) Import(ctx context.Context, input *ReportDefinitionImportInput) (*ReportDefinitionImportResponse, error) {
+	resp, err := s.client.post(ctx, "/reportDefinition/import", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: import report definition: %w", err)
 	}

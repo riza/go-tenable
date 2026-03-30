@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type PassiveScannerCreateInput struct {
 type PassiveScannerUpdateInput = PassiveScannerCreateInput
 
 // List returns all passiveScanners.
-func (s *PassiveScannerService) List() (*PassiveScannerListResponse, error) {
-	resp, err := s.client.get("/passivescanner")
+func (s *PassiveScannerService) List(ctx context.Context) (*PassiveScannerListResponse, error) {
+	resp, err := s.client.get(ctx, "/passivescanner")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list passiveScanners: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *PassiveScannerService) List() (*PassiveScannerListResponse, error) {
 }
 
 // Create creates a new passiveScanner.
-func (s *PassiveScannerService) Create(input *PassiveScannerCreateInput) (*PassiveScanner, error) {
-	resp, err := s.client.post("/passivescanner", input)
+func (s *PassiveScannerService) Create(ctx context.Context, input *PassiveScannerCreateInput) (*PassiveScanner, error) {
+	resp, err := s.client.post(ctx, "/passivescanner", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create passiveScanner: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *PassiveScannerService) Create(input *PassiveScannerCreateInput) (*Passi
 }
 
 // Get returns the passiveScanner with the given ID.
-func (s *PassiveScannerService) Get(id string) (*PassiveScanner, error) {
-	resp, err := s.client.get("/passivescanner" + "/" + id)
+func (s *PassiveScannerService) Get(ctx context.Context, id string) (*PassiveScanner, error) {
+	resp, err := s.client.get(ctx, "/passivescanner"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get passiveScanner %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *PassiveScannerService) Get(id string) (*PassiveScanner, error) {
 }
 
 // Update updates the passiveScanner with the given ID.
-func (s *PassiveScannerService) Update(id string, input *PassiveScannerUpdateInput) (*PassiveScanner, error) {
-	resp, err := s.client.patch("/passivescanner" + "/" + id, input)
+func (s *PassiveScannerService) Update(ctx context.Context, id string, input *PassiveScannerUpdateInput) (*PassiveScanner, error) {
+	resp, err := s.client.patch(ctx, "/passivescanner"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update passiveScanner %s: %w", id, err)
 	}
@@ -94,8 +94,8 @@ func (s *PassiveScannerService) Update(id string, input *PassiveScannerUpdateInp
 }
 
 // Delete deletes the passiveScanner with the given ID.
-func (s *PassiveScannerService) Delete(id string) error {
-	_, err := s.client.delete("/passivescanner" + "/" + id)
+func (s *PassiveScannerService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/passivescanner"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete passiveScanner %s: %w", id, err)
 	}
@@ -104,8 +104,8 @@ func (s *PassiveScannerService) Delete(id string) error {
 }
 
 // UpdateStatus performs the updateStatus action on the passiveScanner.
-func (s *PassiveScannerService) UpdateStatus() (*PassiveScanner, error) {
-	resp, err := s.client.post("/passivescanner/updateStatus", nil)
+func (s *PassiveScannerService) UpdateStatus(ctx context.Context) (*PassiveScanner, error) {
+	resp, err := s.client.post(ctx, "/passivescanner/updateStatus", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: updateStatus passiveScanner: %w", err)
 	}
@@ -117,4 +117,3 @@ func (s *PassiveScannerService) UpdateStatus() (*PassiveScanner, error) {
 
 	return &result, nil
 }
-

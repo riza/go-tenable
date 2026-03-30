@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type DashboardComponentCreateInput struct {
 type DashboardComponentUpdateInput = DashboardComponentCreateInput
 
 // List returns all dashboardComponents.
-func (s *DashboardComponentService) List() (*DashboardComponentListResponse, error) {
-	resp, err := s.client.get("/dashboard/{dID}/component")
+func (s *DashboardComponentService) List(ctx context.Context) (*DashboardComponentListResponse, error) {
+	resp, err := s.client.get(ctx, "/dashboard/{dID}/component")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list dashboardComponents: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *DashboardComponentService) List() (*DashboardComponentListResponse, err
 }
 
 // Create creates a new dashboardComponent.
-func (s *DashboardComponentService) Create(input *DashboardComponentCreateInput) (*DashboardComponent, error) {
-	resp, err := s.client.post("/dashboard/{dID}/component", input)
+func (s *DashboardComponentService) Create(ctx context.Context, input *DashboardComponentCreateInput) (*DashboardComponent, error) {
+	resp, err := s.client.post(ctx, "/dashboard/{dID}/component", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create dashboardComponent: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *DashboardComponentService) Create(input *DashboardComponentCreateInput)
 }
 
 // Get returns the dashboardComponent with the given ID.
-func (s *DashboardComponentService) Get(id string) (*DashboardComponent, error) {
-	resp, err := s.client.get("/dashboard/{dID}/component" + "/" + id)
+func (s *DashboardComponentService) Get(ctx context.Context, id string) (*DashboardComponent, error) {
+	resp, err := s.client.get(ctx, "/dashboard/{dID}/component"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get dashboardComponent %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *DashboardComponentService) Get(id string) (*DashboardComponent, error) 
 }
 
 // Update updates the dashboardComponent with the given ID.
-func (s *DashboardComponentService) Update(id string, input *DashboardComponentUpdateInput) (*DashboardComponent, error) {
-	resp, err := s.client.patch("/dashboard/{dID}/component" + "/" + id, input)
+func (s *DashboardComponentService) Update(ctx context.Context, id string, input *DashboardComponentUpdateInput) (*DashboardComponent, error) {
+	resp, err := s.client.patch(ctx, "/dashboard/{dID}/component"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update dashboardComponent %s: %w", id, err)
 	}
@@ -94,8 +94,8 @@ func (s *DashboardComponentService) Update(id string, input *DashboardComponentU
 }
 
 // Delete deletes the dashboardComponent with the given ID.
-func (s *DashboardComponentService) Delete(id string) error {
-	_, err := s.client.delete("/dashboard/{dID}/component" + "/" + id)
+func (s *DashboardComponentService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/dashboard/{dID}/component"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete dashboardComponent %s: %w", id, err)
 	}
@@ -104,8 +104,8 @@ func (s *DashboardComponentService) Delete(id string) error {
 }
 
 // Copy performs the copy action on the dashboardComponent with the given ID.
-func (s *DashboardComponentService) Copy(id string) (*DashboardComponent, error) {
-	resp, err := s.client.post("/dashboard/{dID}/component" + "/" + id + "/copy", nil)
+func (s *DashboardComponentService) Copy(ctx context.Context, id string) (*DashboardComponent, error) {
+	resp, err := s.client.post(ctx, "/dashboard/{dID}/component"+"/"+id+"/copy", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: copy dashboardComponent %s: %w", id, err)
 	}
@@ -119,8 +119,8 @@ func (s *DashboardComponentService) Copy(id string) (*DashboardComponent, error)
 }
 
 // Refresh performs the refresh action on the dashboardComponent with the given ID.
-func (s *DashboardComponentService) Refresh(id string) (*DashboardComponent, error) {
-	resp, err := s.client.post("/dashboard/{dID}/component" + "/" + id + "/refresh", nil)
+func (s *DashboardComponentService) Refresh(ctx context.Context, id string) (*DashboardComponent, error) {
+	resp, err := s.client.post(ctx, "/dashboard/{dID}/component"+"/"+id+"/refresh", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: refresh dashboardComponent %s: %w", id, err)
 	}
@@ -132,4 +132,3 @@ func (s *DashboardComponentService) Refresh(id string) (*DashboardComponent, err
 
 	return &result, nil
 }
-

@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type ReportTemplateListResponse struct {
 }
 
 // List returns all reportTemplates.
-func (s *ReportTemplateService) List() (*ReportTemplateListResponse, error) {
-	resp, err := s.client.get("/reportTemplate")
+func (s *ReportTemplateService) List(ctx context.Context) (*ReportTemplateListResponse, error) {
+	resp, err := s.client.get(ctx, "/reportTemplate")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list reportTemplates: %w", err)
 	}
@@ -40,8 +40,8 @@ func (s *ReportTemplateService) List() (*ReportTemplateListResponse, error) {
 }
 
 // Get returns the reportTemplate with the given ID.
-func (s *ReportTemplateService) Get(id string) (*ReportTemplate, error) {
-	resp, err := s.client.get("/reportTemplate" + "/" + id)
+func (s *ReportTemplateService) Get(ctx context.Context, id string) (*ReportTemplate, error) {
+	resp, err := s.client.get(ctx, "/reportTemplate"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get reportTemplate %s: %w", id, err)
 	}
@@ -55,8 +55,8 @@ func (s *ReportTemplateService) Get(id string) (*ReportTemplate, error) {
 }
 
 // Image performs the image action on the reportTemplate with the given ID.
-func (s *ReportTemplateService) Image(id string) (*ReportTemplate, error) {
-	resp, err := s.client.get("/reportTemplate" + "/" + id + "/image")
+func (s *ReportTemplateService) Image(ctx context.Context, id string) (*ReportTemplate, error) {
+	resp, err := s.client.get(ctx, "/reportTemplate"+"/"+id+"/image")
 	if err != nil {
 		return nil, fmt.Errorf("sc: image reportTemplate %s: %w", id, err)
 	}
@@ -70,8 +70,8 @@ func (s *ReportTemplateService) Image(id string) (*ReportTemplate, error) {
 }
 
 // Categories performs the categories action on the reportTemplate.
-func (s *ReportTemplateService) Categories() (*ReportTemplate, error) {
-	resp, err := s.client.get("/reportTemplate/categories")
+func (s *ReportTemplateService) Categories(ctx context.Context) (*ReportTemplate, error) {
+	resp, err := s.client.get(ctx, "/reportTemplate/categories")
 	if err != nil {
 		return nil, fmt.Errorf("sc: categories reportTemplate: %w", err)
 	}
@@ -83,4 +83,3 @@ func (s *ReportTemplateService) Categories() (*ReportTemplate, error) {
 
 	return &result, nil
 }
-

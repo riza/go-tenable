@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type ARCTemplateListResponse struct {
 }
 
 // List returns all aRCTemplates.
-func (s *ARCTemplateService) List() (*ARCTemplateListResponse, error) {
-	resp, err := s.client.get("/arcTemplate")
+func (s *ARCTemplateService) List(ctx context.Context) (*ARCTemplateListResponse, error) {
+	resp, err := s.client.get(ctx, "/arcTemplate")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list aRCTemplates: %w", err)
 	}
@@ -40,8 +40,8 @@ func (s *ARCTemplateService) List() (*ARCTemplateListResponse, error) {
 }
 
 // Get returns the aRCTemplate with the given ID.
-func (s *ARCTemplateService) Get(id string) (*ARCTemplate, error) {
-	resp, err := s.client.get("/arcTemplate" + "/" + id)
+func (s *ARCTemplateService) Get(ctx context.Context, id string) (*ARCTemplate, error) {
+	resp, err := s.client.get(ctx, "/arcTemplate"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get aRCTemplate %s: %w", id, err)
 	}
@@ -55,8 +55,8 @@ func (s *ARCTemplateService) Get(id string) (*ARCTemplate, error) {
 }
 
 // Image performs the image action on the aRCTemplate with the given ID.
-func (s *ARCTemplateService) Image(id string) (*ARCTemplate, error) {
-	resp, err := s.client.get("/arcTemplate" + "/" + id + "/image")
+func (s *ARCTemplateService) Image(ctx context.Context, id string) (*ARCTemplate, error) {
+	resp, err := s.client.get(ctx, "/arcTemplate"+"/"+id+"/image")
 	if err != nil {
 		return nil, fmt.Errorf("sc: image aRCTemplate %s: %w", id, err)
 	}
@@ -70,8 +70,8 @@ func (s *ARCTemplateService) Image(id string) (*ARCTemplate, error) {
 }
 
 // Categories performs the categories action on the aRCTemplate.
-func (s *ARCTemplateService) Categories() (*ARCTemplate, error) {
-	resp, err := s.client.get("/arcTemplate/categories")
+func (s *ARCTemplateService) Categories(ctx context.Context) (*ARCTemplate, error) {
+	resp, err := s.client.get(ctx, "/arcTemplate/categories")
 	if err != nil {
 		return nil, fmt.Errorf("sc: categories aRCTemplate: %w", err)
 	}
@@ -83,4 +83,3 @@ func (s *ARCTemplateService) Categories() (*ARCTemplate, error) {
 
 	return &result, nil
 }
-

@@ -1,6 +1,7 @@
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -28,8 +29,8 @@ type BulkInput struct {
 type BulkResponse = json.RawMessage
 
 // Execute sends a bulk request containing multiple API operations.
-func (s *BulkService) Execute(input *BulkInput) (json.RawMessage, error) {
-	resp, err := s.client.post("/bulk", input)
+func (s *BulkService) Execute(ctx context.Context, input *BulkInput) (json.RawMessage, error) {
+	resp, err := s.client.post(ctx, "/bulk", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: execute bulk: %w", err)
 	}

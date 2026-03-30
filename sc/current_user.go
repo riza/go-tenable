@@ -1,6 +1,7 @@
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -84,8 +85,8 @@ type SwitchInput struct {
 }
 
 // Get returns the currently authenticated user.
-func (s *CurrentUserService) Get() (*CurrentUser, error) {
-	resp, err := s.client.get("/currentUser")
+func (s *CurrentUserService) Get(ctx context.Context) (*CurrentUser, error) {
+	resp, err := s.client.get(ctx, "/currentUser")
 	if err != nil {
 		return nil, fmt.Errorf("sc: get current user: %w", err)
 	}
@@ -99,8 +100,8 @@ func (s *CurrentUserService) Get() (*CurrentUser, error) {
 }
 
 // Update updates the currently authenticated user with the given input.
-func (s *CurrentUserService) Update(input *CurrentUserUpdateInput) (*CurrentUser, error) {
-	resp, err := s.client.patch("/currentUser", input)
+func (s *CurrentUserService) Update(ctx context.Context, input *CurrentUserUpdateInput) (*CurrentUser, error) {
+	resp, err := s.client.patch(ctx, "/currentUser", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update current user: %w", err)
 	}
@@ -114,8 +115,8 @@ func (s *CurrentUserService) Update(input *CurrentUserUpdateInput) (*CurrentUser
 }
 
 // AssociateCert associates a client certificate with the current user.
-func (s *CurrentUserService) AssociateCert() (*CurrentUser, error) {
-	resp, err := s.client.post("/currentUser/associateCert", nil)
+func (s *CurrentUserService) AssociateCert(ctx context.Context) (*CurrentUser, error) {
+	resp, err := s.client.post(ctx, "/currentUser/associateCert", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: associate cert for current user: %w", err)
 	}
@@ -129,8 +130,8 @@ func (s *CurrentUserService) AssociateCert() (*CurrentUser, error) {
 }
 
 // GetPreferences returns the preferences for the current user.
-func (s *CurrentUserService) GetPreferences(input *PreferenceInput) ([]UserPreference, error) {
-	resp, err := s.client.get("/currentUser/preferences")
+func (s *CurrentUserService) GetPreferences(ctx context.Context, input *PreferenceInput) ([]UserPreference, error) {
+	resp, err := s.client.get(ctx, "/currentUser/preferences")
 	if err != nil {
 		return nil, fmt.Errorf("sc: get current user preferences: %w", err)
 	}
@@ -144,8 +145,8 @@ func (s *CurrentUserService) GetPreferences(input *PreferenceInput) ([]UserPrefe
 }
 
 // UpdatePreference updates a preference for the current user.
-func (s *CurrentUserService) UpdatePreference(input *PreferenceInput) ([]UserPreference, error) {
-	resp, err := s.client.patch("/currentUser/preferences", input)
+func (s *CurrentUserService) UpdatePreference(ctx context.Context, input *PreferenceInput) ([]UserPreference, error) {
+	resp, err := s.client.patch(ctx, "/currentUser/preferences", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update current user preference: %w", err)
 	}
@@ -160,8 +161,8 @@ func (s *CurrentUserService) UpdatePreference(input *PreferenceInput) ([]UserPre
 
 // DeletePreferences deletes preferences for the current user.
 // The SC API requires a request body with the DELETE method for this endpoint.
-func (s *CurrentUserService) DeletePreferences(input *PreferenceInput) error {
-	_, err := s.client.doRequest(http.MethodDelete, "/currentUser/preferences", input)
+func (s *CurrentUserService) DeletePreferences(ctx context.Context, input *PreferenceInput) error {
+	_, err := s.client.doRequest(ctx, http.MethodDelete, "/currentUser/preferences", input)
 	if err != nil {
 		return fmt.Errorf("sc: delete current user preferences: %w", err)
 	}
@@ -170,8 +171,8 @@ func (s *CurrentUserService) DeletePreferences(input *PreferenceInput) error {
 }
 
 // Switch switches the current user context to another user.
-func (s *CurrentUserService) Switch(input *SwitchInput) (*CurrentUser, error) {
-	resp, err := s.client.post("/currentUser/switch", input)
+func (s *CurrentUserService) Switch(ctx context.Context, input *SwitchInput) (*CurrentUser, error) {
+	resp, err := s.client.post(ctx, "/currentUser/switch", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: switch current user: %w", err)
 	}

@@ -1,6 +1,7 @@
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -24,8 +25,8 @@ type TokenResponse struct {
 
 // Create logs in to Tenable Security Center and returns a session token.
 // POST /token
-func (s *TokenService) Create(input *TokenCreateInput) (*TokenResponse, error) {
-	resp, err := s.client.post("/token", input)
+func (s *TokenService) Create(ctx context.Context, input *TokenCreateInput) (*TokenResponse, error) {
+	resp, err := s.client.post(ctx, "/token", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: token create: %w", err)
 	}
@@ -40,8 +41,8 @@ func (s *TokenService) Create(input *TokenCreateInput) (*TokenResponse, error) {
 
 // Delete destroys the current session token (logout).
 // DELETE /token
-func (s *TokenService) Delete() error {
-	_, err := s.client.delete("/token")
+func (s *TokenService) Delete(ctx context.Context) error {
+	_, err := s.client.delete(ctx, "/token")
 	if err != nil {
 		return fmt.Errorf("sc: token delete: %w", err)
 	}

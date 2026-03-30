@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type LCEPolicyListResponse struct {
 }
 
 // List returns all lCEPolicys.
-func (s *LCEPolicyService) List() (*LCEPolicyListResponse, error) {
-	resp, err := s.client.get("/lce/{id}/policy")
+func (s *LCEPolicyService) List(ctx context.Context) (*LCEPolicyListResponse, error) {
+	resp, err := s.client.get(ctx, "/lce/{id}/policy")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list lCEPolicys: %w", err)
 	}
@@ -40,12 +40,11 @@ func (s *LCEPolicyService) List() (*LCEPolicyListResponse, error) {
 }
 
 // Delete deletes the lCEPolicy.
-func (s *LCEPolicyService) Delete() error {
-	_, err := s.client.delete("/lce/{id}/policy")
+func (s *LCEPolicyService) Delete(ctx context.Context) error {
+	_, err := s.client.delete(ctx, "/lce/{id}/policy")
 	if err != nil {
 		return fmt.Errorf("sc: delete lCEPolicy: %w", err)
 	}
 
 	return nil
 }
-

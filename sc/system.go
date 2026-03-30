@@ -1,6 +1,7 @@
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -12,36 +13,36 @@ type SystemService struct {
 
 // SystemInfo represents the system information returned by GET /system.
 type SystemInfo struct {
-	Version                        string             `json:"version"`
-	BuildID                        string             `json:"buildID"`
-	ReleaseID                      string             `json:"releaseID"`
-	Banner                         string             `json:"banner"`
-	UUID                           string             `json:"uuid"`
-	UUIDSHA256                     string             `json:"uuidsha256"`
-	Logo                           string             `json:"logo"`
-	ServerAuth                     string             `json:"serverAuth"`
-	ServerClassification           string             `json:"serverClassification"`
-	SessionTimeout                 string             `json:"sessionTimeout"`
-	LicenseStatus                  string             `json:"licenseStatus"`
-	ACAS                           string             `json:"ACAS"`
-	FreshInstall                   string             `json:"freshInstall"`
-	HeaderText                     string             `json:"headerText"`
-	RiskRuleCommentsEnabled        string             `json:"riskRuleCommentsEnabled"`
-	TelemetryEnabled               string             `json:"telemetryEnabled"`
-	SerializationDisabled          string             `json:"SerializationDisabled"`
-	ActiveIPs                      string             `json:"activeIPs"`
-	LicensedIPs                    string             `json:"licensedIPs"`
-	LicenseExpiration              string             `json:"licenseExpiration"`
-	PostgresConnStatus             string             `json:"postgresConnStatus"`
-	PostgresConnectionType         string             `json:"postgresConnectionType"`
-	VulnerabilityIntelligenceEnabled string           `json:"VulnerabilityIntelligenceEnabled"`
-	WASLicense                     string             `json:"wasLicense"`
-	WASFQDNCount                   string             `json:"wasFQDNCount"`
-	LoginNotifications             json.RawMessage    `json:"loginNotifications"`
-	PasswordComplexity             json.RawMessage    `json:"PasswordComplexity"`
-	SAML                           json.RawMessage    `json:"SAML"`
-	ReportTypes                    []ReportType       `json:"reportTypes"`
-	Timezones                      []Timezone         `json:"timezones"`
+	Version                          string          `json:"version"`
+	BuildID                          string          `json:"buildID"`
+	ReleaseID                        string          `json:"releaseID"`
+	Banner                           string          `json:"banner"`
+	UUID                             string          `json:"uuid"`
+	UUIDSHA256                       string          `json:"uuidsha256"`
+	Logo                             string          `json:"logo"`
+	ServerAuth                       string          `json:"serverAuth"`
+	ServerClassification             string          `json:"serverClassification"`
+	SessionTimeout                   string          `json:"sessionTimeout"`
+	LicenseStatus                    string          `json:"licenseStatus"`
+	ACAS                             string          `json:"ACAS"`
+	FreshInstall                     string          `json:"freshInstall"`
+	HeaderText                       string          `json:"headerText"`
+	RiskRuleCommentsEnabled          string          `json:"riskRuleCommentsEnabled"`
+	TelemetryEnabled                 string          `json:"telemetryEnabled"`
+	SerializationDisabled            string          `json:"SerializationDisabled"`
+	ActiveIPs                        string          `json:"activeIPs"`
+	LicensedIPs                      string          `json:"licensedIPs"`
+	LicenseExpiration                string          `json:"licenseExpiration"`
+	PostgresConnStatus               string          `json:"postgresConnStatus"`
+	PostgresConnectionType           string          `json:"postgresConnectionType"`
+	VulnerabilityIntelligenceEnabled string          `json:"VulnerabilityIntelligenceEnabled"`
+	WASLicense                       string          `json:"wasLicense"`
+	WASFQDNCount                     string          `json:"wasFQDNCount"`
+	LoginNotifications               json.RawMessage `json:"loginNotifications"`
+	PasswordComplexity               json.RawMessage `json:"PasswordComplexity"`
+	SAML                             json.RawMessage `json:"SAML"`
+	ReportTypes                      []ReportType    `json:"reportTypes"`
+	Timezones                        []Timezone      `json:"timezones"`
 }
 
 // ReportType represents a report type entry in the system info.
@@ -148,8 +149,8 @@ type LogDownloadInput struct {
 }
 
 // Get returns the system information.
-func (s *SystemService) Get() (*SystemInfo, error) {
-	resp, err := s.client.get("/system")
+func (s *SystemService) Get(ctx context.Context) (*SystemInfo, error) {
+	resp, err := s.client.get(ctx, "/system")
 	if err != nil {
 		return nil, fmt.Errorf("sc: get system: %w", err)
 	}
@@ -163,8 +164,8 @@ func (s *SystemService) Get() (*SystemInfo, error) {
 }
 
 // GetDebug returns the list of debug settings.
-func (s *SystemService) GetDebug() ([]DebugItem, error) {
-	resp, err := s.client.get("/system/debug")
+func (s *SystemService) GetDebug(ctx context.Context) ([]DebugItem, error) {
+	resp, err := s.client.get(ctx, "/system/debug")
 	if err != nil {
 		return nil, fmt.Errorf("sc: get system debug: %w", err)
 	}
@@ -178,8 +179,8 @@ func (s *SystemService) GetDebug() ([]DebugItem, error) {
 }
 
 // UpdateDebug updates the debug settings.
-func (s *SystemService) UpdateDebug(input *DebugUpdateInput) error {
-	_, err := s.client.patch("/system/debug", input)
+func (s *SystemService) UpdateDebug(ctx context.Context, input *DebugUpdateInput) error {
+	_, err := s.client.patch(ctx, "/system/debug", input)
 	if err != nil {
 		return fmt.Errorf("sc: update system debug: %w", err)
 	}
@@ -188,8 +189,8 @@ func (s *SystemService) UpdateDebug(input *DebugUpdateInput) error {
 }
 
 // GetDiagnostics returns the system diagnostics information.
-func (s *SystemService) GetDiagnostics() (*SystemDiagnostics, error) {
-	resp, err := s.client.get("/system/diagnostics")
+func (s *SystemService) GetDiagnostics(ctx context.Context) (*SystemDiagnostics, error) {
+	resp, err := s.client.get(ctx, "/system/diagnostics")
 	if err != nil {
 		return nil, fmt.Errorf("sc: get system diagnostics: %w", err)
 	}
@@ -203,8 +204,8 @@ func (s *SystemService) GetDiagnostics() (*SystemDiagnostics, error) {
 }
 
 // GenerateDiagnostics starts generating system diagnostics.
-func (s *SystemService) GenerateDiagnostics(input *DiagnosticsGenerateInput) error {
-	_, err := s.client.post("/system/diagnostics/generate", input)
+func (s *SystemService) GenerateDiagnostics(ctx context.Context, input *DiagnosticsGenerateInput) error {
+	_, err := s.client.post(ctx, "/system/diagnostics/generate", input)
 	if err != nil {
 		return fmt.Errorf("sc: generate system diagnostics: %w", err)
 	}
@@ -213,8 +214,8 @@ func (s *SystemService) GenerateDiagnostics(input *DiagnosticsGenerateInput) err
 }
 
 // DownloadDiagnostics downloads the system diagnostics file.
-func (s *SystemService) DownloadDiagnostics() error {
-	_, err := s.client.post("/system/diagnostics/download", nil)
+func (s *SystemService) DownloadDiagnostics(ctx context.Context) error {
+	_, err := s.client.post(ctx, "/system/diagnostics/download", nil)
 	if err != nil {
 		return fmt.Errorf("sc: download system diagnostics: %w", err)
 	}
@@ -223,8 +224,8 @@ func (s *SystemService) DownloadDiagnostics() error {
 }
 
 // GenerateDebugLogs starts generating debug logs.
-func (s *SystemService) GenerateDebugLogs(input *DebugLogsGenerateInput) error {
-	_, err := s.client.post("/system/debuglogs/generate", input)
+func (s *SystemService) GenerateDebugLogs(ctx context.Context, input *DebugLogsGenerateInput) error {
+	_, err := s.client.post(ctx, "/system/debuglogs/generate", input)
 	if err != nil {
 		return fmt.Errorf("sc: generate system debug logs: %w", err)
 	}
@@ -233,8 +234,8 @@ func (s *SystemService) GenerateDebugLogs(input *DebugLogsGenerateInput) error {
 }
 
 // DownloadDebugLogs downloads the debug logs file.
-func (s *SystemService) DownloadDebugLogs() error {
-	_, err := s.client.post("/system/debuglogs/download", nil)
+func (s *SystemService) DownloadDebugLogs(ctx context.Context) error {
+	_, err := s.client.post(ctx, "/system/debuglogs/download", nil)
 	if err != nil {
 		return fmt.Errorf("sc: download system debug logs: %w", err)
 	}
@@ -243,8 +244,8 @@ func (s *SystemService) DownloadDebugLogs() error {
 }
 
 // GetLocale returns the current locale configuration.
-func (s *SystemService) GetLocale() (*Locale, error) {
-	resp, err := s.client.get("/system/locale")
+func (s *SystemService) GetLocale(ctx context.Context) (*Locale, error) {
+	resp, err := s.client.get(ctx, "/system/locale")
 	if err != nil {
 		return nil, fmt.Errorf("sc: get system locale: %w", err)
 	}
@@ -258,8 +259,8 @@ func (s *SystemService) GetLocale() (*Locale, error) {
 }
 
 // UpdateLocale updates the system locale.
-func (s *SystemService) UpdateLocale(input *LocaleUpdateInput) error {
-	_, err := s.client.patch("/system/locale", input)
+func (s *SystemService) UpdateLocale(ctx context.Context, input *LocaleUpdateInput) error {
+	_, err := s.client.patch(ctx, "/system/locale", input)
 	if err != nil {
 		return fmt.Errorf("sc: update system locale: %w", err)
 	}
@@ -268,8 +269,8 @@ func (s *SystemService) UpdateLocale(input *LocaleUpdateInput) error {
 }
 
 // GetLocales returns the available locales as a raw JSON map.
-func (s *SystemService) GetLocales() (json.RawMessage, error) {
-	resp, err := s.client.get("/system/locales")
+func (s *SystemService) GetLocales(ctx context.Context) (json.RawMessage, error) {
+	resp, err := s.client.get(ctx, "/system/locales")
 	if err != nil {
 		return nil, fmt.Errorf("sc: get system locales: %w", err)
 	}
@@ -278,8 +279,8 @@ func (s *SystemService) GetLocales() (json.RawMessage, error) {
 }
 
 // GetLogFiles returns the list of log files as raw JSON.
-func (s *SystemService) GetLogFiles() (json.RawMessage, error) {
-	resp, err := s.client.get("/system/logFiles")
+func (s *SystemService) GetLogFiles(ctx context.Context) (json.RawMessage, error) {
+	resp, err := s.client.get(ctx, "/system/logFiles")
 	if err != nil {
 		return nil, fmt.Errorf("sc: get system log files: %w", err)
 	}
@@ -288,8 +289,8 @@ func (s *SystemService) GetLogFiles() (json.RawMessage, error) {
 }
 
 // SearchLogs searches the system logs with the given criteria.
-func (s *SystemService) SearchLogs(input *LogSearchInput) (*LogSearchResponse, error) {
-	resp, err := s.client.post("/system/logs", input)
+func (s *SystemService) SearchLogs(ctx context.Context, input *LogSearchInput) (*LogSearchResponse, error) {
+	resp, err := s.client.post(ctx, "/system/logs", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: search system logs: %w", err)
 	}
@@ -303,8 +304,8 @@ func (s *SystemService) SearchLogs(input *LogSearchInput) (*LogSearchResponse, e
 }
 
 // DownloadLogs downloads system logs matching the given criteria.
-func (s *SystemService) DownloadLogs(input *LogDownloadInput) error {
-	_, err := s.client.post("/system/logs/download", input)
+func (s *SystemService) DownloadLogs(ctx context.Context, input *LogDownloadInput) error {
+	_, err := s.client.post(ctx, "/system/logs/download", input)
 	if err != nil {
 		return fmt.Errorf("sc: download system logs: %w", err)
 	}
@@ -313,8 +314,8 @@ func (s *SystemService) DownloadLogs(input *LogDownloadInput) error {
 }
 
 // GetLogModules returns the available log modules as raw JSON.
-func (s *SystemService) GetLogModules() (json.RawMessage, error) {
-	resp, err := s.client.get("/system/logs/modules")
+func (s *SystemService) GetLogModules(ctx context.Context) (json.RawMessage, error) {
+	resp, err := s.client.get(ctx, "/system/logs/modules")
 	if err != nil {
 		return nil, fmt.Errorf("sc: get system log modules: %w", err)
 	}
@@ -323,8 +324,8 @@ func (s *SystemService) GetLogModules() (json.RawMessage, error) {
 }
 
 // GetFIPS returns the current FIPS status.
-func (s *SystemService) GetFIPS() (*FIPSStatus, error) {
-	resp, err := s.client.get("/system/fips")
+func (s *SystemService) GetFIPS(ctx context.Context) (*FIPSStatus, error) {
+	resp, err := s.client.get(ctx, "/system/fips")
 	if err != nil {
 		return nil, fmt.Errorf("sc: get system fips: %w", err)
 	}
@@ -338,8 +339,8 @@ func (s *SystemService) GetFIPS() (*FIPSStatus, error) {
 }
 
 // SetFIPS sets the FIPS mode and returns the updated status.
-func (s *SystemService) SetFIPS(input *FIPSSetInput) (*FIPSStatus, error) {
-	resp, err := s.client.post("/system/fips", input)
+func (s *SystemService) SetFIPS(ctx context.Context, input *FIPSSetInput) (*FIPSStatus, error) {
+	resp, err := s.client.post(ctx, "/system/fips", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: set system fips: %w", err)
 	}

@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type RecastRiskRuleCreateInput struct {
 type RecastRiskRuleUpdateInput = RecastRiskRuleCreateInput
 
 // List returns all recastRiskRules.
-func (s *RecastRiskRuleService) List() (*RecastRiskRuleListResponse, error) {
-	resp, err := s.client.get("/recastRiskRule")
+func (s *RecastRiskRuleService) List(ctx context.Context) (*RecastRiskRuleListResponse, error) {
+	resp, err := s.client.get(ctx, "/recastRiskRule")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list recastRiskRules: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *RecastRiskRuleService) List() (*RecastRiskRuleListResponse, error) {
 }
 
 // Create creates a new recastRiskRule.
-func (s *RecastRiskRuleService) Create(input *RecastRiskRuleCreateInput) (*RecastRiskRule, error) {
-	resp, err := s.client.post("/recastRiskRule", input)
+func (s *RecastRiskRuleService) Create(ctx context.Context, input *RecastRiskRuleCreateInput) (*RecastRiskRule, error) {
+	resp, err := s.client.post(ctx, "/recastRiskRule", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create recastRiskRule: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *RecastRiskRuleService) Create(input *RecastRiskRuleCreateInput) (*Recas
 }
 
 // Get returns the recastRiskRule with the given ID.
-func (s *RecastRiskRuleService) Get(id string) (*RecastRiskRule, error) {
-	resp, err := s.client.get("/recastRiskRule" + "/" + id)
+func (s *RecastRiskRuleService) Get(ctx context.Context, id string) (*RecastRiskRule, error) {
+	resp, err := s.client.get(ctx, "/recastRiskRule"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get recastRiskRule %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *RecastRiskRuleService) Get(id string) (*RecastRiskRule, error) {
 }
 
 // Delete deletes the recastRiskRule with the given ID.
-func (s *RecastRiskRuleService) Delete(id string) error {
-	_, err := s.client.delete("/recastRiskRule" + "/" + id)
+func (s *RecastRiskRuleService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/recastRiskRule"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete recastRiskRule %s: %w", id, err)
 	}
@@ -89,8 +89,8 @@ func (s *RecastRiskRuleService) Delete(id string) error {
 }
 
 // Update updates the recastRiskRule with the given ID.
-func (s *RecastRiskRuleService) Update(id string, input *RecastRiskRuleUpdateInput) (*RecastRiskRule, error) {
-	resp, err := s.client.patch("/recastRiskRule" + "/" + id, input)
+func (s *RecastRiskRuleService) Update(ctx context.Context, id string, input *RecastRiskRuleUpdateInput) (*RecastRiskRule, error) {
+	resp, err := s.client.patch(ctx, "/recastRiskRule"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update recastRiskRule %s: %w", id, err)
 	}
@@ -104,8 +104,8 @@ func (s *RecastRiskRuleService) Update(id string, input *RecastRiskRuleUpdateInp
 }
 
 // Apply performs the apply action on the recastRiskRule.
-func (s *RecastRiskRuleService) Apply() (*RecastRiskRule, error) {
-	resp, err := s.client.post("/recastRiskRule/apply", nil)
+func (s *RecastRiskRuleService) Apply(ctx context.Context) (*RecastRiskRule, error) {
+	resp, err := s.client.post(ctx, "/recastRiskRule/apply", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: apply recastRiskRule: %w", err)
 	}
@@ -117,4 +117,3 @@ func (s *RecastRiskRuleService) Apply() (*RecastRiskRule, error) {
 
 	return &result, nil
 }
-

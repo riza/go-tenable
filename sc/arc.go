@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type ARCCreateInput struct {
 type ARCUpdateInput = ARCCreateInput
 
 // List returns all aRCs.
-func (s *ARCService) List() (*ARCListResponse, error) {
-	resp, err := s.client.get("/arc")
+func (s *ARCService) List(ctx context.Context) (*ARCListResponse, error) {
+	resp, err := s.client.get(ctx, "/arc")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list aRCs: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *ARCService) List() (*ARCListResponse, error) {
 }
 
 // Create creates a new aRC.
-func (s *ARCService) Create(input *ARCCreateInput) (*ARC, error) {
-	resp, err := s.client.post("/arc", input)
+func (s *ARCService) Create(ctx context.Context, input *ARCCreateInput) (*ARC, error) {
+	resp, err := s.client.post(ctx, "/arc", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create aRC: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *ARCService) Create(input *ARCCreateInput) (*ARC, error) {
 }
 
 // Get returns the aRC with the given ID.
-func (s *ARCService) Get(id string) (*ARC, error) {
-	resp, err := s.client.get("/arc" + "/" + id)
+func (s *ARCService) Get(ctx context.Context, id string) (*ARC, error) {
+	resp, err := s.client.get(ctx, "/arc"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get aRC %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *ARCService) Get(id string) (*ARC, error) {
 }
 
 // Update updates the aRC with the given ID.
-func (s *ARCService) Update(id string, input *ARCUpdateInput) (*ARC, error) {
-	resp, err := s.client.patch("/arc" + "/" + id, input)
+func (s *ARCService) Update(ctx context.Context, id string, input *ARCUpdateInput) (*ARC, error) {
+	resp, err := s.client.patch(ctx, "/arc"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update aRC %s: %w", id, err)
 	}
@@ -94,8 +94,8 @@ func (s *ARCService) Update(id string, input *ARCUpdateInput) (*ARC, error) {
 }
 
 // Delete deletes the aRC with the given ID.
-func (s *ARCService) Delete(id string) error {
-	_, err := s.client.delete("/arc" + "/" + id)
+func (s *ARCService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/arc"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete aRC %s: %w", id, err)
 	}
@@ -104,8 +104,8 @@ func (s *ARCService) Delete(id string) error {
 }
 
 // Import performs the import action on the aRC.
-func (s *ARCService) Import() (*ARC, error) {
-	resp, err := s.client.post("/arc/import", nil)
+func (s *ARCService) Import(ctx context.Context) (*ARC, error) {
+	resp, err := s.client.post(ctx, "/arc/import", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: import aRC: %w", err)
 	}
@@ -119,8 +119,8 @@ func (s *ARCService) Import() (*ARC, error) {
 }
 
 // Export performs the export action on the aRC with the given ID.
-func (s *ARCService) Export(id string) (*ARC, error) {
-	resp, err := s.client.post("/arc" + "/" + id + "/export", nil)
+func (s *ARCService) Export(ctx context.Context, id string) (*ARC, error) {
+	resp, err := s.client.post(ctx, "/arc"+"/"+id+"/export", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: export aRC %s: %w", id, err)
 	}
@@ -134,8 +134,8 @@ func (s *ARCService) Export(id string) (*ARC, error) {
 }
 
 // Copy performs the copy action on the aRC with the given ID.
-func (s *ARCService) Copy(id string) (*ARC, error) {
-	resp, err := s.client.post("/arc" + "/" + id + "/copy", nil)
+func (s *ARCService) Copy(ctx context.Context, id string) (*ARC, error) {
+	resp, err := s.client.post(ctx, "/arc"+"/"+id+"/copy", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: copy aRC %s: %w", id, err)
 	}
@@ -149,8 +149,8 @@ func (s *ARCService) Copy(id string) (*ARC, error) {
 }
 
 // Refresh performs the refresh action on the aRC with the given ID.
-func (s *ARCService) Refresh(id string) (*ARC, error) {
-	resp, err := s.client.post("/arc" + "/" + id + "/refresh", nil)
+func (s *ARCService) Refresh(ctx context.Context, id string) (*ARC, error) {
+	resp, err := s.client.post(ctx, "/arc"+"/"+id+"/refresh", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: refresh aRC %s: %w", id, err)
 	}
@@ -164,8 +164,8 @@ func (s *ARCService) Refresh(id string) (*ARC, error) {
 }
 
 // Share performs the share action on the aRC with the given ID.
-func (s *ARCService) Share(id string) (*ARC, error) {
-	resp, err := s.client.post("/arc" + "/" + id + "/share", nil)
+func (s *ARCService) Share(ctx context.Context, id string) (*ARC, error) {
+	resp, err := s.client.post(ctx, "/arc"+"/"+id+"/share", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: share aRC %s: %w", id, err)
 	}
@@ -177,4 +177,3 @@ func (s *ARCService) Share(id string) (*ARC, error) {
 
 	return &result, nil
 }
-

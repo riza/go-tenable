@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type OrganizationSecurityManagerCreateInput struct {
 type OrganizationSecurityManagerUpdateInput = OrganizationSecurityManagerCreateInput
 
 // List returns all organizationSecurityManagers.
-func (s *OrganizationSecurityManagerService) List() (*OrganizationSecurityManagerListResponse, error) {
-	resp, err := s.client.get("/organization/{orgID}/securityManager")
+func (s *OrganizationSecurityManagerService) List(ctx context.Context) (*OrganizationSecurityManagerListResponse, error) {
+	resp, err := s.client.get(ctx, "/organization/{orgID}/securityManager")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list organizationSecurityManagers: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *OrganizationSecurityManagerService) List() (*OrganizationSecurityManage
 }
 
 // Create creates a new organizationSecurityManager.
-func (s *OrganizationSecurityManagerService) Create(input *OrganizationSecurityManagerCreateInput) (*OrganizationSecurityManager, error) {
-	resp, err := s.client.post("/organization/{orgID}/securityManager", input)
+func (s *OrganizationSecurityManagerService) Create(ctx context.Context, input *OrganizationSecurityManagerCreateInput) (*OrganizationSecurityManager, error) {
+	resp, err := s.client.post(ctx, "/organization/{orgID}/securityManager", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create organizationSecurityManager: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *OrganizationSecurityManagerService) Create(input *OrganizationSecurityM
 }
 
 // Get returns the organizationSecurityManager with the given ID.
-func (s *OrganizationSecurityManagerService) Get(id string) (*OrganizationSecurityManager, error) {
-	resp, err := s.client.get("/organization/{orgID}/securityManager" + "/" + id)
+func (s *OrganizationSecurityManagerService) Get(ctx context.Context, id string) (*OrganizationSecurityManager, error) {
+	resp, err := s.client.get(ctx, "/organization/{orgID}/securityManager"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get organizationSecurityManager %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *OrganizationSecurityManagerService) Get(id string) (*OrganizationSecuri
 }
 
 // Update updates the organizationSecurityManager with the given ID.
-func (s *OrganizationSecurityManagerService) Update(id string, input *OrganizationSecurityManagerUpdateInput) (*OrganizationSecurityManager, error) {
-	resp, err := s.client.patch("/organization/{orgID}/securityManager" + "/" + id, input)
+func (s *OrganizationSecurityManagerService) Update(ctx context.Context, id string, input *OrganizationSecurityManagerUpdateInput) (*OrganizationSecurityManager, error) {
+	resp, err := s.client.patch(ctx, "/organization/{orgID}/securityManager"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update organizationSecurityManager %s: %w", id, err)
 	}
@@ -94,12 +94,11 @@ func (s *OrganizationSecurityManagerService) Update(id string, input *Organizati
 }
 
 // Delete deletes the organizationSecurityManager with the given ID.
-func (s *OrganizationSecurityManagerService) Delete(id string) error {
-	_, err := s.client.delete("/organization/{orgID}/securityManager" + "/" + id)
+func (s *OrganizationSecurityManagerService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/organization/{orgID}/securityManager"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete organizationSecurityManager %s: %w", id, err)
 	}
 
 	return nil
 }
-

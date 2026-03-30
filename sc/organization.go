@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type OrganizationCreateInput struct {
 type OrganizationUpdateInput = OrganizationCreateInput
 
 // List returns all organizations.
-func (s *OrganizationService) List() (*OrganizationListResponse, error) {
-	resp, err := s.client.get("/organization")
+func (s *OrganizationService) List(ctx context.Context) (*OrganizationListResponse, error) {
+	resp, err := s.client.get(ctx, "/organization")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list organizations: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *OrganizationService) List() (*OrganizationListResponse, error) {
 }
 
 // Create creates a new organization.
-func (s *OrganizationService) Create(input *OrganizationCreateInput) (*Organization, error) {
-	resp, err := s.client.post("/organization", input)
+func (s *OrganizationService) Create(ctx context.Context, input *OrganizationCreateInput) (*Organization, error) {
+	resp, err := s.client.post(ctx, "/organization", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create organization: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *OrganizationService) Create(input *OrganizationCreateInput) (*Organizat
 }
 
 // Get returns the organization with the given ID.
-func (s *OrganizationService) Get(id string) (*Organization, error) {
-	resp, err := s.client.get("/organization" + "/" + id)
+func (s *OrganizationService) Get(ctx context.Context, id string) (*Organization, error) {
+	resp, err := s.client.get(ctx, "/organization"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get organization %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *OrganizationService) Get(id string) (*Organization, error) {
 }
 
 // Update updates the organization with the given ID.
-func (s *OrganizationService) Update(id string, input *OrganizationUpdateInput) (*Organization, error) {
-	resp, err := s.client.patch("/organization" + "/" + id, input)
+func (s *OrganizationService) Update(ctx context.Context, id string, input *OrganizationUpdateInput) (*Organization, error) {
+	resp, err := s.client.patch(ctx, "/organization"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update organization %s: %w", id, err)
 	}
@@ -94,8 +94,8 @@ func (s *OrganizationService) Update(id string, input *OrganizationUpdateInput) 
 }
 
 // Delete deletes the organization with the given ID.
-func (s *OrganizationService) Delete(id string) error {
-	_, err := s.client.delete("/organization" + "/" + id)
+func (s *OrganizationService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/organization"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete organization %s: %w", id, err)
 	}
@@ -104,8 +104,8 @@ func (s *OrganizationService) Delete(id string) error {
 }
 
 // AcceptRiskRule performs the acceptRiskRule action on the organization with the given ID.
-func (s *OrganizationService) AcceptRiskRule(id string) (*Organization, error) {
-	resp, err := s.client.get("/organization" + "/" + id + "/acceptRiskRule")
+func (s *OrganizationService) AcceptRiskRule(ctx context.Context, id string) (*Organization, error) {
+	resp, err := s.client.get(ctx, "/organization"+"/"+id+"/acceptRiskRule")
 	if err != nil {
 		return nil, fmt.Errorf("sc: acceptRiskRule organization %s: %w", id, err)
 	}
@@ -119,8 +119,8 @@ func (s *OrganizationService) AcceptRiskRule(id string) (*Organization, error) {
 }
 
 // RecastRiskRule performs the recastRiskRule action on the organization with the given ID.
-func (s *OrganizationService) RecastRiskRule(id string) (*Organization, error) {
-	resp, err := s.client.get("/organization" + "/" + id + "/recastRiskRule")
+func (s *OrganizationService) RecastRiskRule(ctx context.Context, id string) (*Organization, error) {
+	resp, err := s.client.get(ctx, "/organization"+"/"+id+"/recastRiskRule")
 	if err != nil {
 		return nil, fmt.Errorf("sc: recastRiskRule organization %s: %w", id, err)
 	}
@@ -132,4 +132,3 @@ func (s *OrganizationService) RecastRiskRule(id string) (*Organization, error) {
 
 	return &result, nil
 }
-

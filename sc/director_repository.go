@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type DirectorRepositoryListResponse struct {
 }
 
 // List returns all directorRepositorys.
-func (s *DirectorRepositoryService) List() (*DirectorRepositoryListResponse, error) {
-	resp, err := s.client.get("/mgmt/repository")
+func (s *DirectorRepositoryService) List(ctx context.Context) (*DirectorRepositoryListResponse, error) {
+	resp, err := s.client.get(ctx, "/mgmt/repository")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list directorRepositorys: %w", err)
 	}
@@ -40,8 +40,8 @@ func (s *DirectorRepositoryService) List() (*DirectorRepositoryListResponse, err
 }
 
 // Get returns the directorRepository with the given ID.
-func (s *DirectorRepositoryService) Get(id string) (*DirectorRepository, error) {
-	resp, err := s.client.get("/mgmt/repository" + "/" + id)
+func (s *DirectorRepositoryService) Get(ctx context.Context, id string) (*DirectorRepository, error) {
+	resp, err := s.client.get(ctx, "/mgmt/repository"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get directorRepository %s: %w", id, err)
 	}
@@ -53,4 +53,3 @@ func (s *DirectorRepositoryService) Get(id string) (*DirectorRepository, error) 
 
 	return &result, nil
 }
-

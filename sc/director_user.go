@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -19,8 +19,8 @@ type DirectorUser struct {
 }
 
 // Get returns the directorUser with the given ID.
-func (s *DirectorUserService) Get(id string) (*DirectorUser, error) {
-	resp, err := s.client.get("/mgmt/user" + "/" + id)
+func (s *DirectorUserService) Get(ctx context.Context, id string) (*DirectorUser, error) {
+	resp, err := s.client.get(ctx, "/mgmt/user"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get directorUser %s: %w", id, err)
 	}
@@ -32,4 +32,3 @@ func (s *DirectorUserService) Get(id string) (*DirectorUser, error) {
 
 	return &result, nil
 }
-

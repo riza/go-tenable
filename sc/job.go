@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type JobListResponse struct {
 }
 
 // List returns all jobs.
-func (s *JobService) List() (*JobListResponse, error) {
-	resp, err := s.client.get("/job")
+func (s *JobService) List(ctx context.Context) (*JobListResponse, error) {
+	resp, err := s.client.get(ctx, "/job")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list jobs: %w", err)
 	}
@@ -40,8 +40,8 @@ func (s *JobService) List() (*JobListResponse, error) {
 }
 
 // Get returns the job with the given ID.
-func (s *JobService) Get(id string) (*Job, error) {
-	resp, err := s.client.get("/job" + "/" + id)
+func (s *JobService) Get(ctx context.Context, id string) (*Job, error) {
+	resp, err := s.client.get(ctx, "/job"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get job %s: %w", id, err)
 	}
@@ -55,8 +55,8 @@ func (s *JobService) Get(id string) (*Job, error) {
 }
 
 // Kill performs the kill action on the job with the given ID.
-func (s *JobService) Kill(id string) (*Job, error) {
-	resp, err := s.client.post("/job" + "/" + id + "/kill", nil)
+func (s *JobService) Kill(ctx context.Context, id string) (*Job, error) {
+	resp, err := s.client.post(ctx, "/job"+"/"+id+"/kill", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: kill job %s: %w", id, err)
 	}
@@ -68,4 +68,3 @@ func (s *JobService) Kill(id string) (*Job, error) {
 
 	return &result, nil
 }
-

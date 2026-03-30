@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type TenableSCInstanceCreateInput struct {
 type TenableSCInstanceUpdateInput = TenableSCInstanceCreateInput
 
 // List returns all tenableSCInstances.
-func (s *TenableSCInstanceService) List() (*TenableSCInstanceListResponse, error) {
-	resp, err := s.client.get("/sci")
+func (s *TenableSCInstanceService) List(ctx context.Context) (*TenableSCInstanceListResponse, error) {
+	resp, err := s.client.get(ctx, "/sci")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list tenableSCInstances: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *TenableSCInstanceService) List() (*TenableSCInstanceListResponse, error
 }
 
 // Create creates a new tenableSCInstance.
-func (s *TenableSCInstanceService) Create(input *TenableSCInstanceCreateInput) (*TenableSCInstance, error) {
-	resp, err := s.client.post("/sci", input)
+func (s *TenableSCInstanceService) Create(ctx context.Context, input *TenableSCInstanceCreateInput) (*TenableSCInstance, error) {
+	resp, err := s.client.post(ctx, "/sci", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create tenableSCInstance: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *TenableSCInstanceService) Create(input *TenableSCInstanceCreateInput) (
 }
 
 // Get returns the tenableSCInstance with the given ID.
-func (s *TenableSCInstanceService) Get(id string) (*TenableSCInstance, error) {
-	resp, err := s.client.get("/sci" + "/" + id)
+func (s *TenableSCInstanceService) Get(ctx context.Context, id string) (*TenableSCInstance, error) {
+	resp, err := s.client.get(ctx, "/sci"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get tenableSCInstance %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *TenableSCInstanceService) Get(id string) (*TenableSCInstance, error) {
 }
 
 // Update updates the tenableSCInstance with the given ID.
-func (s *TenableSCInstanceService) Update(id string, input *TenableSCInstanceUpdateInput) (*TenableSCInstance, error) {
-	resp, err := s.client.patch("/sci" + "/" + id, input)
+func (s *TenableSCInstanceService) Update(ctx context.Context, id string, input *TenableSCInstanceUpdateInput) (*TenableSCInstance, error) {
+	resp, err := s.client.patch(ctx, "/sci"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update tenableSCInstance %s: %w", id, err)
 	}
@@ -94,12 +94,11 @@ func (s *TenableSCInstanceService) Update(id string, input *TenableSCInstanceUpd
 }
 
 // Delete deletes the tenableSCInstance with the given ID.
-func (s *TenableSCInstanceService) Delete(id string) error {
-	_, err := s.client.delete("/sci" + "/" + id)
+func (s *TenableSCInstanceService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/sci"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete tenableSCInstance %s: %w", id, err)
 	}
 
 	return nil
 }
-

@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type ScanPolicyCreateInput struct {
 type ScanPolicyUpdateInput = ScanPolicyCreateInput
 
 // List returns all scanPolicys.
-func (s *ScanPolicyService) List() (*ScanPolicyListResponse, error) {
-	resp, err := s.client.get("/policy")
+func (s *ScanPolicyService) List(ctx context.Context) (*ScanPolicyListResponse, error) {
+	resp, err := s.client.get(ctx, "/policy")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list scanPolicys: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *ScanPolicyService) List() (*ScanPolicyListResponse, error) {
 }
 
 // Create creates a new scanPolicy.
-func (s *ScanPolicyService) Create(input *ScanPolicyCreateInput) (*ScanPolicy, error) {
-	resp, err := s.client.post("/policy", input)
+func (s *ScanPolicyService) Create(ctx context.Context, input *ScanPolicyCreateInput) (*ScanPolicy, error) {
+	resp, err := s.client.post(ctx, "/policy", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create scanPolicy: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *ScanPolicyService) Create(input *ScanPolicyCreateInput) (*ScanPolicy, e
 }
 
 // Get returns the scanPolicy with the given ID.
-func (s *ScanPolicyService) Get(id string) (*ScanPolicy, error) {
-	resp, err := s.client.get("/policy" + "/" + id)
+func (s *ScanPolicyService) Get(ctx context.Context, id string) (*ScanPolicy, error) {
+	resp, err := s.client.get(ctx, "/policy"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get scanPolicy %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *ScanPolicyService) Get(id string) (*ScanPolicy, error) {
 }
 
 // Update updates the scanPolicy with the given ID.
-func (s *ScanPolicyService) Update(id string, input *ScanPolicyUpdateInput) (*ScanPolicy, error) {
-	resp, err := s.client.patch("/policy" + "/" + id, input)
+func (s *ScanPolicyService) Update(ctx context.Context, id string, input *ScanPolicyUpdateInput) (*ScanPolicy, error) {
+	resp, err := s.client.patch(ctx, "/policy"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update scanPolicy %s: %w", id, err)
 	}
@@ -94,8 +94,8 @@ func (s *ScanPolicyService) Update(id string, input *ScanPolicyUpdateInput) (*Sc
 }
 
 // Delete deletes the scanPolicy with the given ID.
-func (s *ScanPolicyService) Delete(id string) error {
-	_, err := s.client.delete("/policy" + "/" + id)
+func (s *ScanPolicyService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/policy"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete scanPolicy %s: %w", id, err)
 	}
@@ -104,8 +104,8 @@ func (s *ScanPolicyService) Delete(id string) error {
 }
 
 // Copy performs the copy action on the scanPolicy with the given ID.
-func (s *ScanPolicyService) Copy(id string) (*ScanPolicy, error) {
-	resp, err := s.client.post("/policy" + "/" + id + "/copy", nil)
+func (s *ScanPolicyService) Copy(ctx context.Context, id string) (*ScanPolicy, error) {
+	resp, err := s.client.post(ctx, "/policy"+"/"+id+"/copy", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: copy scanPolicy %s: %w", id, err)
 	}
@@ -119,8 +119,8 @@ func (s *ScanPolicyService) Copy(id string) (*ScanPolicy, error) {
 }
 
 // Export performs the export action on the scanPolicy with the given ID.
-func (s *ScanPolicyService) Export(id string) (*ScanPolicy, error) {
-	resp, err := s.client.post("/policy" + "/" + id + "/export", nil)
+func (s *ScanPolicyService) Export(ctx context.Context, id string) (*ScanPolicy, error) {
+	resp, err := s.client.post(ctx, "/policy"+"/"+id+"/export", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: export scanPolicy %s: %w", id, err)
 	}
@@ -134,8 +134,8 @@ func (s *ScanPolicyService) Export(id string) (*ScanPolicy, error) {
 }
 
 // Share performs the share action on the scanPolicy with the given ID.
-func (s *ScanPolicyService) Share(id string) (*ScanPolicy, error) {
-	resp, err := s.client.post("/policy" + "/" + id + "/share", nil)
+func (s *ScanPolicyService) Share(ctx context.Context, id string) (*ScanPolicy, error) {
+	resp, err := s.client.post(ctx, "/policy"+"/"+id+"/share", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: share scanPolicy %s: %w", id, err)
 	}
@@ -149,8 +149,8 @@ func (s *ScanPolicyService) Share(id string) (*ScanPolicy, error) {
 }
 
 // Import performs the import action on the scanPolicy.
-func (s *ScanPolicyService) Import() (*ScanPolicy, error) {
-	resp, err := s.client.post("/policy/import", nil)
+func (s *ScanPolicyService) Import(ctx context.Context) (*ScanPolicy, error) {
+	resp, err := s.client.post(ctx, "/policy/import", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: import scanPolicy: %w", err)
 	}
@@ -164,8 +164,8 @@ func (s *ScanPolicyService) Import() (*ScanPolicy, error) {
 }
 
 // Tag performs the tag action on the scanPolicy.
-func (s *ScanPolicyService) Tag() (*ScanPolicy, error) {
-	resp, err := s.client.get("/policy/tag")
+func (s *ScanPolicyService) Tag(ctx context.Context) (*ScanPolicy, error) {
+	resp, err := s.client.get(ctx, "/policy/tag")
 	if err != nil {
 		return nil, fmt.Errorf("sc: tag scanPolicy: %w", err)
 	}
@@ -177,4 +177,3 @@ func (s *ScanPolicyService) Tag() (*ScanPolicy, error) {
 
 	return &result, nil
 }
-

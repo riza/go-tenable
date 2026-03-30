@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type AgentResultsSyncCreateInput struct {
 type AgentResultsSyncUpdateInput = AgentResultsSyncCreateInput
 
 // List returns all agentResultsSyncs.
-func (s *AgentResultsSyncService) List() (*AgentResultsSyncListResponse, error) {
-	resp, err := s.client.get("/agentResultsSync")
+func (s *AgentResultsSyncService) List(ctx context.Context) (*AgentResultsSyncListResponse, error) {
+	resp, err := s.client.get(ctx, "/agentResultsSync")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list agentResultsSyncs: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *AgentResultsSyncService) List() (*AgentResultsSyncListResponse, error) 
 }
 
 // Create creates a new agentResultsSync.
-func (s *AgentResultsSyncService) Create(input *AgentResultsSyncCreateInput) (*AgentResultsSync, error) {
-	resp, err := s.client.post("/agentResultsSync", input)
+func (s *AgentResultsSyncService) Create(ctx context.Context, input *AgentResultsSyncCreateInput) (*AgentResultsSync, error) {
+	resp, err := s.client.post(ctx, "/agentResultsSync", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create agentResultsSync: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *AgentResultsSyncService) Create(input *AgentResultsSyncCreateInput) (*A
 }
 
 // Get returns the agentResultsSync with the given ID.
-func (s *AgentResultsSyncService) Get(id string) (*AgentResultsSync, error) {
-	resp, err := s.client.get("/agentResultsSync" + "/" + id)
+func (s *AgentResultsSyncService) Get(ctx context.Context, id string) (*AgentResultsSync, error) {
+	resp, err := s.client.get(ctx, "/agentResultsSync"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get agentResultsSync %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *AgentResultsSyncService) Get(id string) (*AgentResultsSync, error) {
 }
 
 // Update updates the agentResultsSync with the given ID.
-func (s *AgentResultsSyncService) Update(id string, input *AgentResultsSyncUpdateInput) (*AgentResultsSync, error) {
-	resp, err := s.client.patch("/agentResultsSync" + "/" + id, input)
+func (s *AgentResultsSyncService) Update(ctx context.Context, id string, input *AgentResultsSyncUpdateInput) (*AgentResultsSync, error) {
+	resp, err := s.client.patch(ctx, "/agentResultsSync"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update agentResultsSync %s: %w", id, err)
 	}
@@ -94,8 +94,8 @@ func (s *AgentResultsSyncService) Update(id string, input *AgentResultsSyncUpdat
 }
 
 // Delete deletes the agentResultsSync with the given ID.
-func (s *AgentResultsSyncService) Delete(id string) error {
-	_, err := s.client.delete("/agentResultsSync" + "/" + id)
+func (s *AgentResultsSyncService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/agentResultsSync"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete agentResultsSync %s: %w", id, err)
 	}
@@ -104,8 +104,8 @@ func (s *AgentResultsSyncService) Delete(id string) error {
 }
 
 // Launch performs the launch action on the agentResultsSync with the given ID.
-func (s *AgentResultsSyncService) Launch(id string) (*AgentResultsSync, error) {
-	resp, err := s.client.post("/agentResultsSync" + "/" + id + "/launch", nil)
+func (s *AgentResultsSyncService) Launch(ctx context.Context, id string) (*AgentResultsSync, error) {
+	resp, err := s.client.post(ctx, "/agentResultsSync"+"/"+id+"/launch", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: launch agentResultsSync %s: %w", id, err)
 	}
@@ -117,4 +117,3 @@ func (s *AgentResultsSyncService) Launch(id string) (*AgentResultsSync, error) {
 
 	return &result, nil
 }
-

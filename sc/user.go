@@ -1,6 +1,7 @@
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -12,46 +13,46 @@ type UserService struct {
 
 // User represents a user resource from the API.
 type User struct {
-	ID                         string           `json:"id"`
-	UUID                       string           `json:"uuid"`
-	Status                     string           `json:"status"`
-	Username                   string           `json:"username"`
-	LDAPUsername               string           `json:"ldapUsername"`
-	Firstname                  string           `json:"firstname"`
-	Lastname                   string           `json:"lastname"`
-	Title                      string           `json:"title"`
-	Email                      string           `json:"email"`
-	Address                    string           `json:"address"`
-	City                       string           `json:"city"`
-	State                      string           `json:"state"`
-	Country                    string           `json:"country"`
-	Phone                      string           `json:"phone"`
-	Fax                        string           `json:"fax"`
-	CreatedTime                string           `json:"createdTime"`
-	ModifiedTime               string           `json:"modifiedTime"`
-	LastLogin                  string           `json:"lastLogin"`
-	LastLoginIP                string           `json:"lastLoginIP"`
-	MustChangePassword         string           `json:"mustChangePassword"`
-	PasswordExpires            string           `json:"passwordExpires"`
-	PasswordExpiration         string           `json:"passwordExpiration"`
-	PasswordExpirationOverride string           `json:"passwordExpirationOverride"`
-	PasswordSetDate            string           `json:"passwordSetDate"`
-	Locked                     string           `json:"locked"`
-	FailedLogins               string           `json:"failedLogins"`
-	AuthType                   string           `json:"authType"`
-	Fingerprint                string           `json:"fingerprint"`
-	Password                   string           `json:"password"`
-	CanUse                     string           `json:"canUse"`
-	CanManage                  string           `json:"canManage"`
-	Role                       *IDRef           `json:"role"`
-	LDAP                       *IDRef           `json:"ldap"`
-	ResponsibleAsset           *IDRef           `json:"responsibleAsset"`
-	Group                      *IDRef           `json:"group"`
-	ManagedUsersGroups         []IDRef          `json:"managedUsersGroups"`
-	ManagedObjectsGroups       []IDRef          `json:"managedObjectsGroups"`
-	Preferences                []UserPreference `json:"preferences"`
+	ID                         string            `json:"id"`
+	UUID                       string            `json:"uuid"`
+	Status                     string            `json:"status"`
+	Username                   string            `json:"username"`
+	LDAPUsername               string            `json:"ldapUsername"`
+	Firstname                  string            `json:"firstname"`
+	Lastname                   string            `json:"lastname"`
+	Title                      string            `json:"title"`
+	Email                      string            `json:"email"`
+	Address                    string            `json:"address"`
+	City                       string            `json:"city"`
+	State                      string            `json:"state"`
+	Country                    string            `json:"country"`
+	Phone                      string            `json:"phone"`
+	Fax                        string            `json:"fax"`
+	CreatedTime                string            `json:"createdTime"`
+	ModifiedTime               string            `json:"modifiedTime"`
+	LastLogin                  string            `json:"lastLogin"`
+	LastLoginIP                string            `json:"lastLoginIP"`
+	MustChangePassword         string            `json:"mustChangePassword"`
+	PasswordExpires            string            `json:"passwordExpires"`
+	PasswordExpiration         string            `json:"passwordExpiration"`
+	PasswordExpirationOverride string            `json:"passwordExpirationOverride"`
+	PasswordSetDate            string            `json:"passwordSetDate"`
+	Locked                     string            `json:"locked"`
+	FailedLogins               string            `json:"failedLogins"`
+	AuthType                   string            `json:"authType"`
+	Fingerprint                string            `json:"fingerprint"`
+	Password                   string            `json:"password"`
+	CanUse                     string            `json:"canUse"`
+	CanManage                  string            `json:"canManage"`
+	Role                       *IDRef            `json:"role"`
+	LDAP                       *IDRef            `json:"ldap"`
+	ResponsibleAsset           *IDRef            `json:"responsibleAsset"`
+	Group                      *IDRef            `json:"group"`
+	ManagedUsersGroups         []IDRef           `json:"managedUsersGroups"`
+	ManagedObjectsGroups       []IDRef           `json:"managedObjectsGroups"`
+	Preferences                []UserPreference  `json:"preferences"`
 	APIKeys                    []json.RawMessage `json:"apiKeys"`
-	Parent                     json.RawMessage  `json:"parent"`
+	Parent                     json.RawMessage   `json:"parent"`
 }
 
 // UserPreference represents a single user preference entry.
@@ -98,8 +99,8 @@ type UserDeleteInput struct {
 }
 
 // List returns the paginated list of users.
-func (s *UserService) List() (*UserListResponse, error) {
-	resp, err := s.client.get("/user")
+func (s *UserService) List(ctx context.Context) (*UserListResponse, error) {
+	resp, err := s.client.get(ctx, "/user")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list users: %w", err)
 	}
@@ -113,8 +114,8 @@ func (s *UserService) List() (*UserListResponse, error) {
 }
 
 // Get returns the user with the given ID.
-func (s *UserService) Get(id string) (*User, error) {
-	resp, err := s.client.get("/user/" + id)
+func (s *UserService) Get(ctx context.Context, id string) (*User, error) {
+	resp, err := s.client.get(ctx, "/user/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get user %s: %w", id, err)
 	}
@@ -128,8 +129,8 @@ func (s *UserService) Get(id string) (*User, error) {
 }
 
 // Create creates a new user with the given input.
-func (s *UserService) Create(input *UserCreateInput) (*User, error) {
-	resp, err := s.client.post("/user", input)
+func (s *UserService) Create(ctx context.Context, input *UserCreateInput) (*User, error) {
+	resp, err := s.client.post(ctx, "/user", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create user: %w", err)
 	}
@@ -143,8 +144,8 @@ func (s *UserService) Create(input *UserCreateInput) (*User, error) {
 }
 
 // Update updates an existing user with the given input.
-func (s *UserService) Update(id string, input *UserUpdateInput) (*User, error) {
-	resp, err := s.client.patch("/user/"+id, input)
+func (s *UserService) Update(ctx context.Context, id string, input *UserUpdateInput) (*User, error) {
+	resp, err := s.client.patch(ctx, "/user/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update user %s: %w", id, err)
 	}
@@ -159,12 +160,12 @@ func (s *UserService) Update(id string, input *UserUpdateInput) (*User, error) {
 
 // Delete deletes the user with the given ID.
 // If input is non-nil and MigrateUserID is set, the user's objects are migrated to that user.
-func (s *UserService) Delete(id string, input *UserDeleteInput) error {
+func (s *UserService) Delete(ctx context.Context, id string, input *UserDeleteInput) error {
 	path := "/user/" + id
 	if input != nil && input.MigrateUserID != "" {
 		path += "?migrateUserID=" + input.MigrateUserID
 	}
-	_, err := s.client.delete(path)
+	_, err := s.client.delete(ctx, path)
 	if err != nil {
 		return fmt.Errorf("sc: delete user %s: %w", id, err)
 	}

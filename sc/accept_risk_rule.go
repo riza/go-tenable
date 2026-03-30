@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -31,8 +31,8 @@ type AcceptRiskRuleCreateInput struct {
 }
 
 // List returns all acceptRiskRules.
-func (s *AcceptRiskRuleService) List() (*AcceptRiskRuleListResponse, error) {
-	resp, err := s.client.get("/acceptRiskRule")
+func (s *AcceptRiskRuleService) List(ctx context.Context) (*AcceptRiskRuleListResponse, error) {
+	resp, err := s.client.get(ctx, "/acceptRiskRule")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list acceptRiskRules: %w", err)
 	}
@@ -46,8 +46,8 @@ func (s *AcceptRiskRuleService) List() (*AcceptRiskRuleListResponse, error) {
 }
 
 // Create creates a new acceptRiskRule.
-func (s *AcceptRiskRuleService) Create(input *AcceptRiskRuleCreateInput) (*AcceptRiskRule, error) {
-	resp, err := s.client.post("/acceptRiskRule", input)
+func (s *AcceptRiskRuleService) Create(ctx context.Context, input *AcceptRiskRuleCreateInput) (*AcceptRiskRule, error) {
+	resp, err := s.client.post(ctx, "/acceptRiskRule", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create acceptRiskRule: %w", err)
 	}
@@ -61,8 +61,8 @@ func (s *AcceptRiskRuleService) Create(input *AcceptRiskRuleCreateInput) (*Accep
 }
 
 // Get returns the acceptRiskRule with the given ID.
-func (s *AcceptRiskRuleService) Get(id string) (*AcceptRiskRule, error) {
-	resp, err := s.client.get("/acceptRiskRule" + "/" + id)
+func (s *AcceptRiskRuleService) Get(ctx context.Context, id string) (*AcceptRiskRule, error) {
+	resp, err := s.client.get(ctx, "/acceptRiskRule"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get acceptRiskRule %s: %w", id, err)
 	}
@@ -76,8 +76,8 @@ func (s *AcceptRiskRuleService) Get(id string) (*AcceptRiskRule, error) {
 }
 
 // Delete deletes the acceptRiskRule with the given ID.
-func (s *AcceptRiskRuleService) Delete(id string) error {
-	_, err := s.client.delete("/acceptRiskRule" + "/" + id)
+func (s *AcceptRiskRuleService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/acceptRiskRule"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete acceptRiskRule %s: %w", id, err)
 	}
@@ -86,8 +86,8 @@ func (s *AcceptRiskRuleService) Delete(id string) error {
 }
 
 // Apply performs the apply action on the acceptRiskRule.
-func (s *AcceptRiskRuleService) Apply() (*AcceptRiskRule, error) {
-	resp, err := s.client.post("/acceptRiskRule/apply", nil)
+func (s *AcceptRiskRuleService) Apply(ctx context.Context) (*AcceptRiskRule, error) {
+	resp, err := s.client.post(ctx, "/acceptRiskRule/apply", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: apply acceptRiskRule: %w", err)
 	}
@@ -99,4 +99,3 @@ func (s *AcceptRiskRuleService) Apply() (*AcceptRiskRule, error) {
 
 	return &result, nil
 }
-

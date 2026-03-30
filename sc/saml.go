@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -31,8 +31,8 @@ type SAMLUpdateInput struct {
 }
 
 // List returns all sAMLs.
-func (s *SAMLService) List() (*SAMLListResponse, error) {
-	resp, err := s.client.get("/saml")
+func (s *SAMLService) List(ctx context.Context) (*SAMLListResponse, error) {
+	resp, err := s.client.get(ctx, "/saml")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list sAMLs: %w", err)
 	}
@@ -46,8 +46,8 @@ func (s *SAMLService) List() (*SAMLListResponse, error) {
 }
 
 // Get returns the sAML with the given ID.
-func (s *SAMLService) Get(id string) (*SAML, error) {
-	resp, err := s.client.get("/saml" + "/" + id)
+func (s *SAMLService) Get(ctx context.Context, id string) (*SAML, error) {
+	resp, err := s.client.get(ctx, "/saml"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get sAML %s: %w", id, err)
 	}
@@ -61,8 +61,8 @@ func (s *SAMLService) Get(id string) (*SAML, error) {
 }
 
 // Update updates the sAML with the given ID.
-func (s *SAMLService) Update(id string, input *SAMLUpdateInput) (*SAML, error) {
-	resp, err := s.client.patch("/saml" + "/" + id, input)
+func (s *SAMLService) Update(ctx context.Context, id string, input *SAMLUpdateInput) (*SAML, error) {
+	resp, err := s.client.patch(ctx, "/saml"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update sAML %s: %w", id, err)
 	}
@@ -76,8 +76,8 @@ func (s *SAMLService) Update(id string, input *SAMLUpdateInput) (*SAML, error) {
 }
 
 // GetMetadata performs the getMetadata action on the sAML.
-func (s *SAMLService) GetMetadata() (*SAML, error) {
-	resp, err := s.client.get("/saml/getMetadata")
+func (s *SAMLService) GetMetadata(ctx context.Context) (*SAML, error) {
+	resp, err := s.client.get(ctx, "/saml/getMetadata")
 	if err != nil {
 		return nil, fmt.Errorf("sc: getMetadata sAML: %w", err)
 	}
@@ -89,4 +89,3 @@ func (s *SAMLService) GetMetadata() (*SAML, error) {
 
 	return &result, nil
 }
-

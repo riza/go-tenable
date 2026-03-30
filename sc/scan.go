@@ -1,6 +1,7 @@
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -138,13 +139,13 @@ var ScanAllFields = []string{
 
 // List returns the list of scans (usable and manageable).
 // Pass nil for opts to use the API's default fields.
-func (s *ScanService) List(opts *ScanListOptions) (*ScanListResponse, error) {
+func (s *ScanService) List(ctx context.Context, opts *ScanListOptions) (*ScanListResponse, error) {
 	var params QueryParams
 	if opts != nil && len(opts.Fields) > 0 {
-		params = QueryParams{"fields": strings.Join(opts.Fields, ",")}
+		params = QueryParams{"fields": []string{strings.Join(opts.Fields, ",")}}
 	}
 
-	resp, err := s.client.getWithParams("/scan", params)
+	resp, err := s.client.getWithParams(ctx, "/scan", params)
 	if err != nil {
 		return nil, fmt.Errorf("sc: list scans: %w", err)
 	}
@@ -158,8 +159,8 @@ func (s *ScanService) List(opts *ScanListOptions) (*ScanListResponse, error) {
 }
 
 // Get returns the scan with the given ID.
-func (s *ScanService) Get(id string) (*Scan, error) {
-	resp, err := s.client.get("/scan/" + id)
+func (s *ScanService) Get(ctx context.Context, id string) (*Scan, error) {
+	resp, err := s.client.get(ctx, "/scan/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get scan %s: %w", id, err)
 	}
@@ -173,8 +174,8 @@ func (s *ScanService) Get(id string) (*Scan, error) {
 }
 
 // Create creates a new scan with the given input.
-func (s *ScanService) Create(input *ScanCreateInput) (*Scan, error) {
-	resp, err := s.client.post("/scan", input)
+func (s *ScanService) Create(ctx context.Context, input *ScanCreateInput) (*Scan, error) {
+	resp, err := s.client.post(ctx, "/scan", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create scan: %w", err)
 	}
@@ -188,8 +189,8 @@ func (s *ScanService) Create(input *ScanCreateInput) (*Scan, error) {
 }
 
 // Update updates an existing scan with the given input.
-func (s *ScanService) Update(id string, input *ScanUpdateInput) (*Scan, error) {
-	resp, err := s.client.patch("/scan/"+id, input)
+func (s *ScanService) Update(ctx context.Context, id string, input *ScanUpdateInput) (*Scan, error) {
+	resp, err := s.client.patch(ctx, "/scan/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update scan %s: %w", id, err)
 	}
@@ -203,8 +204,8 @@ func (s *ScanService) Update(id string, input *ScanUpdateInput) (*Scan, error) {
 }
 
 // Delete deletes the scan with the given ID.
-func (s *ScanService) Delete(id string) error {
-	_, err := s.client.delete("/scan/" + id)
+func (s *ScanService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/scan/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete scan %s: %w", id, err)
 	}
@@ -213,8 +214,8 @@ func (s *ScanService) Delete(id string) error {
 }
 
 // Launch launches the scan with the given ID.
-func (s *ScanService) Launch(id string, input *ScanLaunchInput) (*ScanLaunchResponse, error) {
-	resp, err := s.client.post("/scan/"+id+"/launch", input)
+func (s *ScanService) Launch(ctx context.Context, id string, input *ScanLaunchInput) (*ScanLaunchResponse, error) {
+	resp, err := s.client.post(ctx, "/scan/"+id+"/launch", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: launch scan %s: %w", id, err)
 	}
@@ -228,8 +229,8 @@ func (s *ScanService) Launch(id string, input *ScanLaunchInput) (*ScanLaunchResp
 }
 
 // Copy copies the scan with the given ID.
-func (s *ScanService) Copy(id string, input *ScanCopyInput) (*Scan, error) {
-	resp, err := s.client.post("/scan/"+id+"/copy", input)
+func (s *ScanService) Copy(ctx context.Context, id string, input *ScanCopyInput) (*Scan, error) {
+	resp, err := s.client.post(ctx, "/scan/"+id+"/copy", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: copy scan %s: %w", id, err)
 	}

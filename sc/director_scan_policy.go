@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -31,8 +31,8 @@ type DirectorScanPolicyCreateInput struct {
 }
 
 // List returns all directorScanPolicys.
-func (s *DirectorScanPolicyService) List() (*DirectorScanPolicyListResponse, error) {
-	resp, err := s.client.get("/mgmt/policy")
+func (s *DirectorScanPolicyService) List(ctx context.Context) (*DirectorScanPolicyListResponse, error) {
+	resp, err := s.client.get(ctx, "/mgmt/policy")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list directorScanPolicys: %w", err)
 	}
@@ -46,8 +46,8 @@ func (s *DirectorScanPolicyService) List() (*DirectorScanPolicyListResponse, err
 }
 
 // Create creates a new directorScanPolicy.
-func (s *DirectorScanPolicyService) Create(input *DirectorScanPolicyCreateInput) (*DirectorScanPolicy, error) {
-	resp, err := s.client.post("/mgmt/policy", input)
+func (s *DirectorScanPolicyService) Create(ctx context.Context, input *DirectorScanPolicyCreateInput) (*DirectorScanPolicy, error) {
+	resp, err := s.client.post(ctx, "/mgmt/policy", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create directorScanPolicy: %w", err)
 	}
@@ -61,8 +61,8 @@ func (s *DirectorScanPolicyService) Create(input *DirectorScanPolicyCreateInput)
 }
 
 // Get returns the directorScanPolicy with the given ID.
-func (s *DirectorScanPolicyService) Get(id string) (*DirectorScanPolicy, error) {
-	resp, err := s.client.get("/mgmt/policy" + "/" + id)
+func (s *DirectorScanPolicyService) Get(ctx context.Context, id string) (*DirectorScanPolicy, error) {
+	resp, err := s.client.get(ctx, "/mgmt/policy"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get directorScanPolicy %s: %w", id, err)
 	}
@@ -76,12 +76,11 @@ func (s *DirectorScanPolicyService) Get(id string) (*DirectorScanPolicy, error) 
 }
 
 // Delete deletes the directorScanPolicy with the given ID.
-func (s *DirectorScanPolicyService) Delete(id string) error {
-	_, err := s.client.delete("/mgmt/policy" + "/" + id)
+func (s *DirectorScanPolicyService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/mgmt/policy"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete directorScanPolicy %s: %w", id, err)
 	}
 
 	return nil
 }
-

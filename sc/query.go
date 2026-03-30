@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -18,7 +18,7 @@ type Query struct {
 	Description string `json:"description"`
 }
 
-// QueryListResponse represents the response from listing querys.
+// QueryListResponse represents the response from listing queries.
 type QueryListResponse struct {
 	Usable     []Query `json:"usable"`
 	Manageable []Query `json:"manageable"`
@@ -33,11 +33,11 @@ type QueryCreateInput struct {
 // QueryUpdateInput represents the request body for updating a query.
 type QueryUpdateInput = QueryCreateInput
 
-// List returns all querys.
-func (s *QueryService) List() (*QueryListResponse, error) {
-	resp, err := s.client.get("/query")
+// List returns all queries.
+func (s *QueryService) List(ctx context.Context) (*QueryListResponse, error) {
+	resp, err := s.client.get(ctx, "/query")
 	if err != nil {
-		return nil, fmt.Errorf("sc: list querys: %w", err)
+		return nil, fmt.Errorf("sc: list queries: %w", err)
 	}
 
 	var result QueryListResponse
@@ -49,8 +49,8 @@ func (s *QueryService) List() (*QueryListResponse, error) {
 }
 
 // Create creates a new query.
-func (s *QueryService) Create(input *QueryCreateInput) (*Query, error) {
-	resp, err := s.client.post("/query", input)
+func (s *QueryService) Create(ctx context.Context, input *QueryCreateInput) (*Query, error) {
+	resp, err := s.client.post(ctx, "/query", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create query: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *QueryService) Create(input *QueryCreateInput) (*Query, error) {
 }
 
 // Get returns the query with the given ID.
-func (s *QueryService) Get(id string) (*Query, error) {
-	resp, err := s.client.get("/query" + "/" + id)
+func (s *QueryService) Get(ctx context.Context, id string) (*Query, error) {
+	resp, err := s.client.get(ctx, "/query"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get query %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *QueryService) Get(id string) (*Query, error) {
 }
 
 // Update updates the query with the given ID.
-func (s *QueryService) Update(id string, input *QueryUpdateInput) (*Query, error) {
-	resp, err := s.client.patch("/query" + "/" + id, input)
+func (s *QueryService) Update(ctx context.Context, id string, input *QueryUpdateInput) (*Query, error) {
+	resp, err := s.client.patch(ctx, "/query"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update query %s: %w", id, err)
 	}
@@ -94,8 +94,8 @@ func (s *QueryService) Update(id string, input *QueryUpdateInput) (*Query, error
 }
 
 // Delete deletes the query with the given ID.
-func (s *QueryService) Delete(id string) error {
-	_, err := s.client.delete("/query" + "/" + id)
+func (s *QueryService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/query"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete query %s: %w", id, err)
 	}
@@ -104,8 +104,8 @@ func (s *QueryService) Delete(id string) error {
 }
 
 // Share performs the share action on the query with the given ID.
-func (s *QueryService) Share(id string) (*Query, error) {
-	resp, err := s.client.post("/query" + "/" + id + "/share", nil)
+func (s *QueryService) Share(ctx context.Context, id string) (*Query, error) {
+	resp, err := s.client.post(ctx, "/query"+"/"+id+"/share", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: share query %s: %w", id, err)
 	}
@@ -119,8 +119,8 @@ func (s *QueryService) Share(id string) (*Query, error) {
 }
 
 // Tag performs the tag action on the query.
-func (s *QueryService) Tag() (*Query, error) {
-	resp, err := s.client.get("/query/tag")
+func (s *QueryService) Tag(ctx context.Context) (*Query, error) {
+	resp, err := s.client.get(ctx, "/query/tag")
 	if err != nil {
 		return nil, fmt.Errorf("sc: tag query: %w", err)
 	}
@@ -132,4 +132,3 @@ func (s *QueryService) Tag() (*Query, error) {
 
 	return &result, nil
 }
-

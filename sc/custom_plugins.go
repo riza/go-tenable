@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type CustomPluginsListResponse struct {
 }
 
 // List returns all customPluginss.
-func (s *CustomPluginsService) List() (*CustomPluginsListResponse, error) {
-	resp, err := s.client.get("/customPlugins")
+func (s *CustomPluginsService) List(ctx context.Context) (*CustomPluginsListResponse, error) {
+	resp, err := s.client.get(ctx, "/customPlugins")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list customPluginss: %w", err)
 	}
@@ -40,8 +40,8 @@ func (s *CustomPluginsService) List() (*CustomPluginsListResponse, error) {
 }
 
 // Process performs the process action on the customPlugins with the given ID.
-func (s *CustomPluginsService) Process(id string) (*CustomPlugins, error) {
-	resp, err := s.client.post("/customPlugins" + "/" + id + "/process", nil)
+func (s *CustomPluginsService) Process(ctx context.Context, id string) (*CustomPlugins, error) {
+	resp, err := s.client.post(ctx, "/customPlugins"+"/"+id+"/process", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: process customPlugins %s: %w", id, err)
 	}
@@ -53,4 +53,3 @@ func (s *CustomPluginsService) Process(id string) (*CustomPlugins, error) {
 
 	return &result, nil
 }
-

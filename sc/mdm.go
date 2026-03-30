@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type MDMListResponse struct {
 }
 
 // List returns all mDMs.
-func (s *MDMService) List() (*MDMListResponse, error) {
-	resp, err := s.client.get("/mdm")
+func (s *MDMService) List(ctx context.Context) (*MDMListResponse, error) {
+	resp, err := s.client.get(ctx, "/mdm")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list mDMs: %w", err)
 	}
@@ -40,8 +40,8 @@ func (s *MDMService) List() (*MDMListResponse, error) {
 }
 
 // Get returns the mDM with the given ID.
-func (s *MDMService) Get(id string) (*MDM, error) {
-	resp, err := s.client.get("/mdm" + "/" + id)
+func (s *MDMService) Get(ctx context.Context, id string) (*MDM, error) {
+	resp, err := s.client.get(ctx, "/mdm"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get mDM %s: %w", id, err)
 	}
@@ -53,4 +53,3 @@ func (s *MDMService) Get(id string) (*MDM, error) {
 
 	return &result, nil
 }
-

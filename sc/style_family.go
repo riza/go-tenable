@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type StyleFamilyListResponse struct {
 }
 
 // List returns all styleFamilys.
-func (s *StyleFamilyService) List() (*StyleFamilyListResponse, error) {
-	resp, err := s.client.get("/styleFamily")
+func (s *StyleFamilyService) List(ctx context.Context) (*StyleFamilyListResponse, error) {
+	resp, err := s.client.get(ctx, "/styleFamily")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list styleFamilys: %w", err)
 	}
@@ -40,8 +40,8 @@ func (s *StyleFamilyService) List() (*StyleFamilyListResponse, error) {
 }
 
 // Get returns the styleFamily with the given ID.
-func (s *StyleFamilyService) Get(id string) (*StyleFamily, error) {
-	resp, err := s.client.get("/styleFamily" + "/" + id)
+func (s *StyleFamilyService) Get(ctx context.Context, id string) (*StyleFamily, error) {
+	resp, err := s.client.get(ctx, "/styleFamily"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get styleFamily %s: %w", id, err)
 	}
@@ -53,4 +53,3 @@ func (s *StyleFamilyService) Get(id string) (*StyleFamily, error) {
 
 	return &result, nil
 }
-

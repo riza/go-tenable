@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type AgentScanCreateInput struct {
 type AgentScanUpdateInput = AgentScanCreateInput
 
 // List returns all agentScans.
-func (s *AgentScanService) List() (*AgentScanListResponse, error) {
-	resp, err := s.client.get("/agentScan")
+func (s *AgentScanService) List(ctx context.Context) (*AgentScanListResponse, error) {
+	resp, err := s.client.get(ctx, "/agentScan")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list agentScans: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *AgentScanService) List() (*AgentScanListResponse, error) {
 }
 
 // Create creates a new agentScan.
-func (s *AgentScanService) Create(input *AgentScanCreateInput) (*AgentScan, error) {
-	resp, err := s.client.post("/agentScan", input)
+func (s *AgentScanService) Create(ctx context.Context, input *AgentScanCreateInput) (*AgentScan, error) {
+	resp, err := s.client.post(ctx, "/agentScan", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create agentScan: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *AgentScanService) Create(input *AgentScanCreateInput) (*AgentScan, erro
 }
 
 // Get returns the agentScan with the given ID.
-func (s *AgentScanService) Get(id string) (*AgentScan, error) {
-	resp, err := s.client.get("/agentScan" + "/" + id)
+func (s *AgentScanService) Get(ctx context.Context, id string) (*AgentScan, error) {
+	resp, err := s.client.get(ctx, "/agentScan"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get agentScan %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *AgentScanService) Get(id string) (*AgentScan, error) {
 }
 
 // Update updates the agentScan with the given ID.
-func (s *AgentScanService) Update(id string, input *AgentScanUpdateInput) (*AgentScan, error) {
-	resp, err := s.client.patch("/agentScan" + "/" + id, input)
+func (s *AgentScanService) Update(ctx context.Context, id string, input *AgentScanUpdateInput) (*AgentScan, error) {
+	resp, err := s.client.patch(ctx, "/agentScan"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update agentScan %s: %w", id, err)
 	}
@@ -94,8 +94,8 @@ func (s *AgentScanService) Update(id string, input *AgentScanUpdateInput) (*Agen
 }
 
 // Delete deletes the agentScan with the given ID.
-func (s *AgentScanService) Delete(id string) error {
-	_, err := s.client.delete("/agentScan" + "/" + id)
+func (s *AgentScanService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/agentScan"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete agentScan %s: %w", id, err)
 	}
@@ -104,8 +104,8 @@ func (s *AgentScanService) Delete(id string) error {
 }
 
 // Launch performs the launch action on the agentScan with the given ID.
-func (s *AgentScanService) Launch(id string) (*AgentScan, error) {
-	resp, err := s.client.post("/agentScan" + "/" + id + "/launch", nil)
+func (s *AgentScanService) Launch(ctx context.Context, id string) (*AgentScan, error) {
+	resp, err := s.client.post(ctx, "/agentScan"+"/"+id+"/launch", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: launch agentScan %s: %w", id, err)
 	}
@@ -117,4 +117,3 @@ func (s *AgentScanService) Launch(id string) (*AgentScan, error) {
 
 	return &result, nil
 }
-

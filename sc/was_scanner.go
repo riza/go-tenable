@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -31,8 +31,8 @@ type WASScannerUpdateInput struct {
 }
 
 // List returns all wASScanners.
-func (s *WASScannerService) List() (*WASScannerListResponse, error) {
-	resp, err := s.client.get("/wasScanner")
+func (s *WASScannerService) List(ctx context.Context) (*WASScannerListResponse, error) {
+	resp, err := s.client.get(ctx, "/wasScanner")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list wASScanners: %w", err)
 	}
@@ -46,8 +46,8 @@ func (s *WASScannerService) List() (*WASScannerListResponse, error) {
 }
 
 // Get returns the wASScanner with the given ID.
-func (s *WASScannerService) Get(id string) (*WASScanner, error) {
-	resp, err := s.client.get("/wasScanner" + "/" + id)
+func (s *WASScannerService) Get(ctx context.Context, id string) (*WASScanner, error) {
+	resp, err := s.client.get(ctx, "/wasScanner"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get wASScanner %s: %w", id, err)
 	}
@@ -61,8 +61,8 @@ func (s *WASScannerService) Get(id string) (*WASScanner, error) {
 }
 
 // Update updates the wASScanner with the given ID.
-func (s *WASScannerService) Update(id string, input *WASScannerUpdateInput) (*WASScanner, error) {
-	resp, err := s.client.patch("/wasScanner" + "/" + id, input)
+func (s *WASScannerService) Update(ctx context.Context, id string, input *WASScannerUpdateInput) (*WASScanner, error) {
+	resp, err := s.client.patch(ctx, "/wasScanner"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update wASScanner %s: %w", id, err)
 	}
@@ -76,12 +76,11 @@ func (s *WASScannerService) Update(id string, input *WASScannerUpdateInput) (*WA
 }
 
 // Delete deletes the wASScanner with the given ID.
-func (s *WASScannerService) Delete(id string) error {
-	_, err := s.client.delete("/wasScanner" + "/" + id)
+func (s *WASScannerService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/wasScanner"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete wASScanner %s: %w", id, err)
 	}
 
 	return nil
 }
-

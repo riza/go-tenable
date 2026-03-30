@@ -6,6 +6,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -28,7 +29,7 @@ func main() {
 		sc.WithInsecureSkipVerify(),
 	)
 
-	result, err := client.Scan.List(&sc.ScanListOptions{
+	result, err := client.Scan.List(context.Background(), &sc.ScanListOptions{
 		Fields: sc.ScanAllFields,
 	})
 	if err != nil {

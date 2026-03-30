@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type ScannerCreateInput struct {
 type ScannerUpdateInput = ScannerCreateInput
 
 // List returns all scanners.
-func (s *ScannerService) List() (*ScannerListResponse, error) {
-	resp, err := s.client.get("/scanner")
+func (s *ScannerService) List(ctx context.Context) (*ScannerListResponse, error) {
+	resp, err := s.client.get(ctx, "/scanner")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list scanners: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *ScannerService) List() (*ScannerListResponse, error) {
 }
 
 // Create creates a new scanner.
-func (s *ScannerService) Create(input *ScannerCreateInput) (*Scanner, error) {
-	resp, err := s.client.post("/scanner", input)
+func (s *ScannerService) Create(ctx context.Context, input *ScannerCreateInput) (*Scanner, error) {
+	resp, err := s.client.post(ctx, "/scanner", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create scanner: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *ScannerService) Create(input *ScannerCreateInput) (*Scanner, error) {
 }
 
 // Get returns the scanner with the given ID.
-func (s *ScannerService) Get(id string) (*Scanner, error) {
-	resp, err := s.client.get("/scanner" + "/" + id)
+func (s *ScannerService) Get(ctx context.Context, id string) (*Scanner, error) {
+	resp, err := s.client.get(ctx, "/scanner"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get scanner %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *ScannerService) Get(id string) (*Scanner, error) {
 }
 
 // Update updates the scanner with the given ID.
-func (s *ScannerService) Update(id string, input *ScannerUpdateInput) (*Scanner, error) {
-	resp, err := s.client.patch("/scanner" + "/" + id, input)
+func (s *ScannerService) Update(ctx context.Context, id string, input *ScannerUpdateInput) (*Scanner, error) {
+	resp, err := s.client.patch(ctx, "/scanner"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update scanner %s: %w", id, err)
 	}
@@ -94,8 +94,8 @@ func (s *ScannerService) Update(id string, input *ScannerUpdateInput) (*Scanner,
 }
 
 // Delete deletes the scanner with the given ID.
-func (s *ScannerService) Delete(id string) error {
-	_, err := s.client.delete("/scanner" + "/" + id)
+func (s *ScannerService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/scanner"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete scanner %s: %w", id, err)
 	}
@@ -104,8 +104,8 @@ func (s *ScannerService) Delete(id string) error {
 }
 
 // TestScansQuery performs the testScansQuery action on the scanner with the given ID.
-func (s *ScannerService) TestScansQuery(id string) (*Scanner, error) {
-	resp, err := s.client.post("/scanner" + "/" + id + "/testScansQuery", nil)
+func (s *ScannerService) TestScansQuery(ctx context.Context, id string) (*Scanner, error) {
+	resp, err := s.client.post(ctx, "/scanner"+"/"+id+"/testScansQuery", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: testScansQuery scanner %s: %w", id, err)
 	}
@@ -119,8 +119,8 @@ func (s *ScannerService) TestScansQuery(id string) (*Scanner, error) {
 }
 
 // BugReport performs the bug-report action on the scanner with the given ID.
-func (s *ScannerService) BugReport(id string) (*Scanner, error) {
-	resp, err := s.client.post("/scanner" + "/" + id + "/bug-report", nil)
+func (s *ScannerService) BugReport(ctx context.Context, id string) (*Scanner, error) {
+	resp, err := s.client.post(ctx, "/scanner"+"/"+id+"/bug-report", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: bugReport scanner %s: %w", id, err)
 	}
@@ -134,8 +134,8 @@ func (s *ScannerService) BugReport(id string) (*Scanner, error) {
 }
 
 // Health performs the health action on the scanner with the given ID.
-func (s *ScannerService) Health(id string) (*Scanner, error) {
-	resp, err := s.client.get("/scanner" + "/" + id + "/health")
+func (s *ScannerService) Health(ctx context.Context, id string) (*Scanner, error) {
+	resp, err := s.client.get(ctx, "/scanner"+"/"+id+"/health")
 	if err != nil {
 		return nil, fmt.Errorf("sc: health scanner %s: %w", id, err)
 	}
@@ -149,8 +149,8 @@ func (s *ScannerService) Health(id string) (*Scanner, error) {
 }
 
 // UpdateStatus performs the updateStatus action on the scanner.
-func (s *ScannerService) UpdateStatus() (*Scanner, error) {
-	resp, err := s.client.post("/scanner/updateStatus", nil)
+func (s *ScannerService) UpdateStatus(ctx context.Context) (*Scanner, error) {
+	resp, err := s.client.post(ctx, "/scanner/updateStatus", nil)
 	if err != nil {
 		return nil, fmt.Errorf("sc: updateStatus scanner: %w", err)
 	}
@@ -162,4 +162,3 @@ func (s *ScannerService) UpdateStatus() (*Scanner, error) {
 
 	return &result, nil
 }
-

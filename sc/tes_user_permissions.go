@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -25,8 +25,8 @@ type TESUserPermissionsListResponse struct {
 }
 
 // List returns all tESUserPermissionss.
-func (s *TESUserPermissionsService) List() (*TESUserPermissionsListResponse, error) {
-	resp, err := s.client.get("/tes/userPermissions")
+func (s *TESUserPermissionsService) List(ctx context.Context) (*TESUserPermissionsListResponse, error) {
+	resp, err := s.client.get(ctx, "/tes/userPermissions")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list tESUserPermissionss: %w", err)
 	}
@@ -38,4 +38,3 @@ func (s *TESUserPermissionsService) List() (*TESUserPermissionsListResponse, err
 
 	return &result, nil
 }
-

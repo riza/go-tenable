@@ -1,6 +1,7 @@
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -13,25 +14,25 @@ type HostsService struct {
 
 // Host represents a host resource from the API.
 type Host struct {
-	ID              string       `json:"id"`
-	UUID            string       `json:"uuid"`
-	TenableUUID     string       `json:"tenableUUID"`
-	Name            string       `json:"name"`
-	IPAddress       string       `json:"ipAddress"`
-	OS              string       `json:"os"`
-	FirstSeen       string       `json:"firstSeen"`
-	LastSeen        string       `json:"lastSeen"`
-	DNS             string       `json:"dns"`
-	FQDNIndex       string       `json:"fqdnIndex"`
-	NetBios         string       `json:"netBios"`
-	NetBiosWorkgroup string      `json:"netBiosWorkgroup"`
-	MacAddress      string       `json:"macAddress"`
-	SystemType      string       `json:"systemType"`
-	CreatedTime     string       `json:"createdTime"`
-	ModifiedTime    string       `json:"modifiedTime"`
-	Source          []HostSource `json:"source"`
-	Repository      *IDRef       `json:"repository"`
-	ACR             *ACRInfo     `json:"acr"`
+	ID               string       `json:"id"`
+	UUID             string       `json:"uuid"`
+	TenableUUID      string       `json:"tenableUUID"`
+	Name             string       `json:"name"`
+	IPAddress        string       `json:"ipAddress"`
+	OS               string       `json:"os"`
+	FirstSeen        string       `json:"firstSeen"`
+	LastSeen         string       `json:"lastSeen"`
+	DNS              string       `json:"dns"`
+	FQDNIndex        string       `json:"fqdnIndex"`
+	NetBios          string       `json:"netBios"`
+	NetBiosWorkgroup string       `json:"netBiosWorkgroup"`
+	MacAddress       string       `json:"macAddress"`
+	SystemType       string       `json:"systemType"`
+	CreatedTime      string       `json:"createdTime"`
+	ModifiedTime     string       `json:"modifiedTime"`
+	Source           []HostSource `json:"source"`
+	Repository       *IDRef       `json:"repository"`
+	ACR              *ACRInfo     `json:"acr"`
 }
 
 // HostSource represents the source of a host record.
@@ -41,20 +42,20 @@ type HostSource struct {
 
 // ACRInfo represents the Asset Criticality Rating information for a host.
 type ACRInfo struct {
-	HostUUID           string            `json:"hostUUID"`
-	Score              string            `json:"score"`
-	Overwritten        string            `json:"overwritten"`
-	Notes              string            `json:"notes"`
-	OverwrittenScore   string            `json:"overwrittenScore"`
-	LastEditedUserID   string            `json:"lastEditedUserID"`
-	LastEditedOrgID    string            `json:"lastEditedOrgID"`
-	LastEvaluatedTime  string            `json:"lastEvaluatedTime"`
-	InternetExposure   string            `json:"internetExposure"`
-	Capability         string            `json:"capability"`
-	DeviceType         string            `json:"deviceType"`
-	Reasoning          []json.RawMessage `json:"reasoning"`
-	KeyDrivers         json.RawMessage   `json:"keyDrivers"`
-	User               *IDRef            `json:"user"`
+	HostUUID          string            `json:"hostUUID"`
+	Score             string            `json:"score"`
+	Overwritten       string            `json:"overwritten"`
+	Notes             string            `json:"notes"`
+	OverwrittenScore  string            `json:"overwrittenScore"`
+	LastEditedUserID  string            `json:"lastEditedUserID"`
+	LastEditedOrgID   string            `json:"lastEditedOrgID"`
+	LastEvaluatedTime string            `json:"lastEvaluatedTime"`
+	InternetExposure  string            `json:"internetExposure"`
+	Capability        string            `json:"capability"`
+	DeviceType        string            `json:"deviceType"`
+	Reasoning         []json.RawMessage `json:"reasoning"`
+	KeyDrivers        json.RawMessage   `json:"keyDrivers"`
+	User              *IDRef            `json:"user"`
 }
 
 // ACRUpdateInput contains the fields for updating a host's ACR.
@@ -91,8 +92,8 @@ type HostDownloadInput struct {
 }
 
 // List returns all hosts.
-func (s *HostsService) List() ([]Host, error) {
-	resp, err := s.client.get("/hosts")
+func (s *HostsService) List(ctx context.Context) ([]Host, error) {
+	resp, err := s.client.get(ctx, "/hosts")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list hosts: %w", err)
 	}
@@ -106,8 +107,8 @@ func (s *HostsService) List() ([]Host, error) {
 }
 
 // UpdateACR updates the ACR for the host with the given UUID.
-func (s *HostsService) UpdateACR(uuid string, input *ACRUpdateInput) (*Host, error) {
-	resp, err := s.client.patch("/hosts/"+uuid+"/acr", input)
+func (s *HostsService) UpdateACR(ctx context.Context, uuid string, input *ACRUpdateInput) (*Host, error) {
+	resp, err := s.client.patch(ctx, "/hosts/"+uuid+"/acr", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update ACR for host %s: %w", uuid, err)
 	}
@@ -121,8 +122,8 @@ func (s *HostsService) UpdateACR(uuid string, input *ACRUpdateInput) (*Host, err
 }
 
 // Search searches for hosts matching the given filters.
-func (s *HostsService) Search(input *HostSearchInput) (*HostSearchResponse, error) {
-	resp, err := s.client.post("/hosts/search", input)
+func (s *HostsService) Search(ctx context.Context, input *HostSearchInput) (*HostSearchResponse, error) {
+	resp, err := s.client.post(ctx, "/hosts/search", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: search hosts: %w", err)
 	}
@@ -138,8 +139,8 @@ func (s *HostsService) Search(input *HostSearchInput) (*HostSearchResponse, erro
 // Download requests a host data download. The response body from the API is
 // binary (CSV), but since the client processes responses as JSON envelopes,
 // the raw response bytes are returned.
-func (s *HostsService) Download(input *HostDownloadInput) (json.RawMessage, error) {
-	resp, err := s.client.post("/hosts/download", input)
+func (s *HostsService) Download(ctx context.Context, input *HostDownloadInput) (json.RawMessage, error) {
+	resp, err := s.client.post(ctx, "/hosts/download", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: download hosts: %w", err)
 	}

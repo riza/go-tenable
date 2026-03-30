@@ -1,7 +1,7 @@
-
 package sc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -34,8 +34,8 @@ type FreezeWindowCreateInput struct {
 type FreezeWindowUpdateInput = FreezeWindowCreateInput
 
 // List returns all freezeWindows.
-func (s *FreezeWindowService) List() (*FreezeWindowListResponse, error) {
-	resp, err := s.client.get("/freeze")
+func (s *FreezeWindowService) List(ctx context.Context) (*FreezeWindowListResponse, error) {
+	resp, err := s.client.get(ctx, "/freeze")
 	if err != nil {
 		return nil, fmt.Errorf("sc: list freezeWindows: %w", err)
 	}
@@ -49,8 +49,8 @@ func (s *FreezeWindowService) List() (*FreezeWindowListResponse, error) {
 }
 
 // Create creates a new freezeWindow.
-func (s *FreezeWindowService) Create(input *FreezeWindowCreateInput) (*FreezeWindow, error) {
-	resp, err := s.client.post("/freeze", input)
+func (s *FreezeWindowService) Create(ctx context.Context, input *FreezeWindowCreateInput) (*FreezeWindow, error) {
+	resp, err := s.client.post(ctx, "/freeze", input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: create freezeWindow: %w", err)
 	}
@@ -64,8 +64,8 @@ func (s *FreezeWindowService) Create(input *FreezeWindowCreateInput) (*FreezeWin
 }
 
 // Get returns the freezeWindow with the given ID.
-func (s *FreezeWindowService) Get(id string) (*FreezeWindow, error) {
-	resp, err := s.client.get("/freeze" + "/" + id)
+func (s *FreezeWindowService) Get(ctx context.Context, id string) (*FreezeWindow, error) {
+	resp, err := s.client.get(ctx, "/freeze"+"/"+id)
 	if err != nil {
 		return nil, fmt.Errorf("sc: get freezeWindow %s: %w", id, err)
 	}
@@ -79,8 +79,8 @@ func (s *FreezeWindowService) Get(id string) (*FreezeWindow, error) {
 }
 
 // Update updates the freezeWindow with the given ID.
-func (s *FreezeWindowService) Update(id string, input *FreezeWindowUpdateInput) (*FreezeWindow, error) {
-	resp, err := s.client.patch("/freeze" + "/" + id, input)
+func (s *FreezeWindowService) Update(ctx context.Context, id string, input *FreezeWindowUpdateInput) (*FreezeWindow, error) {
+	resp, err := s.client.patch(ctx, "/freeze"+"/"+id, input)
 	if err != nil {
 		return nil, fmt.Errorf("sc: update freezeWindow %s: %w", id, err)
 	}
@@ -94,12 +94,11 @@ func (s *FreezeWindowService) Update(id string, input *FreezeWindowUpdateInput) 
 }
 
 // Delete deletes the freezeWindow with the given ID.
-func (s *FreezeWindowService) Delete(id string) error {
-	_, err := s.client.delete("/freeze" + "/" + id)
+func (s *FreezeWindowService) Delete(ctx context.Context, id string) error {
+	_, err := s.client.delete(ctx, "/freeze"+"/"+id)
 	if err != nil {
 		return fmt.Errorf("sc: delete freezeWindow %s: %w", id, err)
 	}
 
 	return nil
 }
-
