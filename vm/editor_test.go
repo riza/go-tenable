@@ -134,7 +134,7 @@ func TestEditorAudits(t *testing.T) {
 		gotMethod = r.Method
 		gotPath = r.URL.Path
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("audit file content"))
+		_, _ = w.Write([]byte("audit file content"))
 	}))
 	defer ts.Close()
 

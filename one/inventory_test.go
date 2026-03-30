@@ -59,8 +59,8 @@ func TestInventoryAssetsSearchRequest(t *testing.T) {
 	if gotBody.Limit == nil || *gotBody.Limit != 50 {
 		t.Errorf("Limit = %v, want 50", gotBody.Limit)
 	}
-	if gotBody.Filters == nil || len(gotBody.Filters) == 0 {
-		t.Errorf("Filters is nil, want non-nil")
+	if len(gotBody.Filters) == 0 {
+		t.Errorf("Filters is empty, want non-empty")
 	} else if gotBody.Filters[0].Property != "sources" || gotBody.Filters[0].Operator != "eq" {
 		t.Errorf("Filters.Sources = %v, want [tvm]", gotBody.Filters[0])
 	}
@@ -116,8 +116,8 @@ func TestSearchFindings(t *testing.T) {
 	if gotBody.Limit == nil || *gotBody.Limit != 25 {
 		t.Errorf("Limit = %v, want 25", gotBody.Limit)
 	}
-	if gotBody.Filters == nil || len(gotBody.Filters) == 0 {
-		t.Errorf("Filters is nil, want non-nil")
+	if len(gotBody.Filters) == 0 {
+		t.Errorf("Filters is empty, want non-empty")
 	} else if gotBody.Filters[0].Property != "finding_severity" {
 		t.Errorf("Filters.Severities = %v, want [HIGH, CRITICAL]", gotBody.Filters[0])
 	}

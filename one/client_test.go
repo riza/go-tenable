@@ -57,7 +57,7 @@ func TestAPIKeyHeader(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		gotHeader = r.Header.Get("x-apikeys")
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(`{}`))
+		_, _ = w.Write([]byte(`{}`))
 	}))
 	defer ts.Close()
 
@@ -77,7 +77,7 @@ func TestAPIErrorParsing(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusForbidden)
-		json.NewEncoder(w).Encode(apiErrorResponse{
+		_ = json.NewEncoder(w).Encode(apiErrorResponse{
 			Error: "Invalid API key",
 		})
 	}))

@@ -139,7 +139,7 @@ func TestExportsAssetsDownloadChunk(t *testing.T) {
 		gotMethod = r.Method
 		gotPath = r.URL.Path
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("chunk data"))
+		_, _ = w.Write([]byte("chunk data"))
 	}))
 	defer ts.Close()
 

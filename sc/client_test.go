@@ -53,7 +53,7 @@ func TestAPIKeyHeader(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		gotHeader = r.Header.Get("x-apikey")
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type:     "regular",
 			Response: json.RawMessage(`{}`),
 		})
@@ -79,7 +79,7 @@ func TestAPIKeyHeaderAbsentWithoutCredentials(t *testing.T) {
 		gotHeader = r.Header.Get("x-apikey")
 		_, hasHeader = r.Header["X-Apikey"]
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type:     "regular",
 			Response: json.RawMessage(`{}`),
 		})
@@ -101,7 +101,7 @@ func TestAPIErrorParsing(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusForbidden)
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type:      "error",
 			ErrorCode: 143,
 			ErrorMsg:  "Invalid API key",
@@ -141,7 +141,7 @@ func TestAPIErrorParsingWithErrorCodeOnSuccess(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type:      "error",
 			ErrorCode: 42,
 			ErrorMsg:  "Something went wrong",
@@ -172,7 +172,7 @@ func TestDoRequestSetsContentType(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		gotContentType = r.Header.Get("Content-Type")
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type:     "regular",
 			Response: json.RawMessage(`{}`),
 		})
@@ -195,7 +195,7 @@ func TestDoRequestSetsUserAgent(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		gotUA = r.Header.Get("User-Agent")
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type:     "regular",
 			Response: json.RawMessage(`{}`),
 		})
@@ -253,7 +253,7 @@ func TestHTTPMethods(t *testing.T) {
 				gotMethod = r.Method
 				gotPath = r.URL.Path
 				w.Header().Set("Content-Type", "application/json")
-				json.NewEncoder(w).Encode(apiResponse{
+				_ = json.NewEncoder(w).Encode(apiResponse{
 					Type:     "regular",
 					Response: json.RawMessage(`{}`),
 				})
@@ -294,7 +294,7 @@ func TestPostBodyMarshaling(t *testing.T) {
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type:     "regular",
 			Response: json.RawMessage(`{}`),
 		})
@@ -326,7 +326,7 @@ func TestPostBodyMarshaling(t *testing.T) {
 func TestSuccessfulResponse(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type:      "regular",
 			Response:  json.RawMessage(`{"id":"123","name":"My Scan"}`),
 			Timestamp: 1700000000,
@@ -375,7 +375,7 @@ func TestUnmarshalError(t *testing.T) {
 	// Server returns invalid JSON.
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte("not valid json"))
+		_, _ = w.Write([]byte("not valid json"))
 	}))
 	defer ts.Close()
 
@@ -396,7 +396,7 @@ func TestHTTPStatusErrorWithZeroErrorCode(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type:      "error",
 			ErrorCode: 0,
 			ErrorMsg:  "Internal Server Error",
@@ -424,7 +424,7 @@ func TestNilBodyProducesNoRequestBody(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		gotContentLength = r.ContentLength
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type:     "regular",
 			Response: json.RawMessage(`{}`),
 		})

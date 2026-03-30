@@ -76,7 +76,7 @@ func TestExportDownload(t *testing.T) {
 		gotMethod = r.Method
 		gotPath = r.URL.Path
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("scan export data"))
+		_, _ = w.Write([]byte("scan export data"))
 	}))
 	defer ts.Close()
 

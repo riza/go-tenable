@@ -59,8 +59,8 @@ func TestTagsSearchRequest(t *testing.T) {
 	if gotBody.Limit == nil || *gotBody.Limit != 20 {
 		t.Errorf("Limit = %v, want 20", gotBody.Limit)
 	}
-	if gotBody.Filters == nil || len(gotBody.Filters) == 0 {
-		t.Errorf("Filters is nil, want non-nil")
+	if len(gotBody.Filters) == 0 {
+		t.Errorf("Filters is empty, want non-empty")
 	} else if gotBody.Filters[0].Property != "keys" {
 		t.Errorf("Filters.Keys = %v, want [env]", gotBody.Filters[0])
 	}

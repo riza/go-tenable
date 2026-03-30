@@ -76,7 +76,7 @@ func TestAttachments(t *testing.T) {
 		gotMethod = r.Method
 		gotPath = r.URL.Path
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("attachment data"))
+		_, _ = w.Write([]byte("attachment data"))
 	}))
 	defer ts.Close()
 

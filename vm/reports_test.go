@@ -75,7 +75,7 @@ func TestVmReportsDownload(t *testing.T) {
 		gotMethod = r.Method
 		gotPath = r.URL.Path
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("report data"))
+		_, _ = w.Write([]byte("report data"))
 	}))
 	defer ts.Close()
 

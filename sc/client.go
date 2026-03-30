@@ -263,7 +263,7 @@ func (c *Client) post(ctx context.Context, path string, body interface{}) (*apiR
 	return c.doRequest(ctx, http.MethodPost, path, body)
 }
 
-func (c *Client) put(ctx context.Context, path string, body interface{}) (*apiResponse, error) {
+func (c *Client) put(ctx context.Context, path string, body interface{}) (*apiResponse, error) { //nolint:unused // kept for API completeness
 	return c.doRequest(ctx, http.MethodPut, path, body)
 }
 

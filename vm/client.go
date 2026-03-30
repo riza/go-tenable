@@ -130,7 +130,7 @@ func (c *Client) initServices() {
 // QueryParams holds optional query string parameters for API requests.
 type QueryParams map[string][]string
 
-func (c *Client) newRequest(ctx context.Context, method, path string, body interface{}) (*http.Request, error) {
+func (c *Client) newRequest(ctx context.Context, method, path string, body interface{}) (*http.Request, error) { //nolint:unused // kept for API completeness
 	return c.newRequestWithParams(ctx, method, path, body, nil)
 }
 
@@ -222,7 +222,7 @@ func (c *Client) get(ctx context.Context, path string) ([]byte, error) {
 	return c.doRequest(ctx, http.MethodGet, path, nil)
 }
 
-func (c *Client) getWithParams(ctx context.Context, path string, params QueryParams) ([]byte, error) {
+func (c *Client) getWithParams(ctx context.Context, path string, params QueryParams) ([]byte, error) { //nolint:unused // kept for API completeness
 	return c.doRequestWithParams(ctx, http.MethodGet, path, nil, params)
 }
 
@@ -238,6 +238,6 @@ func (c *Client) delete(ctx context.Context, path string) ([]byte, error) {
 	return c.doRequest(ctx, http.MethodDelete, path, nil)
 }
 
-func (c *Client) patch(ctx context.Context, path string, body interface{}) ([]byte, error) {
+func (c *Client) patch(ctx context.Context, path string, body interface{}) ([]byte, error) { //nolint:unused // kept for API completeness
 	return c.doRequest(ctx, http.MethodPatch, path, body)
 }

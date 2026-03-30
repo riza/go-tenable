@@ -107,7 +107,7 @@ func TestExportsVulnsDownloadChunk(t *testing.T) {
 		gotMethod = r.Method
 		gotPath = r.URL.Path
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("vuln chunk data"))
+		_, _ = w.Write([]byte("vuln chunk data"))
 	}))
 	defer ts.Close()
 

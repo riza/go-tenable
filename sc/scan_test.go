@@ -15,7 +15,7 @@ func TestScanList(t *testing.T) {
 		gotMethod = r.Method
 		gotPath = r.URL.Path
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type: "regular",
 			Response: json.RawMessage(`{
 				"usable": [
@@ -68,7 +68,7 @@ func TestScanGet(t *testing.T) {
 		gotMethod = r.Method
 		gotPath = r.URL.Path
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type: "regular",
 			Response: json.RawMessage(`{
 				"id": "4",
@@ -173,7 +173,7 @@ func TestScanCreate(t *testing.T) {
 			t.Fatalf("failed to unmarshal request body: %v", err)
 		}
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type: "regular",
 			Response: json.RawMessage(`{
 				"id": "4",
@@ -287,7 +287,7 @@ func TestScanUpdate(t *testing.T) {
 			t.Fatalf("failed to unmarshal request body: %v", err)
 		}
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type: "regular",
 			Response: json.RawMessage(`{
 				"id": "4",
@@ -353,7 +353,7 @@ func TestScanDelete(t *testing.T) {
 		gotMethod = r.Method
 		gotPath = r.URL.Path
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type:     "regular",
 			Response: json.RawMessage(`""`),
 		})
@@ -388,7 +388,7 @@ func TestScanLaunch(t *testing.T) {
 			t.Fatalf("failed to unmarshal request body: %v", err)
 		}
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type: "regular",
 			Response: json.RawMessage(`{
 				"scanID": "2",
@@ -452,7 +452,7 @@ func TestScanLaunchNilInput(t *testing.T) {
 		gotMethod = r.Method
 		gotPath = r.URL.Path
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type: "regular",
 			Response: json.RawMessage(`{
 				"scanID": "2",
@@ -498,7 +498,7 @@ func TestScanCopy(t *testing.T) {
 			t.Fatalf("failed to unmarshal request body: %v", err)
 		}
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type: "regular",
 			Response: json.RawMessage(`{
 				"scan": {

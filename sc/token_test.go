@@ -26,7 +26,7 @@ func TestTokenCreate(t *testing.T) {
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type:     "regular",
 			Response: json.RawMessage(`{"token":123456789}`),
 		})
@@ -79,7 +79,7 @@ func TestTokenCreateWithReleaseSession(t *testing.T) {
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type:     "regular",
 			Response: json.RawMessage(`{"token":987654321}`),
 		})
@@ -112,7 +112,7 @@ func TestTokenDelete(t *testing.T) {
 		gotPath = r.URL.Path
 
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type:     "regular",
 			Response: json.RawMessage(`""`),
 		})
@@ -140,7 +140,7 @@ func TestTokenCreateAPIError(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusForbidden)
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type:      "error",
 			ErrorCode: 141,
 			ErrorMsg:  "Invalid login credentials.",
@@ -162,7 +162,7 @@ func TestTokenDeleteAPIError(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusForbidden)
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type:      "error",
 			ErrorCode: 143,
 			ErrorMsg:  "Invalid token.",

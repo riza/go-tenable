@@ -14,7 +14,7 @@ func TestRepositoryList(t *testing.T) {
 		gotMethod = r.Method
 		gotPath = r.URL.Path
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type: "regular",
 			Response: json.RawMessage(`[
 				{
@@ -67,7 +67,7 @@ func TestRepositoryGet(t *testing.T) {
 		gotMethod = r.Method
 		gotPath = r.URL.Path
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type: "regular",
 			Response: json.RawMessage(`{
 				"id": "3",

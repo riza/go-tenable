@@ -16,7 +16,7 @@ func TestUserList(t *testing.T) {
 		gotMethod = r.Method
 		gotPath = r.URL.Path
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type: "regular",
 			Response: json.RawMessage(`{
 				"totalRecords": 2,
@@ -64,7 +64,7 @@ func TestUserGet(t *testing.T) {
 		gotMethod = r.Method
 		gotPath = r.URL.Path
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type: "regular",
 			Response: json.RawMessage(`{
 				"id": "42",
@@ -126,7 +126,7 @@ func TestUserCreate(t *testing.T) {
 			t.Fatalf("failed to unmarshal request body: %v", err)
 		}
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type: "regular",
 			Response: json.RawMessage(`{
 				"id": "99",
@@ -207,7 +207,7 @@ func TestUserUpdate(t *testing.T) {
 			t.Fatalf("failed to unmarshal request body: %v", err)
 		}
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type: "regular",
 			Response: json.RawMessage(`{
 				"id": "7",
@@ -269,7 +269,7 @@ func TestUserDelete(t *testing.T) {
 			gotMethod = r.Method
 			gotPath = r.URL.Path
 			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(apiResponse{
+			_ = json.NewEncoder(w).Encode(apiResponse{
 				Type:     "regular",
 				Response: json.RawMessage(`""`),
 			})
@@ -297,7 +297,7 @@ func TestUserDelete(t *testing.T) {
 			gotPath = r.URL.Path
 			gotQuery = r.URL.RawQuery
 			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(apiResponse{
+			_ = json.NewEncoder(w).Encode(apiResponse{
 				Type:     "regular",
 				Response: json.RawMessage(`""`),
 			})
@@ -326,7 +326,7 @@ func TestUserListAPIError(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusForbidden)
-		json.NewEncoder(w).Encode(apiResponse{
+		_ = json.NewEncoder(w).Encode(apiResponse{
 			Type:      "error",
 			ErrorCode: 401,
 			ErrorMsg:  "Insufficient privileges",
