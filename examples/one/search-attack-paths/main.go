@@ -25,15 +25,15 @@ func main() {
 
 	client := one.NewClient(baseURL,
 		one.WithAPIKey(accessKey, secretKey),
-		one.WithInsecureSkipVerify(), // if needed for intercepting proxies
 	)
 
 	ctx := context.Background()
 
-	// Search attack paths
+	excludeResolved := false
 	attackPathsReq := &one.APASearchAttackPathsRequest{
-		Limit:  100,
-		Offset: 0,
+		Limit:           100,
+		Sort:            "priority:desc",
+		ExcludeResolved: &excludeResolved,
 		Filter: one.APAFilterGroup{
 			Operator: "AND",
 			Value: []one.APAFilterCondition{
@@ -54,11 +54,12 @@ func main() {
 	fmt.Printf("Found %d attack path(s)\n\n", attackPaths.Total)
 
 	for _, ap := range attackPaths.AttackPaths {
-		fmt.Printf("ID: %s | Name: %s | Score: %d | Assets: %d\n",
-			ap.ID,
+		fmt.Printf("VectorID: %s | Name: %s | Status: %s | AES: %.1f | ACR: %.1f\n",
+			ap.VectorID,
 			ap.Name,
-			ap.Score,
-			ap.AssetCount,
+			ap.PathStatus,
+			ap.FirstAES,
+			ap.LastACR,
 		)
 	}
 
@@ -66,14 +67,13 @@ func main() {
 	fmt.Println("\n--- Attack Techniques ---")
 
 	techniquesReq := &one.APASearchAttackTechniquesRequest{
-		Limit:  100,
-		Offset: 0,
+		Limit: 100,
 		Filter: one.APAFilterGroup{
-			Operator: "and",
+			Operator: "AND",
 			Value: []one.APAFilterCondition{
 				{
 					Property: "priority",
-					Operator: "==",
+					Operator: "eq",
 					Value:    "low",
 				},
 			},
@@ -82,7 +82,6 @@ func main() {
 
 	techniques, err := client.AttackPathService.SearchAttackTechniques(ctx, techniquesReq)
 	if err != nil {
-		fmt.Printf("API Error: %+v\n", err)
 		log.Fatalf("failed to search attack techniques: %v", err)
 	}
 
@@ -97,25 +96,4 @@ func main() {
 			t.Priority,
 		)
 	}
-
-	/*
-		// List exposure view cards
-		fmt.Println("\n--- Exposure View Cards ---")
-
-		cards, err := client.ExposureViewService.ListCards(ctx)
-		if err != nil {
-			log.Fatalf("failed to list exposure view cards: %v", err)
-		}
-
-		fmt.Printf("Found %d card(s)\n\n", cards.Total)
-
-		for _, card := range cards.Cards {
-			fmt.Printf("ID: %s | Name: %s | Type: %s | Category: %s\n",
-				card.ID,
-				card.Name,
-				card.Type,
-				card.Category,
-			)
-		}
-	*/
 }

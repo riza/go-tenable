@@ -25,7 +25,7 @@ func TestIntegration_AttackPathSearch(t *testing.T) {
 
 	ctx := context.Background()
 	paths, err := client.AttackPathService.SearchAttackPaths(ctx, &APASearchAttackPathsRequest{
-		Limit: 10,
+		Limit: 100,
 	})
 	if err != nil {
 		t.Fatalf("AttackPathService.SearchAttackPaths() failed: %v", err)
