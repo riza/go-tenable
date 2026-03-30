@@ -13,7 +13,7 @@ type AttackPathService struct {
 
 // APAAttackPath represents an attack path in the APA service.
 type APAAttackPath struct {
-	Id         string      `json:"id,omitempty"`
+	ID         string      `json:"id,omitempty"`
 	Name       string      `json:"name,omitempty"`
 	Score      int         `json:"score,omitempty"`
 	AssetCount int         `json:"asset_count,omitempty"`
@@ -48,14 +48,19 @@ type APASearchAttackPathsRequest struct {
 type APASearchAttackPathsResponse struct {
 	AttackPaths []APAAttackPath `json:"data,omitempty"`
 	Total       int             `json:"total,omitempty"`
-	Pagination  interface{}     `json:"pagination,omitempty"`
+	Pagination  *PaginationInfo `json:"pagination,omitempty"`
 }
 
 // SearchAttackPaths searches for attack paths.
 func (s *AttackPathService) SearchAttackPaths(ctx context.Context, req *APASearchAttackPathsRequest) (*APASearchAttackPathsResponse, error) {
-	path := "/api/v1/t1/apa/top-attack-paths/search"
-	if req != nil && req.Limit > 0 {
-		path = fmt.Sprintf("%s?limit=%d", path, req.Limit)
+	params := QueryParams{}
+	if req != nil {
+		if req.Limit > 0 {
+			params["limit"] = []string{fmt.Sprintf("%d", req.Limit)}
+		}
+		if req.Offset > 0 {
+			params["offset"] = []string{fmt.Sprintf("%d", req.Offset)}
+		}
 	}
 
 	var payload interface{}
@@ -65,7 +70,7 @@ func (s *AttackPathService) SearchAttackPaths(ctx context.Context, req *APASearc
 		payload = map[string]interface{}{}
 	}
 
-	resp, err := s.client.post(ctx, path, payload)
+	resp, err := s.client.doRequestWithParams(ctx, "POST", "/api/v1/t1/apa/top-attack-paths/search", payload, params)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +85,7 @@ func (s *AttackPathService) SearchAttackPaths(ctx context.Context, req *APASearc
 
 // APAAttackTechnique represents an attack technique in the APA service.
 type APAAttackTechnique struct {
-	MitreId       string   `json:"mitre_id,omitempty"`
+	MitreID       string   `json:"mitre_id,omitempty"`
 	TechniqueName string   `json:"technique_name,omitempty"`
 	Tactics       []string `json:"tactics,omitempty"`
 	Count         int      `json:"vector_count,omitempty"`
@@ -99,14 +104,19 @@ type APASearchAttackTechniquesRequest struct {
 type APASearchAttackTechniquesResponse struct {
 	Techniques []APAAttackTechnique `json:"data,omitempty"`
 	Total      int                  `json:"total,omitempty"`
-	Pagination interface{}          `json:"pagination,omitempty"`
+	Pagination *PaginationInfo      `json:"pagination,omitempty"`
 }
 
 // SearchAttackTechniques searches for attack techniques.
 func (s *AttackPathService) SearchAttackTechniques(ctx context.Context, req *APASearchAttackTechniquesRequest) (*APASearchAttackTechniquesResponse, error) {
-	path := "/api/v1/t1/apa/top-attack-techniques/search"
-	if req != nil && req.Limit > 0 {
-		path = fmt.Sprintf("%s?limit=%d", path, req.Limit)
+	params := QueryParams{}
+	if req != nil {
+		if req.Limit > 0 {
+			params["limit"] = []string{fmt.Sprintf("%d", req.Limit)}
+		}
+		if req.Offset > 0 {
+			params["offset"] = []string{fmt.Sprintf("%d", req.Offset)}
+		}
 	}
 
 	var payload interface{}
@@ -116,7 +126,7 @@ func (s *AttackPathService) SearchAttackTechniques(ctx context.Context, req *APA
 		payload = map[string]interface{}{}
 	}
 
-	resp, err := s.client.post(ctx, path, payload)
+	resp, err := s.client.doRequestWithParams(ctx, "POST", "/api/v1/t1/apa/top-attack-techniques/search", payload, params)
 	if err != nil {
 		return nil, err
 	}

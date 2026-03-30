@@ -3,6 +3,7 @@ package one
 import (
 	"context"
 	"encoding/json"
+	"strconv"
 )
 
 // ExportService handles communication with the Export related endpoints of the Tenable One API.
@@ -12,15 +13,15 @@ type ExportService struct {
 
 // InventoryExportRequest represents the request body for creating an inventory export.
 type InventoryExportRequest struct {
-	Format   string        `json:"format,omitempty"`
-	Limit    int           `json:"limit,omitempty"`
-	Filters  interface{}   `json:"filters,omitempty"`
-	Columns  []string      `json:"columns,omitempty"`
+	Format  string      `json:"format,omitempty"`
+	Limit   int         `json:"limit,omitempty"`
+	Filters interface{} `json:"filters,omitempty"`
+	Columns []string    `json:"columns,omitempty"`
 }
 
 // InventoryExportResponse represents the response from creating an inventory export.
 type InventoryExportResponse struct {
-	ExportId     string `json:"export_id,omitempty"`
+	ExportID     string `json:"export_id,omitempty"`
 	Format       string `json:"format,omitempty"`
 	Status       string `json:"status,omitempty"`
 	TotalObjects int    `json:"total_objects,omitempty"`
@@ -60,7 +61,7 @@ func (s *ExportService) ExportFindings(ctx context.Context, req *InventoryExport
 
 // ExportStatusResponse represents the status of an export.
 type ExportStatusResponse struct {
-	ExportId     string `json:"export_id,omitempty"`
+	ExportID     string `json:"export_id,omitempty"`
 	Status       string `json:"status,omitempty"`
 	TotalObjects int    `json:"total_objects,omitempty"`
 	ReadyObjects int    `json:"ready_objects,omitempty"`
@@ -69,8 +70,8 @@ type ExportStatusResponse struct {
 }
 
 // GetAssetsExportStatus returns the status of an assets export.
-func (s *ExportService) GetAssetsExportStatus(ctx context.Context, exportId string) (*ExportStatusResponse, error) {
-	resp, err := s.client.get(ctx, "/api/v1/t1/inventory/export/assets/status")
+func (s *ExportService) GetAssetsExportStatus(ctx context.Context, exportID string) (*ExportStatusResponse, error) {
+	resp, err := s.client.get(ctx, "/api/v1/t1/inventory/export/assets/"+exportID+"/status")
 	if err != nil {
 		return nil, err
 	}
@@ -84,8 +85,8 @@ func (s *ExportService) GetAssetsExportStatus(ctx context.Context, exportId stri
 }
 
 // GetFindingsExportStatus returns the status of a findings export.
-func (s *ExportService) GetFindingsExportStatus(ctx context.Context, exportId string) (*ExportStatusResponse, error) {
-	resp, err := s.client.get(ctx, "/api/v1/t1/inventory/export/findings/status")
+func (s *ExportService) GetFindingsExportStatus(ctx context.Context, exportID string) (*ExportStatusResponse, error) {
+	resp, err := s.client.get(ctx, "/api/v1/t1/inventory/export/findings/"+exportID+"/status")
 	if err != nil {
 		return nil, err
 	}
@@ -99,8 +100,8 @@ func (s *ExportService) GetFindingsExportStatus(ctx context.Context, exportId st
 }
 
 // GetExportStatus returns the status of an export by ID.
-func (s *ExportService) GetExportStatus(ctx context.Context, exportId string) (*ExportStatusResponse, error) {
-	resp, err := s.client.get(ctx, "/api/v1/t1/inventory/export/"+exportId+"/status")
+func (s *ExportService) GetExportStatus(ctx context.Context, exportID string) (*ExportStatusResponse, error) {
+	resp, err := s.client.get(ctx, "/api/v1/t1/inventory/export/"+exportID+"/status")
 	if err != nil {
 		return nil, err
 	}
@@ -114,6 +115,6 @@ func (s *ExportService) GetExportStatus(ctx context.Context, exportId string) (*
 }
 
 // DownloadExportChunk downloads a chunk of an export.
-func (s *ExportService) DownloadExportChunk(ctx context.Context, exportId string, chunkId int) ([]byte, error) {
-	return s.client.get(ctx, "/api/v1/t1/inventory/export/"+exportId+"/download/"+string(rune(chunkId+'0')))
+func (s *ExportService) DownloadExportChunk(ctx context.Context, exportID string, chunkID int) ([]byte, error) {
+	return s.client.get(ctx, "/api/v1/t1/inventory/export/"+exportID+"/download/"+strconv.Itoa(chunkID))
 }

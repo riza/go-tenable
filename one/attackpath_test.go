@@ -68,7 +68,7 @@ func TestSearchAttackPaths(t *testing.T) {
 	if resp.Total != 2 {
 		t.Errorf("Total = %d, want 2", resp.Total)
 	}
-	if len(resp.AttackPaths) != 2 || resp.AttackPaths[0].Id != "path1" {
+	if len(resp.AttackPaths) != 2 || resp.AttackPaths[0].ID != "path1" {
 		t.Errorf("AttackPaths = %v, want 2 elements with first ID path1", resp.AttackPaths)
 	}
 }
@@ -112,7 +112,7 @@ func TestSearchAttackTechniques(t *testing.T) {
 	if len(resp.Techniques) != 1 {
 		t.Fatalf("Got %d techniques, want 1", len(resp.Techniques))
 	}
-	if resp.Techniques[0].MitreId != "tech1" {
-		t.Errorf("Technique MitreId = %q, want %q", resp.Techniques[0].MitreId, "tech1")
+	if resp.Techniques[0].MitreID != "tech1" {
+		t.Errorf("Technique MitreID = %q, want %q", resp.Techniques[0].MitreID, "tech1")
 	}
 }

@@ -39,8 +39,8 @@ func TestExportAssets(t *testing.T) {
 	if gotPath != "/api/v1/t1/inventory/export/assets" {
 		t.Errorf("path = %q, want %q", gotPath, "/api/v1/t1/inventory/export/assets")
 	}
-	if resp.ExportId != "exp123" {
-		t.Errorf("ExportId = %q, want %q", resp.ExportId, "exp123")
+	if resp.ExportID != "exp123" {
+		t.Errorf("ExportID = %q, want %q", resp.ExportID, "exp123")
 	}
 }
 
@@ -85,8 +85,8 @@ func TestExportFindings(t *testing.T) {
 	if gotBody.Format != "csv" {
 		t.Errorf("Format = %q, want csv", gotBody.Format)
 	}
-	if resp.ExportId != "exp456" {
-		t.Errorf("ExportId = %q, want %q", resp.ExportId, "exp456")
+	if resp.ExportID != "exp456" {
+		t.Errorf("ExportID = %q, want %q", resp.ExportID, "exp456")
 	}
 }
 
@@ -114,8 +114,8 @@ func TestGetAssetsExportStatus(t *testing.T) {
 	if gotMethod != http.MethodGet {
 		t.Errorf("method = %q, want %q", gotMethod, http.MethodGet)
 	}
-	if gotPath != "/api/v1/t1/inventory/export/assets/status" {
-		t.Errorf("path = %q, want %q", gotPath, "/api/v1/t1/inventory/export/assets/status")
+	if gotPath != "/api/v1/t1/inventory/export/assets/exp123/status" {
+		t.Errorf("path = %q, want %q", gotPath, "/api/v1/t1/inventory/export/assets/exp123/status")
 	}
 	if resp.Status != "FINISHED" {
 		t.Errorf("Status = %q, want FINISHED", resp.Status)
@@ -147,8 +147,8 @@ func TestGetFindingsExportStatus(t *testing.T) {
 	if gotMethod != http.MethodGet {
 		t.Errorf("method = %q, want %q", gotMethod, http.MethodGet)
 	}
-	if gotPath != "/api/v1/t1/inventory/export/findings/status" {
-		t.Errorf("path = %q, want %q", gotPath, "/api/v1/t1/inventory/export/findings/status")
+	if gotPath != "/api/v1/t1/inventory/export/findings/exp456/status" {
+		t.Errorf("path = %q, want %q", gotPath, "/api/v1/t1/inventory/export/findings/exp456/status")
 	}
 	if resp.Status != "FINISHED" {
 		t.Errorf("Status = %q, want FINISHED", resp.Status)
@@ -180,8 +180,8 @@ func TestGetExportStatus(t *testing.T) {
 	if gotPath != "/api/v1/t1/inventory/export/exp789/status" {
 		t.Errorf("path = %q, want %q", gotPath, "/api/v1/t1/inventory/export/exp789/status")
 	}
-	if resp.ExportId != "exp789" {
-		t.Errorf("ExportId = %q, want exp789", resp.ExportId)
+	if resp.ExportID != "exp789" {
+		t.Errorf("ExportID = %q, want exp789", resp.ExportID)
 	}
 }
 
@@ -204,7 +204,6 @@ func TestDownloadExportChunk(t *testing.T) {
 	if gotMethod != http.MethodGet {
 		t.Errorf("method = %q, want %q", gotMethod, http.MethodGet)
 	}
-	// Note: string(rune(1+'0')) is "1"
 	if gotPath != "/api/v1/t1/inventory/export/exp123/download/1" {
 		t.Errorf("path = %q, want %q", gotPath, "/api/v1/t1/inventory/export/exp123/download/1")
 	}

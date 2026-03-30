@@ -78,11 +78,9 @@ func WithHTTPClient(hc *http.Client) Option {
 // WithInsecureSkipVerify disables TLS certificate verification.
 func WithInsecureSkipVerify() Option {
 	return func(c *Client) {
-		c.HTTPClient = &http.Client{
-			Transport: &http.Transport{
-				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-			},
-		}
+		transport := http.DefaultTransport.(*http.Transport).Clone()
+		transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+		c.HTTPClient = &http.Client{Transport: transport}
 	}
 }
 
@@ -94,8 +92,15 @@ func (c *Client) initServices() {
 	c.TagsService = &TagsService{client: c}
 }
 
+// PaginationInfo holds pagination metadata for list/search responses.
+type PaginationInfo struct {
+	Total  int `json:"total,omitempty"`
+	Limit  int `json:"limit,omitempty"`
+	Offset int `json:"offset,omitempty"`
+}
+
 // QueryParams holds optional query string parameters for API requests.
-type QueryParams map[string]string
+type QueryParams map[string][]string
 
 func (c *Client) newRequest(ctx context.Context, method, path string, body interface{}) (*http.Request, error) {
 	return c.newRequestWithParams(ctx, method, path, body, nil)
@@ -107,7 +112,9 @@ func (c *Client) newRequestWithParams(ctx context.Context, method, path string, 
 	if len(params) > 0 {
 		q := url.Values{}
 		for k, v := range params {
-			q.Set(k, v)
+			for _, val := range v {
+				q.Add(k, val)
+			}
 		}
 		u += "?" + q.Encode()
 	}

@@ -95,11 +95,9 @@ func WithHTTPClient(hc *http.Client) Option {
 // WithInsecureSkipVerify disables TLS certificate verification.
 func WithInsecureSkipVerify() Option {
 	return func(c *Client) {
-		c.HTTPClient = &http.Client{
-			Transport: &http.Transport{
-				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-			},
-		}
+		transport := http.DefaultTransport.(*http.Transport).Clone()
+		transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+		c.HTTPClient = &http.Client{Transport: transport}
 	}
 }
 
@@ -130,7 +128,7 @@ func (c *Client) initServices() {
 }
 
 // QueryParams holds optional query string parameters for API requests.
-type QueryParams map[string]string
+type QueryParams map[string][]string
 
 func (c *Client) newRequest(ctx context.Context, method, path string, body interface{}) (*http.Request, error) {
 	return c.newRequestWithParams(ctx, method, path, body, nil)
@@ -142,7 +140,9 @@ func (c *Client) newRequestWithParams(ctx context.Context, method, path string, 
 	if len(params) > 0 {
 		q := url.Values{}
 		for k, v := range params {
-			q.Set(k, v)
+			for _, val := range v {
+				q.Add(k, val)
+			}
 		}
 		u += "?" + q.Encode()
 	}
@@ -170,7 +170,7 @@ func (c *Client) newRequestWithParams(ctx context.Context, method, path string, 
 	return req, nil
 }
 
-// apiResponse is the response envelope for errors.
+// apiErrorResponse is the response envelope for errors.
 type apiErrorResponse struct {
 	Error string `json:"error"`
 }
@@ -236,4 +236,8 @@ func (c *Client) put(ctx context.Context, path string, body interface{}) ([]byte
 
 func (c *Client) delete(ctx context.Context, path string) ([]byte, error) {
 	return c.doRequest(ctx, http.MethodDelete, path, nil)
+}
+
+func (c *Client) patch(ctx context.Context, path string, body interface{}) ([]byte, error) {
+	return c.doRequest(ctx, http.MethodPatch, path, body)
 }
