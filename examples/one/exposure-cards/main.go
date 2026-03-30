@@ -41,6 +41,6 @@ func main() {
 	fmt.Printf("Total Cards Found: %d\n", cardsResp.Total)
 	for i, card := range cardsResp.Cards {
 		fmt.Printf("[%d] ID: %s | Name: %s | Category: %s | Type: %s\n",
-			i+1, card.Id, card.Name, card.Category, card.Type)
+			i+1, card.ID, card.Name, card.Category, card.Type)
 	}
 }

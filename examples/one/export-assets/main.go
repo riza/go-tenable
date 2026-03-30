@@ -42,12 +42,12 @@ func main() {
 		log.Fatalf("failed to request asset export: %v", err)
 	}
 
-	fmt.Printf("Export Task Created: UUID = %s | Format = %s\n", exportResp.ExportId, exportResp.Format)
+	fmt.Printf("Export Task Created: UUID = %s | Format = %s\n", exportResp.ExportID, exportResp.Format)
 
 	// Step 2: Poll Export Status
 	for {
-		fmt.Printf("\nPolling Export Task [%s] Status...\n", exportResp.ExportId)
-		status, err := client.ExportService.GetAssetsExportStatus(ctx, exportResp.ExportId)
+		fmt.Printf("\nPolling Export Task [%s] Status...\n", exportResp.ExportID)
+		status, err := client.ExportService.GetAssetsExportStatus(ctx, exportResp.ExportID)
 		if err != nil {
 			log.Fatalf("failed to retrieve export status: %v", err)
 		}
@@ -60,7 +60,7 @@ func main() {
 			for _, chunkID := range status.Chunks {
 				fmt.Printf("\nDownloading Chunk #%d\n", chunkID)
 
-				data, err := client.ExportService.DownloadExportChunk(ctx, exportResp.ExportId, chunkID)
+				data, err := client.ExportService.DownloadExportChunk(ctx, exportResp.ExportID, chunkID)
 				if err != nil {
 					log.Printf("Failed to download chunk %d: %v", chunkID, err)
 					continue

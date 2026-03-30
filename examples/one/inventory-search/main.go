@@ -47,7 +47,7 @@ func main() {
 	fmt.Printf("Total Assets Found (across platform): %d\n", assetsResp.Total)
 	for i, asset := range assetsResp.Assets {
 		fmt.Printf("[%d] ID: %s | Name: %s | Type: %s | IPv4: %v\n",
-			i+1, asset.Id, asset.Name, asset.Type, asset.IpAddresses)
+			i+1, asset.ID, asset.Name, asset.Type, asset.IpAddresses)
 	}
 
 	// 2. Search Findings
@@ -67,6 +67,6 @@ func main() {
 	fmt.Printf("Total High/Critical Findings: %d\n", findingsResp.Total)
 	for i, finding := range findingsResp.Findings {
 		fmt.Printf("[%d] ID: %s | Plugin: %s (%d) | Severity: %s | Asset: %s\n",
-			i+1, finding.Id, finding.PluginName, finding.PluginId, finding.Severity, finding.AssetId)
+			i+1, finding.ID, finding.PluginName, finding.PluginID, finding.Severity, finding.AssetID)
 	}
 }

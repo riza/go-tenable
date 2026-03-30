@@ -67,7 +67,7 @@ func TestInventoryAssetsSearchRequest(t *testing.T) {
 	if resp.Total != 2 {
 		t.Errorf("Total = %d, want 2", resp.Total)
 	}
-	if len(resp.Assets) != 2 || resp.Assets[0].Id != "asset1" {
+	if len(resp.Assets) != 2 || resp.Assets[0].ID != "asset1" {
 		t.Errorf("Assets = %v, want 2 elements with first ID asset1", resp.Assets)
 	}
 }
@@ -124,7 +124,7 @@ func TestSearchFindings(t *testing.T) {
 	if resp.Total != 1 {
 		t.Errorf("Total = %d, want 1", resp.Total)
 	}
-	if len(resp.Findings) != 1 || resp.Findings[0].Id != "vuln1" {
+	if len(resp.Findings) != 1 || resp.Findings[0].ID != "vuln1" {
 		t.Errorf("Findings = %v, want 1 element with ID vuln1", resp.Findings)
 	}
 }

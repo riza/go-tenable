@@ -12,7 +12,7 @@ type ExposureViewService struct {
 
 // ExposureViewCard represents an exposure view card.
 type ExposureViewCard struct {
-	Id          string                 `json:"id,omitempty"`
+	ID          string                 `json:"id,omitempty"`
 	Name        string                 `json:"name,omitempty"`
 	Type        string                 `json:"type,omitempty"`
 	Category    string                 `json:"category,omitempty"`

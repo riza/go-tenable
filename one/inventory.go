@@ -12,14 +12,14 @@ type InventoryService struct {
 
 // InventoryAsset represents an asset in the inventory.
 type InventoryAsset struct {
-	Id              string                 `json:"id,omitempty"`
+	ID              string                 `json:"id,omitempty"`
 	Name            string                 `json:"name,omitempty"`
 	Type            string                 `json:"type,omitempty"`
 	Sources         []string               `json:"sources,omitempty"`
 	FirstSeen       string                 `json:"first_seen,omitempty"`
 	LastSeen        string                 `json:"last_seen,omitempty"`
 	Tags            []string               `json:"tags,omitempty"`
-	NetworkId       string                 `json:"network_id,omitempty"`
+	NetworkID       string                 `json:"network_id,omitempty"`
 	IpAddresses     []string               `json:"ip_addresses,omitempty"`
 	Hostnames       []string               `json:"hostnames,omitempty"`
 	MacAddresses    []string               `json:"mac_addresses,omitempty"`
@@ -45,7 +45,7 @@ type InventorySearchFilter struct {
 type InventoryAssetsSearchResponse struct {
 	Assets     []InventoryAsset `json:"assets,omitempty"`
 	Total      int              `json:"total,omitempty"`
-	Pagination interface{}      `json:"pagination,omitempty"`
+	Pagination *PaginationInfo  `json:"pagination,omitempty"`
 }
 
 // SearchAssets searches for assets in the inventory.
@@ -65,14 +65,14 @@ func (s *InventoryService) SearchAssets(ctx context.Context, req *InventoryAsset
 
 // InventoryFinding represents a finding in the inventory.
 type InventoryFinding struct {
-	Id          string                 `json:"id,omitempty"`
+	ID          string                 `json:"id,omitempty"`
 	Name        string                 `json:"name,omitempty"`
 	Description string                 `json:"description,omitempty"`
 	Severity    string                 `json:"severity,omitempty"`
 	Status      string                 `json:"status,omitempty"`
-	PluginId    int                    `json:"plugin_id,omitempty"`
+	PluginID    int                    `json:"plugin_id,omitempty"`
 	PluginName  string                 `json:"plugin_name,omitempty"`
-	AssetId     string                 `json:"asset_id,omitempty"`
+	AssetID     string                 `json:"asset_id,omitempty"`
 	FirstSeen   string                 `json:"first_seen,omitempty"`
 	LastSeen    string                 `json:"last_seen,omitempty"`
 	Output      string                 `json:"output,omitempty"`
@@ -90,7 +90,7 @@ type InventoryFindingsSearchRequest struct {
 type InventoryFindingsSearchResponse struct {
 	Findings   []InventoryFinding `json:"findings,omitempty"`
 	Total      int                `json:"total,omitempty"`
-	Pagination interface{}        `json:"pagination,omitempty"`
+	Pagination *PaginationInfo    `json:"pagination,omitempty"`
 }
 
 // SearchFindings searches for findings in the inventory.
@@ -110,12 +110,12 @@ func (s *InventoryService) SearchFindings(ctx context.Context, req *InventoryFin
 
 // InventorySoftware represents software in the inventory.
 type InventorySoftware struct {
-	Id        string `json:"id,omitempty"`
+	ID        string `json:"id,omitempty"`
 	Name      string `json:"name,omitempty"`
 	Vendor    string `json:"vendor,omitempty"`
 	Version   string `json:"version,omitempty"`
 	Cpe       string `json:"cpe,omitempty"`
-	AssetId   string `json:"asset_id,omitempty"`
+	AssetID   string `json:"asset_id,omitempty"`
 	FirstSeen string `json:"first_seen,omitempty"`
 	LastSeen  string `json:"last_seen,omitempty"`
 }
@@ -131,7 +131,7 @@ type InventorySoftwareSearchRequest struct {
 type InventorySoftwareSearchResponse struct {
 	Software   []InventorySoftware `json:"software,omitempty"`
 	Total      int                 `json:"total,omitempty"`
-	Pagination interface{}         `json:"pagination,omitempty"`
+	Pagination *PaginationInfo     `json:"pagination,omitempty"`
 }
 
 // SearchSoftware searches for software in the inventory.

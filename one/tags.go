@@ -12,7 +12,7 @@ type TagsService struct {
 
 // Tag represents a tag in Tenable One.
 type Tag struct {
-	Uuid      string                 `json:"uuid,omitempty"`
+	UUID      string                 `json:"uuid,omitempty"`
 	Key       string                 `json:"key,omitempty"`
 	Value     string                 `json:"value,omitempty"`
 	Sources   []string               `json:"sources,omitempty"`
@@ -37,9 +37,9 @@ type TagsSearchFilter struct {
 
 // TagsSearchResponse represents the response from searching tags.
 type TagsSearchResponse struct {
-	Tags       []Tag       `json:"tags,omitempty"`
-	Total      int         `json:"total,omitempty"`
-	Pagination interface{} `json:"pagination,omitempty"`
+	Tags       []Tag           `json:"tags,omitempty"`
+	Total      int             `json:"total,omitempty"`
+	Pagination *PaginationInfo `json:"pagination,omitempty"`
 }
 
 // SearchTags searches for tags.

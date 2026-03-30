@@ -39,7 +39,7 @@ func TestListCards(t *testing.T) {
 	if resp.Total != 2 {
 		t.Errorf("Total = %d, want 2", resp.Total)
 	}
-	if len(resp.Cards) != 2 || resp.Cards[0].Id != "card1" {
+	if len(resp.Cards) != 2 || resp.Cards[0].ID != "card1" {
 		t.Errorf("Cards = %v, want 2 elements with first ID card1", resp.Cards)
 	}
 }
@@ -70,8 +70,8 @@ func TestGetCard(t *testing.T) {
 	if gotPath != "/api/v1/t1/exposure-view/cards/card5" {
 		t.Errorf("path = %q, want %q", gotPath, "/api/v1/t1/exposure-view/cards/card5")
 	}
-	if resp.Id != "card5" {
-		t.Errorf("Id = %q, want card5", resp.Id)
+	if resp.ID != "card5" {
+		t.Errorf("ID = %q, want card5", resp.ID)
 	}
 	if resp.Title != "Exposure trend" {
 		t.Errorf("Title = %q, want Exposure trend", resp.Title)

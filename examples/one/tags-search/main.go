@@ -47,7 +47,7 @@ func main() {
 	fmt.Printf("Total Tags Found: %d\n", tagsResp.Total)
 	for i, tag := range tagsResp.Tags {
 		fmt.Printf("[%d] UUID: %s | Category: %s | Value: %s | Sources: %v\n",
-			i+1, tag.Uuid, tag.Key, tag.Value, tag.Sources)
+			i+1, tag.UUID, tag.Key, tag.Value, tag.Sources)
 	}
 
 	// 2. See Tag Properties (Metadata about what filters are valid)

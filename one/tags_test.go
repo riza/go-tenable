@@ -67,7 +67,7 @@ func TestTagsSearchRequest(t *testing.T) {
 	if resp.Total != 2 {
 		t.Errorf("Total = %d, want 2", resp.Total)
 	}
-	if len(resp.Tags) != 2 || resp.Tags[0].Uuid != "tag1" {
+	if len(resp.Tags) != 2 || resp.Tags[0].UUID != "tag1" {
 		t.Errorf("Tags = %v, want 2 elements with first UUID tag1", resp.Tags)
 	}
 }

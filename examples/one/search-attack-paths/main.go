@@ -55,7 +55,7 @@ func main() {
 
 	for _, ap := range attackPaths.AttackPaths {
 		fmt.Printf("ID: %s | Name: %s | Score: %d | Assets: %d\n",
-			ap.Id,
+			ap.ID,
 			ap.Name,
 			ap.Score,
 			ap.AssetCount,
@@ -90,7 +90,7 @@ func main() {
 
 	for _, t := range techniques.Techniques {
 		fmt.Printf("ID: %s | Name: %s | Tactics: %v | Count: %d | Priority: %s\n",
-			t.MitreId,
+			t.MitreID,
 			t.TechniqueName,
 			t.Tactics,
 			t.Count,
@@ -111,7 +111,7 @@ func main() {
 
 		for _, card := range cards.Cards {
 			fmt.Printf("ID: %s | Name: %s | Type: %s | Category: %s\n",
-				card.Id,
+				card.ID,
 				card.Name,
 				card.Type,
 				card.Category,
