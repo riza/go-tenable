@@ -144,7 +144,7 @@ func TestExportsAssetsDownloadChunk(t *testing.T) {
 	defer ts.Close()
 
 	c := NewClient(ts.URL)
-	err := c.ExportsAssetsService.ExportsAssetsDownloadChunk(context.Background(), "export-123", "1")
+	data, err := c.ExportsAssetsService.ExportsAssetsDownloadChunk(context.Background(), "export-123", "1")
 
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -154,6 +154,9 @@ func TestExportsAssetsDownloadChunk(t *testing.T) {
 	}
 	if gotPath != "/assets/export/export-123/chunks/1" {
 		t.Errorf("path = %q, want %q", gotPath, "/assets/export/export-123/chunks/1")
+	}
+	if string(data) != "chunk data" {
+		t.Errorf("data = %q, want %q", string(data), "chunk data")
 	}
 }
 
